@@ -2,6 +2,11 @@ import { useState } from "react";
 import ModalWindow from "../ModalWindow/ModalWindow";
 import "./home.css";
 import War from "../War/War";
+import Sm from "../Sm/Sm";
+import Asgard from '../Asgard/Asgard'
+import Territory from '../Territory/Territory'
+import Activ from "../Activ/Activ";
+import Nakazanie from "../Nakazanie/Nakazanie";
 
 const Home = () => {
   const [modalWindowActive, setModalWindowActive]=useState(false)
@@ -11,7 +16,23 @@ const btnWarHandler =()=>{
   setModalWindowActive(true);
 }
 const btnStolknovenieHandler =()=>{
-  setModalText(<War/>)
+  setModalText(<Sm/>)
+  setModalWindowActive(true);
+}
+const btnAsgard =()=>{
+  setModalText(<Asgard/>)
+  setModalWindowActive(true);
+}
+const btnTerritory =()=>{
+  setModalText(<Territory/>)
+  setModalWindowActive(true);
+}
+const btnActiv =()=>{
+  setModalText(<Activ/>)
+  setModalWindowActive(true);
+}
+const btnNakazanie =()=>{
+  setModalText(<Nakazanie/>)
   setModalWindowActive(true);
 }
   return (
@@ -62,6 +83,7 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
                   <div className="hexagon-item">
                     <div className="hex-item">
                       <div />
@@ -73,7 +95,7 @@ const btnStolknovenieHandler =()=>{
                       <div />
                       <div />
                     </div>
-                    <a className="hex-content" href="/cabinet">
+                    <a className="hex-content">
                       <span className="hex-content-inner">
                         <span className="icon">
                           <i className="fa fa-bullseye" />
@@ -96,6 +118,7 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
                   <div className="hexagon-item">
                     <div className="hex-item">
                       <div />
@@ -112,7 +135,9 @@ const btnStolknovenieHandler =()=>{
                         <span className="icon">
                           <i className="fa fa-braille" />
                         </span>
-                        <span className="title">ПАЧКИ АСГАРДА</span>
+                        <button className="title btnMenu"
+                        onClick={btnAsgard}
+                        >АСГАРД</button>
                       </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
@@ -128,6 +153,7 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
                   <div className="hexagon-item">
                     <div className="hex-item">
                       <div />
@@ -144,8 +170,9 @@ const btnStolknovenieHandler =()=>{
                         <span className="icon">
                           <i className="fa fa-id-badge" />
                         </span>
-                        <span className="title">ПОКА НИЧЕГО</span>
-                      </span>
+                        <button className="title btnMenu"
+                        onClick={btnTerritory}
+                        >Территория завоеваний</button>                      </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"
@@ -160,6 +187,7 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
                   <div className="hexagon-item">
                     <div className="hex-item">
                       <div />
@@ -176,8 +204,9 @@ const btnStolknovenieHandler =()=>{
                         <span className="icon">
                           <i className="fa fa-life-ring" />
                         </span>
-                        <span className="title">ПОХЕР ЧТО</span>
-                      </span>
+                        <button className="title btnMenu"
+                        onClick={btnActiv}
+                        >АКТИВНОСТЬ</button>                      </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"
@@ -192,6 +221,7 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
                   <div className="hexagon-item">
                     <div className="hex-item">
                       <div />
@@ -203,13 +233,14 @@ const btnStolknovenieHandler =()=>{
                       <div />
                       <div />
                     </div>
-                    <a className="hex-content" href="#">
+                    <a className="hex-content">
                       <span className="hex-content-inner">
                         <span className="icon">
                           <i className="fa fa-clipboard" />
                         </span>
-                        <span className="title">ПОХЕР КАК</span>
-                      </span>
+                        <button className="title btnMenu"
+                        onClick={btnNakazanie}
+                        >НАКАЗАНИЯ</button>                      </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"
@@ -224,6 +255,7 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
                   <div className="hexagon-item">
                     <div className="hex-item">
                       <div />
@@ -240,7 +272,7 @@ const btnStolknovenieHandler =()=>{
                         <span className="icon">
                           <i className="fa fa-map-signs" />
                         </span>
-                        <span className="title"> ПОХЕР ЗА ЧТО</span>
+                        <span className="title"> ПОХЕР</span>
                       </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
@@ -256,6 +288,8 @@ const btnStolknovenieHandler =()=>{
                       </svg>
                     </a>
                   </div>
+
+
                 </div>
               </div>
             </div>
