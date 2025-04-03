@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Playwrite+MX+Guides&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Playwrite+MX+Guides&display=swap'); */
 
 /*--------------обнуление стилей-----------------*/
 *{
@@ -31,7 +31,7 @@ html,body{
 	-moz-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
    background-color:rgb(190, 197, 194);
-   font-family: "Pacifico", cursive;
+   /* font-family: "Pacifico", cursive; */
    line-height: 1.5;
 
 }
