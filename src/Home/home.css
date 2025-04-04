@@ -176,7 +176,7 @@
     margin-bottom: 11px; }
   .hex-content .title {
     display: block;
-    font-size: 14px;
+    font-size: 22px;
     letter-spacing: 1px;
     line-height: 24px;
     text-transform: uppercase; }
@@ -232,6 +232,7 @@
   .hexagon-item:first-child {
     margin-left: auto;
 }
+
   
   .page-home .hexagon-item:nth-last-child(1), .page-home .hexagon-item:nth-last-child(2), .page-home .hexagon-item:nth-last-child(3) {
     -webkit-transform: rotate(30deg) translate(0px, 0px);

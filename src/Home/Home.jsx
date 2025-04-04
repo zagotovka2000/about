@@ -7,6 +7,7 @@ import Asgard from '../Asgard/Asgard'
 import Territory from '../Territory/Territory'
 import Activ from "../Activ/Activ";
 import Nakazanie from "../Nakazanie/Nakazanie";
+import Hrefs from "../Hrefs/Hrefs";
 
 const Home = () => {
   const [modalWindowActive, setModalWindowActive]=useState(false)
@@ -33,6 +34,10 @@ const btnActiv =()=>{
 }
 const btnNakazanie =()=>{
   setModalText(<Nakazanie/>)
+  setModalWindowActive(true);
+}
+const btnHrefs =()=>{
+  setModalText(<Hrefs/>)
   setModalWindowActive(true);
 }
   return (
@@ -267,13 +272,14 @@ const btnNakazanie =()=>{
                       <div />
                       <div />
                     </div>
-                    <a className="hex-content" href="#">
+                    <a className="hex-content" >
                       <span className="hex-content-inner">
                         <span className="icon">
                           <i className="fa fa-map-signs" />
                         </span>
-                        <span className="title"> ПОХЕР</span>
-                      </span>
+                        <button className="title btnMenu"
+                        onClick={btnHrefs}
+                        >БЕСПОЛЕЗНЫЕ ССЫЛКИ</button>                        </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"
