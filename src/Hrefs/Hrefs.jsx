@@ -4,6 +4,10 @@ const Hrefs = () => {
     <div className={styles.conteiner}>
       <header className={styles.header}>
         <p className={styles.abzac}>
+          <span>Телеграмм группа: </span>{" "}
+          <a href="https://t.me/+Yt1yDpHxFxo2Njcy">Присоединиться к тарахтелке</a>{" "}
+        </p>
+        <p className={styles.abzac}>
           <span>Приключения: </span>{" "}
           <a href="https://www.solfors.com/adventure/1">Solfors</a>{" "}
         </p>
