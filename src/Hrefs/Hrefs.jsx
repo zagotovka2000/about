@@ -5,7 +5,8 @@ const Hrefs = () => {
       <header className={styles.header}>
         <p className={styles.abzac}>
           <span>Телеграмм группа: </span>{" "}
-          <a href="https://t.me/+Yt1yDpHxFxo2Njcy">Присоединиться к тарахтелке</a>{" "}
+          <a href="#">Недоступна до вступления в гильдию</a>{" "}
+          {/* "https://t.me/+Yt1yDpHxFxo2Njcy" */}
         </p>
         <p className={styles.abzac}>
           <span>Приключения: </span>{" "}
