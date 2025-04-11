@@ -4,15 +4,17 @@ const Main = () => {
     <div className={styles.conteiner}>
       <header className={styles.header}>
         <p className={styles.header_abzac}>
-          <span>
+          <img 
+            src='../logo.png' 
+            className={styles.logo} 
+          />
+          <span className={styles.text}>
             Временная заметка гильдии
-            {/* В будущем исправлю минизаметку на что-то вроде небольшого сайта,
-            куда будем сваливать в кучу что-то полезное и вообще бесполезное.
-            Временная заметка написана для тех,
-            кто пришел сюда впервые, чтобы не распинаться в чате игры.
-            Гильдия с небольшими, но строгими требованиями, ориентированными на
-            бездонатного, но активного игрока. */}
           </span>
+          <img 
+            src='../logo.png' 
+            className={styles.logo} 
+          />
         </p>
       </header>
     </div>
