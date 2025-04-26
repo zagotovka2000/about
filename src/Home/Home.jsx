@@ -279,7 +279,7 @@ const btnHrefs =()=>{
                         </span>
                         <button className="title btnMenu"
                         onClick={btnHrefs}
-                        >БЕСПОЛЕЗНЫЕ ССЫЛКИ</button>                        </span>
+                        >ПОХЕР</button>                        </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"

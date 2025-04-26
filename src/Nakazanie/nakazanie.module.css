@@ -2,5 +2,11 @@
     font-weight: 900;
     font-style: oblique;
 text-decoration: underline;
-
+text-align: center;
+}
+.textThrough{
+    text-decoration: line-through;
+}
+.redStr{
+    text-indent: 30px;
 }

@@ -3,11 +3,11 @@ const Hrefs = () => {
   return (
     <div className={styles.conteiner}>
       <header className={styles.header}>
-        <p className={styles.abzac}>
-          <span>Телеграмм группа: </span>{" "}
-          <a href="#">Недоступна до вступления в гильдию</a>{" "}
+        {/* <p className={styles.abzac}> */}
+          {/* <span>Телеграмм группа: </span>{" "}
+          <a href="#">Недоступна до вступления в гильдию</a>{" "} */}
           {/* "https://t.me/+Yt1yDpHxFxo2Njcy" */}
-        </p>
+        {/* </p> */}
         <p className={styles.abzac}>
           <span>Приключения: </span>{" "}
           <a href="https://www.solfors.com/adventure/1">Solfors</a>{" "}
@@ -19,7 +19,7 @@ const Hrefs = () => {
         <p>
           Командующим генералам и не только можно поставить дополнительное
           расширение "Хроники Хаоса Аналитика", если интересна сухая статистика
-          аккаунта. Открывать можно буквой "Ё" во время запущенной игры.
+          аккаунта и некоторые характеристики героев противников. 
         </p>
       </header>
     </div>
