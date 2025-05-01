@@ -9,7 +9,7 @@ const ModalWindow = ({ modalWindowActive, setModalWindowActive, modalText }) => 
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="text-container">
-          <p className="abzac">{modalText}</p>
+          <div className="abzac">{modalText}</div>
         </div>
       </div>
     </div>
