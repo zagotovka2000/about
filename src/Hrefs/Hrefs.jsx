@@ -10,7 +10,7 @@ const Hrefs = () => {
     { id: 5, word: "ВАНО"  },
     { id: 6, word: "Наташа"  },
     { id: 7, word: "Тема"  },
-    { id: 8, word: "Похер"  }
+    { id: 8, word: "Сибиряк"  }
   ];
 
   const rightColumnData = [
@@ -21,7 +21,7 @@ const Hrefs = () => {
     { id: 13, word: "Похесрун"  },
     { id: 14, word: "Похерок"  },
     { id: 15, word: "Похерец"  },
-    { id: 16, word: "Всем пиздец"  }
+    { id: 16, word: "ЛЮБИМЫЙ"  }
   ];
   
   const middle18ColumnData = [
