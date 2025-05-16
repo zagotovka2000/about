@@ -14,7 +14,7 @@ const Hrefs = () => {
   ];
 
   const rightColumnData = [
-    { id: 9, word: "Похерист"  },
+    { id: 9, word: "Злыдня"  },
     { id: 10, word: "Похераст"  },
     { id: 11, word: "Похерон"  },
     { id: 12, word: "Похерун"  },
