@@ -303,8 +303,6 @@ const btnHrefs =()=>{
           </div>
         </div>
       </div>
-      
-      <video className="video" src="/123.mov" type="video/mov" autoPlay loop muted></video>
       <ModalWindow
       modalWindowActive={modalWindowActive}
       setModalWindowActive={setModalWindowActive}
