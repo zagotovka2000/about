@@ -279,7 +279,7 @@ const btnHrefs =()=>{
                         </span>
                         <button className="title btnMenu"
                         onClick={btnHrefs}
-                        >ПОХЕР</button>                        </span>
+                        >ТУРНИР</button>                        </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"
@@ -297,6 +297,7 @@ const btnHrefs =()=>{
 
 
                 </div>
+
               </div>
             </div>
           </div>
