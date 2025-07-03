@@ -1,0 +1,207 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Заголовки */
+.table-header {
+  display: flex;
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+}
+
+/* Общие стили для заголовков */
+.header-cell {
+  padding: 12px 15px;
+  border-right: 1px solid #3d5166;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex: 1; /* по умолчанию растягиваем */
+}
+
+/* Заголовки points и replay — фиксированная ширина */
+.header-cell.points,
+.header-cell.replay {
+  flex: 0 0 80px;      /* фиксированная ширина 80px */
+  min-width: 100px;
+  max-width: 100px;
+  padding-left: 5px;
+  padding-right: 5px;
+  box-sizing: border-box;
+}
+
+.header-cell:last-child {
+  border-right: none;
+}
+
+/* Строки */
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s;
+}
+
+.table-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* Общие стили для ячеек */
+.table-cell {
+  padding: 12px 15px;
+  border-right: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex: 1; /* по умолчанию растягиваем */
+  box-sizing: border-box;
+}
+
+/* Последняя ячейка без границы */
+.table-cell:last-child {
+  border-right: none;
+}
+
+/* Колонки points и replay — фиксированная одинаковая ширина */
+.points, .replay {
+  flex: 0 0 80px;     /* фиксированная ширина 80px */
+  min-width: 100px;
+  max-width: 100px;
+  padding-left: 5px;
+  padding-right: 5px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Вложенные элементы points и replay */
+.points-badge,
+.replay-link {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+/* Остальные колонки растягиваются */
+.attacker, .defender, .team {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Стили для имен игроков */
+.player-name {
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+/* Цвета фона для атакующих и защитников */
+.attacker {
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.defender {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+/* Стили для колонок team */
+.team {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Стили для points */
+.points-badge {
+  padding: 4px 1px;
+  border-radius: 12px;
+  background-color: #2ecc71;
+  color: white;
+  min-width: 30px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.points-badge.low {
+  background-color: #e74c3c;
+}
+
+/* Стили для ссылки replay */
+.replay-link {
+  padding: 6px 1px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.replay-link:hover {
+  background-color: #2980b9;
+}
+
+/* Адаптив */
+@media (max-width: 1200px) {
+  .table-header {
+    display: none;
+  }
+  
+  .table-row {
+    flex-direction: column;
+    border-bottom: 2px solid #ddd;
+    padding: 15px;
+  }
+  
+  .table-cell {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    justify-content: flex-start;
+  }
+  
+  .table-cell::before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 120px;
+    display: inline-block;
+    color: #555;
+  }
+}
+

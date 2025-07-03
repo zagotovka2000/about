@@ -23,13 +23,10 @@
   background: #ffffff;
   padding: 30px;
   border-radius: 15px;
-<<<<<<< HEAD
-  max-width: 93%;
-  /* width: 90%; */
-=======
+
   max-width: 90%;
   width: 90%;
->>>>>>> af60e4d16a7338675c0c992e11128a046e531536
+
   max-height: 80vh; /* Ограничиваем максимальную высоту */
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   cursor: default;

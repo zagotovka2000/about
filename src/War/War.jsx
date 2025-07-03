@@ -1,4 +1,5 @@
 import styles from "./war.module.css";
+import Stats from './stats/Stats'
 const War = () => {
   return (
     <div className={styles.conteiner}>
@@ -9,6 +10,8 @@ const War = () => {
         соображений генерала. Атака по цели без цели-освобождение от чемпионства навсегда. Идете исполнять наказание, которое выбирает вам Сибиряк.
       </p>
       </header>
+
+      <Stats/>
     </div>
   );
 };
