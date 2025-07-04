@@ -1,5 +1,4 @@
 import styles from "./war.module.css";
-import Stats from './stats/Stats'
 const War = () => {
   return (
     <div className={styles.conteiner}>
@@ -11,7 +10,7 @@ const War = () => {
       </p>
       </header>
 
-      <Stats/>
+  
     </div>
   );
 };

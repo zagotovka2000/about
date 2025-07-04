@@ -1,4 +1,6 @@
 import styles from "./asgard.module.css";
+import Week27 from "./week27/week27";
+
 const Asgard = () => {
   return (
     <div className={styles.conteiner}>
@@ -9,6 +11,7 @@ const Asgard = () => {
           общегильдейском событии. Следует выполнить наказание, которое выбирает вам игрок, которого вы выбираете сами. 
         </p>
       </header>
+<Week27/>
     </div>
   );
 };

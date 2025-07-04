@@ -1,0 +1,272 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Заголовки */
+.table-header {
+  display: flex;
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+  min-height: 60px; /* Добавлено для выравнивания */
+  align-items: center; /* Добавлено для выравнивания */
+}
+
+/* Общие стили для заголовков */
+.header-cell {
+  padding: 12px 15px;
+  border-right: 1px solid #3d5166;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex: 1;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.header-cell:hover {
+  background-color: #3d5166;
+}
+
+/* Колонки с фиксированной шириной */
+.header-cell.damage,
+.header-cell.name,
+.header-cell.replay {
+  flex: 0 0 220px;
+
+  box-sizing: border-box;
+}
+
+.header-cell:last-child {
+  border-right: none;
+}
+
+/* Строки */
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s;
+  align-items: center; /* Добавлено для выравнивания */
+  
+}
+
+.table-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* Общие стили для ячеек */
+.table-cell {
+  padding: 5px;
+  border-right: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex: 1;
+  box-sizing: border-box;
+  min-height: 120px;
+}
+
+/* Последняя ячейка без границы */
+.table-cell:last-child {
+  border-right: none;
+}
+
+/* Колонки с фиксированной шириной */
+.replay {
+  flex: 0 0 120px;
+  min-width: 120px;
+  max-width: 120px;
+  justify-content: center;
+}
+
+.damage {
+  max-width: 150px;
+}
+
+/* Стили для команды с покровителями */
+.team-with-patronage {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.hero-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  transition: transform 0.2s ease-in-out;
+}
+
+.hero-image:hover {
+  transform: scale(1.1);
+  border-color: #3498db;
+}
+
+.patronage-image {
+  position: absolute;
+  top: -7px;
+  right: -13px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid gold;
+  background-color: white;
+  z-index: 1;
+  object-fit: contain;
+  transition: all 0.3s ease-in-out; /* Плавное увеличение */
+  transform-origin: center center; /* Точка трансформации по центру */
+}
+
+.patronage-image:hover {
+  transform: scale(2);
+  border-color: #3498db;
+  z-index: 2; /* Чтобы увеличенное изображение было поверх других */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Тень для эффекта "всплытия" */
+}
+
+/* Стили для урона */
+.low-damage {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #c0392b;
+}
+
+.high-damage {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: #27ae60;
+}
+
+/* Стили для ссылки replay */
+.replay-link {
+  padding: 6px 12px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.replay-link:hover {
+  background-color: #2980b9;
+}
+
+.name {
+  max-width: 200px;
+}
+
+.player-name {
+  font-weight: 500;
+  margin-bottom: 3px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Адаптив */
+@media (max-width: 1200px) {
+  .table-header {
+    display: none;
+  }
+  
+  .table-row {
+    flex-direction: column;
+    border-bottom: 2px solid #ddd;
+    padding: 15px;
+    align-items: flex-start;
+  }
+  
+  .table-cell {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: auto;
+    align-items: flex-start;
+  }
+  
+  .table-cell::before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 120px;
+    display: inline-block;
+    color: #555;
+  }
+
+  .damage, .replay {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .team-with-patronage {
+    justify-content: flex-start;
+  }
+
+  .hero-container {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+  }
+
+  .patronage-image {
+    width: 20px;
+    height: 20px;
+  }
+
+  .player-name {
+    text-align: left;
+  }
+}
