@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+/* import React, { useState, useEffect } from 'react';
 import './week27.css';
 
-const Week27 = () => {
+const Week28 = () => {
   const [battleData, setBattleData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: 'damage', direction: 'desc' });
@@ -197,4 +197,16 @@ const Week27 = () => {
   );
 };
 
-export default Week27;
+export default Week28; */
+
+
+import React, { useState, useEffect } from 'react';
+import './week28.css';
+
+const Week28 = () => {
+
+  return (
+    <div>Ага, писюлек пока тут...неделя даже не началась...</div>
+  )
+}
+  export default Week28;
