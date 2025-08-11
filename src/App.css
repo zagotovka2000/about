@@ -30,7 +30,7 @@ html,body{
 	-ms-text-size-adjust: 100%;
 	-moz-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
-   background-color:rgb(190, 197, 194);
+background-color:rgb(190, 197, 194)    !important ; 
    font-family: "Caveat", cursive;
    font-optical-sizing: auto;
    line-height: 1.5;
