@@ -1,4 +1,21 @@
 .abzac{
     text-indent: 30px;
-
+margin-bottom: 30px;
 }
+.toggleButton{
+   padding: 12px 24px;
+   font-size: 16px;
+   font-weight: 600;
+   color: #ffffff; /* цвет текста */
+   background-color: #af784c; /* зеленый фон */
+   border: none;
+   border-radius: 8px; /* скругление углов */
+   cursor: pointer;
+   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+   transition: all 0.3s ease; /* плавный переход для всех свойств */
+}
+.toggleButton:hover {
+   background-color: #45a049; /* чуть темнее зеленого */
+   box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* более выраженная тень */
+   transform: translateY(-2px); /* легкое поднятие кнопки */
+ }
