@@ -19,3 +19,22 @@ margin-bottom: 30px;
    box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* более выраженная тень */
    transform: translateY(-2px); /* легкое поднятие кнопки */
  }
+ .generateButton {
+   padding: 10px 15px;
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 14px;
+   margin-left: 10px;
+   transition: background-color 0.3s;
+ }
+ 
+ .generateButton:hover {
+   background-color: #45a049;
+ }
+ 
+ .generateButton:active {
+   background-color: #3e8e41;
+ }

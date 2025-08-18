@@ -1,0 +1,227 @@
+.container {
+   max-width: 1200px;
+   margin: 0 auto;
+   padding: 20px;
+   font-family: Arial, sans-serif;
+ }
+ 
+ .mainWrapper {
+   background-color: #f5f5f5;
+   border-radius: 10px;
+   padding: 20px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .title {
+   text-align: center;
+   color: #333;
+   margin-bottom: 30px;
+ }
+ 
+ .packSection {
+   background-color: white;
+   border-radius: 8px;
+   padding: 20px;
+   margin-bottom: 30px;
+   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .sectionTitle {
+   color: #444;
+   margin-bottom: 15px;
+   text-align: center;
+ }
+ 
+ .packGrid {
+   display: grid;
+   grid-template-columns: repeat(6, 1fr);
+   gap: 15px;
+   margin-bottom: 20px;
+ }
+ 
+ .card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   cursor: pointer;
+   transition: transform 0.2s;
+ }
+ 
+ .card:hover {
+   transform: scale(1.05);
+ }
+ 
+ .packImage, .image {
+   width: 80px;
+   height: 80px;
+   object-fit: contain;
+   border-radius: 8px;
+   border: 2px solid #ddd;
+ }
+ 
+ .emptySlot {
+   width: 80px;
+   height: 80px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #eee;
+   border-radius: 8px;
+   border: 2px dashed #ccc;
+   color: #888;
+   font-size: 12px;
+   text-align: center;
+ }
+ 
+ .name {
+   margin-top: 5px;
+   font-size: 14px;
+   color: #555;
+   text-align: center;
+ }
+ 
+ .packButton {
+   display: flex;
+   justify-content: center;
+   margin: 20px 0;
+ }
+ 
+ .generateButton {
+   padding: 12px 25px;
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   border-radius: 5px;
+   font-size: 16px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+ }
+ 
+ .generateButton:hover {
+   background-color: #45a049;
+ }
+ 
+ .generateButton:disabled {
+   background-color: #cccccc;
+   cursor: not-allowed;
+ }
+ 
+ .loaderContainer {
+   margin-top: 15px;
+   text-align: center;
+ }
+ 
+ .loaderBar {
+   height: 10px;
+   background-color: #4CAF50;
+   border-radius: 5px;
+   transition: width 0.3s;
+ }
+ 
+ .loaderText {
+   margin-top: 5px;
+   font-size: 14px;
+   color: #666;
+ }
+ 
+ .packResult {
+   background-color: #f9f9f9;
+   border-radius: 8px;
+   padding: 20px;
+   margin-top: 20px;
+ }
+ 
+ .matchesContainer {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+ }
+ 
+ .matchItem {
+   background-color: white;
+   border-radius: 8px;
+   padding: 15px;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .matchTitle {
+   text-align: center;
+   color: #333;
+   margin-bottom: 15px;
+ }
+ 
+ .foundPackGrid {
+   display: grid;
+   grid-template-columns: repeat(6, 1fr);
+   gap: 10px;
+   margin-bottom: 15px;
+ }
+ 
+ .foundCard {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+ 
+ .foundImage {
+   width: 60px;
+   height: 60px;
+   object-fit: contain;
+   border-radius: 6px;
+   border: 2px solid #ddd;
+ }
+ 
+ .foundName {
+   margin-top: 5px;
+   font-size: 13px;
+   color: #555;
+ }
+ 
+ .replayLinkContainer {
+   text-align: center;
+   margin-top: 10px;
+ }
+ 
+ .replayLink {
+   color: #2196F3;
+   text-decoration: none;
+   font-size: 14px;
+ }
+ 
+ .replayLink:hover {
+   text-decoration: underline;
+ }
+ 
+ .noMatches {
+   text-align: center;
+   color: #666;
+   padding: 15px;
+   font-style: italic;
+ }
+ 
+ .contentWrapper {
+   display: flex;
+   gap: 20px;
+ }
+ 
+ .section {
+   flex: 1;
+   background-color: white;
+   border-radius: 8px;
+   padding: 15px;
+   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .petsGrid, .heroesGrid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+   gap: 10px;
+ }
+ 
+ .petsSection {
+   max-width: 400px;
+ }
+ 
+ .heroesSection {
+   flex-grow: 1;
+ }

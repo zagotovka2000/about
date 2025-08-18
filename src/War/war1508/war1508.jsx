@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './war1508.css';
 
+
 const War1508 = () => {
   const [battleData, setBattleData] = useState([]);
   const [loading, setLoading] = useState(true);
