@@ -1,5 +1,5 @@
-/* import React, { useState, useEffect } from 'react';
-import './week27.css';
+import React, { useState, useEffect } from 'react';
+import './week28.css';
 
 const Week28 = () => {
   const [battleData, setBattleData] = useState([]);
@@ -9,7 +9,7 @@ const Week28 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/week27.txt');
+        const response = await fetch('/week28.txt');
         const text = await response.text();
         processData(text);
       } catch (error) {
@@ -149,7 +149,7 @@ const Week28 = () => {
 
   return (
     <div className="app">
-      <h1>Week 27 Маэстро</h1>
+      <h1>Week 28 Маэстро</h1>
       <div className="table-container" role="table" aria-label="Battle Results Table">
         <div className="table-header" role="rowgroup">
           <div 
@@ -197,16 +197,5 @@ const Week28 = () => {
   );
 };
 
-export default Week28; */
+export default Week28; 
 
-
-import React, { useState, useEffect } from 'react';
-import './week28.css';
-
-const Week28 = () => {
-
-  return (
-    <div>Ага, писюлек пока тут...неделя даже не началась...</div>
-  )
-}
-  export default Week28;

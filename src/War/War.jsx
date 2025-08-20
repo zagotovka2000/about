@@ -1,22 +1,27 @@
 import { useState } from "react";
 import styles from "./war.module.css";
-import War1508 from './war1508/war1508';
+import WarComponent from './WarComponent';
 
 const War = () => {
-  const [activeWeek, setActiveWeek] = useState(null);
+  const [activeWar, setActiveWar] = useState(null);
 
-  const toggleWeek = (weekNumber) => {
-    setActiveWeek(activeWeek === weekNumber ? null : weekNumber);
+  const wars = [
+    { id: 'war1508', fileName: 'GW150825.txt', date: '15.08.2025' },
+    { id: 'war1908', fileName: 'GW190825.txt', date: '19.08.2025' },
+    { id: 'war2208', fileName: 'GW220825.txt', date: '22.08.2025' },
+    // Добавляйте новые войны здесь
+  ];
+
+  const toggleWar = (warId) => {
+    setActiveWar(activeWar === warId ? null : warId);
   };
 
-  const generateDefensesPacks = async () => {
+  const generateDefensesPacks = async (fileName) => {
     try {
-      // Загружаем данные из всех файлов войны
-      const response = await fetch('/GW150825.txt');
+      const response = await fetch(`/${fileName}`);
       const text = await response.text();
       const lines = text.split('\n').filter(line => line.trim() !== '');
 
-      // Формируем данные для записи
       const packsData = lines
         .map(line => {
           const columns = line.split('\t');
@@ -35,19 +40,18 @@ const War = () => {
           replay: battle.replay
         }));
 
-      // Создаем JSON и предлагаем скачать
       const jsonData = JSON.stringify(packsData, null, 2);
       const blob = new Blob([jsonData], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'defensesPacks.json';
+      a.download = `${fileName.replace('.txt', '')}_defensesPacks.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      console.log('Файл defensesPacks.json успешно сгенерирован');
+      console.log(`Файл ${a.download} успешно сгенерирован`);
     } catch (error) {
       console.error('Ошибка при генерации файла:', error);
     }
@@ -65,23 +69,30 @@ const War = () => {
       </header>
 
       <div className={styles.conteiner}>
-        <div className={styles.buttonsContainer}>
-          <button
-            onClick={() => toggleWeek(27)}
-            className={styles.toggleButton}
-          >
-            15.08.2025 {activeWeek === 27 ? '▲' : '▼'}
-          </button>
-          
-          <button
-            onClick={generateDefensesPacks}
-            className={styles.generateButton}
-          >
-            Выгрузить в файл
-          </button>
-        </div>
-        
-        {activeWeek === 27 && <War1508 />}
+        {wars.map((war) => (
+          <div key={war.id} className={styles.buttonsContainer}>
+            <button
+              onClick={() => toggleWar(war.id)}
+              className={styles.toggleButton}
+            >
+              {war.date} {activeWar === war.id ? '▲' : '▼'}
+            </button>
+            
+            <button
+              onClick={() => generateDefensesPacks(war.fileName)}
+              className={styles.generateButton}
+            >
+              Выгрузить в файл
+            </button>
+
+            {activeWar === war.id && (
+              <WarComponent 
+                fileName={war.fileName} 
+                warDate={war.date} 
+              />
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
