@@ -30,6 +30,7 @@
    color: #444;
    margin-bottom: 15px;
    text-align: center;
+   padding-right: 50px;
  }
  
  .packGrid {
@@ -50,18 +51,22 @@
  .card:hover {
    transform: scale(1.05);
  }
- 
+ .packImage{
+   width: 120px;
+   height: 120px;
+ }
  .packImage, .image {
-   width: 80px;
-   height: 80px;
    object-fit: contain;
    border-radius: 8px;
    border: 2px solid #ddd;
  }
- 
- .emptySlot {
+ .image {
    width: 80px;
    height: 80px;
+ }
+ .emptySlot {
+   width: 120px;
+   height: 120px;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -224,4 +229,144 @@
  
  .heroesSection {
    flex-grow: 1;
+ }
+
+
+
+
+
+
+ /* Стили для кнопки очистки */
+.packHeader {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 15px;
+
+ }
+ 
+ .clearButton {
+   background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+   color: white;
+   border: none;
+   padding: 8px 15px;
+   border-radius: 8px;
+   cursor: pointer;
+   font-size: 14px;
+   font-weight: bold;
+   transition: all 0.3s ease;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+ }
+ 
+ .clearButton:hover:not(:disabled) {
+   background: linear-gradient(45deg, #ff5252, #e53935);
+   transform: translateY(-2px);
+   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+ }
+ 
+ .clearButton:disabled {
+   opacity: 0.6;
+   cursor: not-allowed;
+ }
+ 
+ /* Стили для сравнения пачек */
+ .matchComparison {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 30px;
+   margin-bottom: 20px;
+ }
+ 
+ .packComparison {
+   flex: 1;
+   text-align: center;
+ }
+ 
+ .packTitle {
+   margin-bottom: 15px;
+   color: #333;
+   font-size: 16px;
+ }
+ 
+ .vsSeparator {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 24px;
+   font-weight: bold;
+   color: #ff6b6b;
+   margin: 0 10px;
+   min-width: 50px;
+ }
+ .sectionTitle{
+   padding-left: 50px;
+ }
+ .powerInfo {
+   margin-top: 15px;
+   padding: 10px;
+   background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+   border-radius: 8px;
+   font-size: 16px;
+   color: #495057;
+   border: 2px solid #dee2e6;
+ }
+
+
+
+
+ /* Стили для модального окна */
+.modalOverlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background-color: rgba(0, 0, 0, 0.6);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+ }
+ 
+ .modal {
+   background: linear-gradient(135deg, #2c3e50, #4a69bd);
+   border-radius: 16px;
+   padding: 25px;
+   width: 320px;
+   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+   position: relative;
+   border: 1px solid rgba(255, 255, 255, 0.1);
+ }
+ 
+ .closeButton {
+   position: absolute;
+   top: 12px;
+   right: 12px;
+   background: #e74c3c;
+   color: white;
+   border: none;
+   border-radius: 50%;
+   width: 30px;
+   height: 30px;
+   font-size: 16px;
+   font-weight: bold;
+   cursor: pointer;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   transition: all 0.2s ease;
+ }
+ 
+ .closeButton:hover {
+   background: #c0392b;
+   transform: scale(1.1);
+ }
+ 
+ .modalContent {
+   color: white;
+   text-align: center;
+   font-size: 18px;
+   font-weight: 500;
+   margin-top: 10px;
  }

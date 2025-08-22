@@ -6,8 +6,8 @@ const Table = () => {
     // { name: 'Русский', active: 0, prestige: 1, titanite: 0, asgard: 0 },
     // { name: 'Русская', active: 0, prestige: 2, titanite: 0, asgard: 0 },
     // { name: 'Хам', active: 1, prestige: 2, titanite: 1, asgard: 0 },
-    { name: 'Alex', active: 0, prestige: 1, titanite: 0, asgard: 0 },
-    { name: 'Дин', active: 0, prestige: 1, titanite: 0, asgard: 0 },
+    { name: 'Aleks', active: 0, prestige: 1, titanite: 0, asgard: 0 },
+    { name: 'Солнце', active: 1, prestige: 1, titanite: 1, asgard: 1 },
   ];
 
   const [players, setPlayers] = useState(initialPlayers);

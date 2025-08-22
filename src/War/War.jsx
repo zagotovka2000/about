@@ -9,7 +9,6 @@ const War = () => {
     { id: 'war1508', fileName: 'GW150825.txt', date: '15.08.2025' },
     { id: 'war1908', fileName: 'GW190825.txt', date: '19.08.2025' },
     { id: 'war2208', fileName: 'GW220825.txt', date: '22.08.2025' },
-    // Добавляйте новые войны здесь
   ];
 
   const toggleWar = (warId) => {
@@ -22,22 +21,43 @@ const War = () => {
       const text = await response.text();
       const lines = text.split('\n').filter(line => line.trim() !== '');
 
+      // Анализируем заголовки чтобы найти правильные колонки
+      let attPowerColumn = 5; // предположим по умолчанию
+      let defPowerColumn = 7; // предположим по умолчанию
+
+      if (lines.length > 0) {
+        const headers = lines[0].split('\t');
+        headers.forEach((header, index) => {
+          if (header.toLowerCase().includes('att power')) attPowerColumn = index;
+          if (header.toLowerCase().includes('def power')) defPowerColumn = index;
+        });
+        
+        console.log('Найдены колонки:', { attPowerColumn, defPowerColumn });
+      }
+
       const packsData = lines
-        .map(line => {
+        .map((line, index) => {
+          // Пропускаем заголовок
+          if (index === 0) return null;
+          
           const columns = line.split('\t');
           return {
             attackerTeam: columns[4]?.split(' ').filter(Boolean) || [],
             defenderTeam: columns[8]?.split(' ').filter(Boolean) || [],
             points: parseInt(columns[9], 10),
             attackerName: columns[2],
-            replay: columns[13]
+            replay: columns[13],
+            attackPower: parseInt(columns[attPowerColumn], 10) || 0,
+            defensePower: parseInt(columns[defPowerColumn], 10) || 0
           };
         })
-        .filter(item => !isNaN(item.points) && item.points === 20)
+        .filter(item => item && !isNaN(item.points) && item.points === 20)
         .map(battle => ({
           attackPack: battle.attackerTeam,
           defensePack: battle.defenderTeam,
-          replay: battle.replay
+          replay: battle.replay,
+          attackPower: battle.attackPower,
+          defensePower: battle.defensePower
         }));
 
       const jsonData = JSON.stringify(packsData, null, 2);
@@ -51,9 +71,11 @@ const War = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      console.log(`Файл ${a.download} успешно сгенерирован`);
+      console.log(`Файл ${a.download} успешно сгенерирован с данными о мощи`);
+      alert(`Файл ${a.download} успешно сгенерирован!`);
     } catch (error) {
       console.error('Ошибка при генерации файла:', error);
+      alert('Ошибка при генерации файла: ' + error.message);
     }
   };
 

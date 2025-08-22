@@ -57,8 +57,11 @@ const Nakazanie = () => {
       Игроки, которые покинут нашу гильдию в ближайшее время:
       </h3>
       <p className={styles.textThrough}>-Злыдня. </p>
-      <p>-Русский. </p>
-      <p>-Русская.</p>
+      <p className={styles.textThrough}>-Русский. </p>
+      <p className={styles.textThrough}>-Русская.</p>
+      <p className={styles.textThrough}>-Дин.</p>
+      <p className={styles.textThrough}>-Солнце.</p>
+      <p>-Aleks.</p>
     </div>
   );
 };
