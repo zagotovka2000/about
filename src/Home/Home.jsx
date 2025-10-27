@@ -7,7 +7,7 @@ import Asgard from '../Asgard/Asgard'
 import Territory from '../Territory/Territory'
 import Activ from "../Activ/Activ";
 import Nakazanie from "../Nakazanie/Nakazanie";
-import Hrefs from "../Hrefs/Hrefs";
+import Tournament from "../Tournament/Tournament";
 
 const Home = () => {
   const [modalWindowActive, setModalWindowActive]=useState(false)
@@ -37,7 +37,7 @@ const btnNakazanie =()=>{
   setModalWindowActive(true);
 }
 const btnHrefs =()=>{
-  setModalText(<Hrefs/>)
+  setModalText(<Tournament/>)
   setModalWindowActive(true);
 }
   return (
@@ -279,7 +279,7 @@ const btnHrefs =()=>{
                         </span>
                         <button className="title btnMenu"
                         onClick={btnHrefs}
-                        >Подбор пачек</button>                        </span>
+                        >Турнир</button>                        </span>
                       <svg
                         viewBox="0 0 173.20508075688772 200"
                         height="200"

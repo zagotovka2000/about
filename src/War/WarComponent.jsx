@@ -6,6 +6,12 @@ const WarComponent = ({ fileName, warDate }) => {
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: 'points', direction: 'desc' });
 
+
+
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -195,8 +201,11 @@ const WarComponent = ({ fileName, warDate }) => {
           );
         })}
       </div>
+
+
     </div>
   );
 };
 
 export default WarComponent;
+
