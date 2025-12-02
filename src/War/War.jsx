@@ -90,32 +90,7 @@ const War = () => {
         </p>
       </header>
 
-      <div className={styles.conteiner}>
-        {wars.map((war) => (
-          <div key={war.id} className={styles.buttonsContainer}>
-            <button
-              onClick={() => toggleWar(war.id)}
-              className={styles.toggleButton}
-            >
-              {war.date} {activeWar === war.id ? '▲' : '▼'}
-            </button>
-            
-            <button
-              onClick={() => generateDefensesPacks(war.fileName)}
-              className={styles.generateButton}
-            >
-              Выгрузить в файл
-            </button>
-
-            {activeWar === war.id && (
-              <WarComponent 
-                fileName={war.fileName} 
-                warDate={war.date} 
-              />
-            )}
-          </div>
-        ))}
-      </div>
+  
     </div>
   );
 };
