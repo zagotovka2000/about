@@ -1,3 +1,0 @@
-date	time	attacker id	att name	att power	att team	defender id	def name	def power	team	points	attacker patronage	defender patronage	comment	replay
-15/08 22:47	54809137	Spartan	1009087	Оли Себ Сел Ара Ясм Авр	61407464	Natamobil	882493	Авр Неб Хай Ори Дор Хор	16	Оли(7926) Акс(5416) Аль(11064) Фен(6332) Мер(7026)	Оли(3605) Каи(4033) Аль(4503) Хор(8320) Акс(4450)		https://www.hero-wars.com?replay_id=1755287222904912022	
-15/08 22:40	54809137	Spartan	930893	Акс Дор Хай Себ Айз Авр	61407445	BAHO	824003	Лир Неб Ори Авг Дор Хор	10	Мер(7026) Аль(11064) Фен(6332) Акс(5416) Оли(7926)	Оли(5089) Каи(5008) Хор(8554) Аль(5116) Акс

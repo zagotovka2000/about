@@ -1,57 +1,97 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+/* App.css - Упрощенный вариант */
 
-/*--------------обнуление стилей-----------------*/
-*{
-	margin: 0;
-	padding: 0;
-	border: 0;
-}
-:before,*:after{
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-}
-:focus,:active{
-	outline: none;
-}
-a:focus,a:active{
-	outline:none;
-}
-
-nav,footer,header,aside{
-	display:block;
-}
-
-html,body{
-	height: 100%;
-	width: 100%;
-	line-height: 1;
-	font-size: 14px;
-	-ms-text-size-adjust: 100%;
-	-moz-text-size-adjust: 100%;
-	-webkit-text-size-adjust: 100%;
-background-color:rgb(190, 197, 194)    !important ; 
-   font-family: "Caveat", cursive;
-   font-optical-sizing: auto;
-   line-height: 1.5;
-
-}
-
-input,button,textarea{
-	font-family: inherit;
-}
-
-input::-ms-clear{display: none}
-button{cursor: pointer}
-button::-moz-focus-inner{padding: 0;border:0}
-a, a:visited{text-decoration: none}
-ul li{list-style:none}
-img{vertical-align: top;}
-
-h1,h2,h3,h4,h5,h6{font-size: inherit; font-weight: 400;}
-
-/*--------------обнуление стилей-----------------*/
-.app{
-
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+ }
  
-}
+ body {
+   margin: 0;
+   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+     sans-serif;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   overflow: hidden;
+   background: #000;
+   color: #fff;
+ }
+ 
+ .App {
+   width: 100vw;
+   height: 100vh;
+   position: relative;
+   overflow: hidden;
+ }
+ 
+ /* Скрываем scrollbar */
+ ::-webkit-scrollbar {
+   width: 0;
+   background: transparent;
+ }
+ 
+ /* Улучшение для модальных окон */
+ .modal-overlay {
+   z-index: 1000;
+ }
+ 
+ /* Анимация fade-in */
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+   to {
+     opacity: 1;
+   }
+ }
+ 
+ .App {
+   animation: fadeIn 1s ease-out;
+ }
+/* Добавьте в конец App.css */
+
+/* Заголовок в шапке */
+.App-header {
+   position: absolute;
+   top: 20px;
+   left: 0;
+   width: 100%;
+   text-align: center;
+   z-index: 100;
+   padding: 0 20px;
+ }
+ 
+ .main-title {
+   font-family: 'Cinzel', serif;
+   font-size: 3rem;
+   font-weight: 900;
+   color: #4ECDC4;
+   text-shadow: 
+     0 0 10px rgba(78, 205, 196, 0.5),
+     0 0 20px rgba(78, 205, 196, 0.3),
+     0 0 30px rgba(78, 205, 196, 0.2);
+   margin-bottom: 10px;
+   letter-spacing: 4px;
+ }
+ 
+ .subtitle {
+   font-family: 'Cinzel', serif;
+   font-size: 1.2rem;
+   color: rgba(255, 255, 255, 0.7);
+   letter-spacing: 2px;
+ }
+ 
+ /* Эффект пульсации */
+ .pulse-effect {
+   animation: containerPulse 0.5s ease;
+ }
+ 
+ @keyframes containerPulse {
+   0% { transform: scale(1); }
+   50% { transform: scale(0.98); }
+   100% { transform: scale(1); }
+ }
+ 
+ /* Импорт шрифтов */
+ @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');

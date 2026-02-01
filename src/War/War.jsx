@@ -1,6 +1,5 @@
-import { useState } from "react";
-import styles from "./war.module.css";
-import WarComponent from './WarComponent';
+import React, { useState } from 'react';
+import './War.css';
 
 const War = () => {
   const [activeWar, setActiveWar] = useState(null);
@@ -80,19 +79,44 @@ const War = () => {
   };
 
   return (
-    <div className={styles.conteiner}>
-      <header className={styles.header}>
-        <p className={styles.abzac}>
-          ВГ-атаки только по назначенным целям, иначе внезапно вам выдадут 
-          артефакт за шиворот. Список чемпионов формируется, исходя из аморальных
-          соображений генерала. Атака по цели без цели-освобождение от чемпионства навсегда. 
-          Идете исполнять наказание, которое выбирает вам худший друг.
-        </p>
-      </header>
+   <div className="war-container">
+     <div className="war-header">
+       <h3>Войны гильдии</h3>
+       <p className="war-description">
+         ВГ-атаки только по назначенным целям, иначе внезапно вам выдадут 
+         артефакт за шиворот. Список чемпионов формируется, исходя из аморальных
+         соображений генерала.
+       </p>
+     </div>
 
-  
-    </div>
-  );
+     <div className="war-list">
+       {wars.map(war => (
+         <div 
+           key={war.id}
+           className={`war-card ${activeWar === war.id ? 'active' : ''}`}
+           onClick={() => setActiveWar(activeWar === war.id ? null : war.id)}
+         >
+           <div className="war-card-header">
+             <span className="war-date">{war.date}</span>
+             <span className="war-toggle">
+               {activeWar === war.id ? '▲' : '▼'}
+             </span>
+           </div>
+           
+           {activeWar === war.id && (
+             <div className="war-card-content">
+               {/* Здесь будет компонент WarComponent */}
+               <p>Данные о войне {war.date}</p>
+               <button className="war-download-btn">
+                 Скачать данные
+               </button>
+             </div>
+           )}
+         </div>
+       ))}
+     </div>
+   </div>
+ );
 };
 
 export default War;

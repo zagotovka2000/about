@@ -1,0 +1,761 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Bungee&display=swap');
+.monolith-container {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100vw;
+   height: 100vh;
+   overflow: hidden;
+   background: #000;
+   z-index: 1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+ 
+ /* Фон */
+ .monolith-bg {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   background: radial-gradient(
+     circle at center,
+     #0a0a1a 0%,
+     #050510 50%,
+     #000000 100%
+   );
+   z-index: 1;
+ }
+ 
+ /* Центральный кристалл - ИСПРАВЛЕННЫЙ параллакс */
+ .central-crystal {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 300px;
+   height: 300px;
+   transform-style: preserve-3d;
+   transform-origin: center center;
+   transition: transform 0.1s ease-out;
+   z-index: 2;
+   filter: drop-shadow(0 0 30px rgba(255, 100, 0, 0.5));
+   will-change: transform;
+ }
+ 
+ .crystal-core {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   background: 
+     linear-gradient(135deg, 
+       rgba(255, 255, 255, 0.1) 0%,
+       rgba(255, 50, 0, 0.05) 50%,
+       transparent 100%
+     );
+   border-radius: 20px;
+   transform: rotate(45deg);
+   overflow: visible;
+ }
+ 
+ .core-pulse {
+   position: absolute;
+   width: 80%;
+   height: 80%;
+   top: 10%;
+   left: 10%;
+   background: 
+     radial-gradient(circle, 
+       rgba(255, 100, 0, 0.3) 0%,
+       rgba(255, 50, 0, 0.1) 50%,
+       transparent 70%
+     );
+   border-radius: 15px;
+   animation: corePulse 3s infinite alternate;
+ }
+ 
+ .core-light {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   background: 
+     linear-gradient(45deg, 
+       transparent 0%,
+       rgba(255, 200, 0, 0.1) 50%,
+       transparent 100%
+     );
+   animation: lightSweep 4s infinite linear;
+ }
+ 
+ /* Текст "МОНОЛИТ" с огненным эффектом - ИСПРАВЛЕННЫЙ */
+ .crystal-text-container {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center; /* Центрируем по вертикали */
+   align-items: center; /* Центрируем по горизонтали */
+   transform: rotate(-45deg); /* Компенсируем поворот кристалла */
+   z-index: 10;
+ }
+ 
+ .fire-glow {
+   position: absolute;
+   width: 120%;
+   height: 120%;
+   border-radius: 50%;
+   background: radial-gradient(circle, 
+     rgba(255, 100, 0, 0.4) 0%,
+     rgba(255, 200, 0, 0.2) 30%,
+     transparent 70%
+   );
+   filter: blur(40px);
+   animation: fireGlow 2s infinite alternate;
+   z-index: 1;
+ }
+ 
+
+ 
+ .crystal-text {
+   display: flex;
+   gap: 4px;
+   font-size: 36px;
+   font-weight: 900;
+   text-transform: uppercase;
+   letter-spacing: 4px;
+   z-index: 2;
+   position: relative;
+   /* Центрирование текста */
+   margin: 0;
+   padding: 0;
+     
+ }
+ 
+ .crystal-text {
+   font-optical-sizing: auto;
+
+   font-variation-settings:
+     "slnt" 0,
+     "CRSV" 0.5,
+     "ELSH" 0,
+     "ELXP" 0;
+     font-family: "Bitcount Single", system-ui;
+
+ }
+
+
+ .fire-letter {
+   display: inline-block;
+   position: relative;
+   animation: letterFloat 2s infinite ease-in-out;
+   background: linear-gradient(
+     45deg,
+     #ff0000,
+     #ff3300,
+     #ff6600,
+     #ff9900,
+     #ffcc00,
+     #ffff00
+   );
+   background-size: 600% 600%;
+   -webkit-background-clip: text;
+   background-clip: text;
+   color: transparent;
+   animation: 
+     letterFloat 3s infinite ease-in-out,
+     fireGradient 4s infinite linear;
+   text-shadow: 
+     0 0 10px rgba(255, 100, 0, calc(var(--fire-intensity, 0.5) * 0.8)),
+     0 0 20px rgba(255, 100, 0, calc(var(--fire-intensity, 0.5) * 0.6)),
+     0 0 30px rgba(255, 100, 0, calc(var(--fire-intensity, 0.5) * 0.4));
+ }
+ 
+
+ 
+ /* Флаг */
+.crystal-flag {
+   position: absolute; /* Абсолютное позиционирование */
+   bottom: 10px; /* Отступ от нижнего края контейнера */
+   left: 50%; /* Центрируем по горизонтали */
+   transform: translateX(-50%); /* Точное центрирование */
+   opacity: 0.9;
+   filter: drop-shadow(0 0 10px rgba(255, 100, 0, 0.7));
+   z-index: 3;
+   /* Убираем вращение или уменьшаем угол */
+   transform: translateX(-50%) rotate(0deg);
+   /* Вертикальные пропорции */
+   width: 100px;
+   height: 100px;
+}
+
+.flag-icon {
+   width: 100%;
+   height: 100%;
+   background-image: url('../../flag.png');
+   background-size: cover; /* Заполняет весь контейнер */
+   background-repeat: no-repeat;
+   background-position: center;
+}
+ 
+ /* Лучи кристалла */
+ .crystal-ray {
+   position: absolute;
+   width: 2px;
+   height: 150px;
+   bottom: 50%;
+   left: 50%;
+   transform-origin: bottom center;
+   background: linear-gradient(
+     to top,
+     transparent,
+     rgba(255, 255, 255, 0.4),
+     rgba(202, 3, 3, 0.2),
+     transparent
+   );
+   animation: rayGlow 3s infinite ease-in-out;
+   filter: blur(1px);
+ }
+ 
+ /* Вращающиеся кольца */
+/* Вращающиеся кольца - ИСПРАВЛЕННЫЙ ВИДИМЫЙ ВАРИАНТ */
+.crystal-ring {
+   position: absolute;
+   border: 2px solid; /* Увеличиваем толщину */
+   border-radius: 50%;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   filter: drop-shadow(0 0 5px currentColor); /* Добавляем свечение */
+ }
+ 
+ .ring-1 {
+   width: 120%;
+   height: 120%;
+   animation: ringRotate 15s infinite linear; /* Ускоряем */
+   border-color: rgba(255, 100, 0, 0.8); /* Делаем непрозрачными */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 10px rgba(255, 100, 0, 0.5);
+ }
+ 
+ .ring-2 {
+   width: 140%;
+   height: 140%;
+   animation: ringRotate 40s infinite linear reverse; /* Ускоряем */
+   border-color: rgba(3, 220, 32, 0.7); /* Делаем непрозрачными */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   border-width: 4px; /* Делаем толще */
+   box-shadow: 0 0 20px rgba(255, 200, 0, 0.4);
+ }
+ 
+ .ring-3 {
+   width: 160%;
+   height: 160%;
+   animation: ringRotate 50s infinite linear; /* Ускоряем */
+   border-color: rgba(255, 0, 0, 0.6); /* Делаем непрозрачными */
+   border-width: 4px; /* Делаем еще толще */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
+ }
+ 
+ .ring-4 {
+   width: 300%;
+   height: 300%;
+   animation: ringRotate 5s infinite linear reverse; /* Ускоряем */
+   border-color: rgba(0, 0, 0, 0.6); /* Делаем непрозрачными */
+   border-width: 4px; /* Делаем еще толще */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 40px rgba(255, 255, 100, 0.3);
+ }
+ .ring-5 {
+   width: 300%;
+   height: 250%;
+   animation: ringRotate 5s infinite linear ; /* Ускоряем */
+   border-color: rgba(195, 255, 0, 0.6); /* Делаем непрозрачными */
+   border-width: 4px; /* Делаем еще толще */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
+ }
+ .ring-6 {
+   width: 250%;
+   height: 300%;
+   animation: ringRotate 5s infinite linear reverse; /* Ускоряем */
+   border-color: rgba(46, 4, 233, 0.6); /* Делаем непрозрачными */
+   border-width: 4px; /* Делаем еще толще */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
+ }
+ 
+ /* Секции */
+ .sections-container {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   z-index: 5;
+ }
+ 
+ .section-item {
+   position: absolute;
+   width: 120px;
+   height: 120px;
+   cursor: pointer;
+   transform: translate(-50%, -50%);
+   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   z-index: 10;
+   pointer-events: auto;
+ }
+ 
+ .section-icon {
+   position: absolute;
+   width: 60px;
+   height: 60px;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background: var(--section-color);
+   border-radius: 50%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   transition: all 0.3s ease;
+   box-shadow: 
+     0 0 25px var(--section-color),
+     inset 0 0 15px rgba(255, 255, 255, 0.3);
+   z-index: 2;
+ }
+ 
+ .icon-glow {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   background: radial-gradient(
+     circle,
+     var(--section-color) 0%,
+     transparent 70%
+   );
+   border-radius: 50%;
+   opacity: 0.4;
+   animation: iconPulse 2s infinite alternate;
+ }
+ 
+ .icon-symbol {
+   font-weight: 900;
+   font-size: 24px;
+   color: white;
+   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+   z-index: 3;
+ }
+ 
+ /* Текст секции с рамкой */
+ .section-text {
+   position: absolute;
+   top: calc(100% + 15px);
+   left: 50%;
+   transform: translateX(-50%) scale(0.9);
+   text-align: center;
+   white-space: nowrap;
+   background: rgba(0, 0, 0, 0.85);
+   padding: 10px 20px;
+   border-radius: 5px;
+   backdrop-filter: blur(10px);
+   min-width: 140px;
+   pointer-events: none;
+   opacity: 0;
+   transition: all 0.3s ease;
+   overflow: visible;
+ }
+ 
+ .section-title {
+   font-size: 14px;
+   font-weight: 700;
+   color: white;
+   letter-spacing: 1px;
+   text-shadow: 
+     0 0 10px var(--section-color),
+     0 0 20px var(--section-color);
+   position: relative;
+   z-index: 2;
+ }
+ 
+ /* Линии рамки - ИСПРАВЛЕННЫЕ */
+ .frame-line {
+   position: absolute;
+   background: var(--section-color);
+   opacity: 0;
+   transition: all 0.4s ease;
+   box-shadow: 0 0 10px var(--section-color);
+   pointer-events: none;
+ }
+ 
+ .frame-line.top {
+   top: -2px;
+   left: 0;
+   width: 0;
+   height: 2px;
+   transition: width 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ .frame-line.bottom {
+   bottom: -2px;
+   right: 0;
+   width: 0;
+   height: 2px;
+   transition: width 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ .frame-line.left {
+   left: -2px;
+   top: 0;
+   width: 2px;
+   height: 0;
+   transition: height 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ .frame-line.right {
+   right: -2px;
+   bottom: 0;
+   width: 2px;
+   height: 0;
+   transition: height 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ /* Соединительная линия к центру */
+ .section-connection {
+   position: absolute;
+   width: 2px;
+   height: 0;
+   top: 50%;
+   left: 50%;
+   background: linear-gradient(
+     to right,
+     transparent,
+     var(--section-color),
+     transparent
+   );
+   transform: translate(-50%, -50%) rotate(90deg);
+   transform-origin: left center;
+   opacity: 0;
+   transition: all 0.4s ease;
+   filter: blur(1px);
+   z-index: 1;
+ }
+ 
+ /* Ховер эффекты */
+ .section-item:hover {
+   transform: translate(-50%, -50%) scale(1.2);
+ }
+ 
+ .section-item:hover .section-icon {
+   transform: translate(-50%, -50%) scale(1.3);
+   box-shadow: 
+     0 0 40px var(--section-color),
+     inset 0 0 20px rgba(255, 255, 255, 0.4);
+ }
+ 
+ .section-item:hover .section-text {
+   opacity: 1;
+   transform: translateX(-50%) scale(1);
+   background: rgba(0, 0, 0, 0.95);
+   box-shadow: 
+     0 15px 35px rgba(0, 0, 0, 0.8),
+     0 0 50px var(--section-color);
+ }
+ 
+ .section-item:hover .section-connection {
+   height: 150px;
+   opacity: 0.5;
+   animation: beamPulse 1s infinite alternate;
+ }
+ 
+ /* Анимация рамки при наведении */
+ .section-item:hover .frame-line {
+   opacity: 1;
+ }
+ 
+ .section-item:hover .frame-line.top {
+   width: 100%;
+   transition: width 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ .section-item:hover .frame-line.bottom {
+   width: 100%;
+   transition: width 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ .section-item:hover .frame-line.left {
+   height: 100%;
+   transition: height 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ .section-item:hover .frame-line.right {
+   height: 100%;
+   transition: height 4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+ }
+ 
+ /* Активная секция */
+ .section-item.active {
+   animation: activePulse 5.5s ease;
+ }
+ 
+
+ 
+ .fire-particle {
+   position: absolute;
+   border-radius: 50%;
+   background: radial-gradient(circle, 
+     rgba(255, 100, 0, 0.8) 0%,
+     rgba(255, 200, 0, 0.6) 50%,
+     transparent 70%
+   );
+   opacity: 0.7;
+   animation: fireFloat 3s infinite ease-in-out;
+   filter: blur(2px);
+ }
+ 
+ /* Анимации */
+ @keyframes corePulse {
+   0% { 
+     opacity: 0.3;
+     transform: scale(0.95);
+   }
+   100% { 
+     opacity: 0.6;
+     transform: scale(1.05);
+   }
+ }
+
+ 
+ @keyframes letterFloat {
+   0%, 100% { 
+     transform: translateY(0);
+     filter: brightness(1);
+   }
+   50% { 
+     transform: translateY(-3px);
+     filter: brightness(1.5);
+   }
+ }
+ 
+ @keyframes fireGradient {
+   0% {
+     background-position: 0% 50%;
+   }
+   50% {
+     background-position: 100% 50%;
+   }
+   100% {
+     background-position: 0% 50%;
+   }
+ }
+ 
+ @keyframes fireGlow {
+   0% { 
+     opacity: 0.2;
+     transform: scale(1);
+   }
+   100% { 
+     opacity: 0.5;
+     transform: scale(1.1);
+   }
+ }
+ 
+ @keyframes flameFlicker {
+   0% { 
+     opacity: calc(var(--fire-intensity, 0.5) * 0.8);
+     transform: translateX(-50%) scaleY(0.8);
+   }
+   100% { 
+     opacity: calc(var(--fire-intensity, 0.5) * 1.2);
+     transform: translateX(-50%) scaleY(1.2);
+   }
+ }
+ 
+ @keyframes flagFloat {
+   0%, 100% { transform: rotate(45deg) translateY(0); }
+   50% { transform: rotate(45deg) translateY(-5px); }
+ }
+ 
+ @keyframes rayGlow {
+   0%, 100% { 
+     opacity: 0.3;
+     filter: blur(1px);
+   }
+   50% { 
+     opacity: 0.7;
+     filter: blur(0.5px);
+   }
+ }
+ 
+ @keyframes ringRotate {
+   0% { transform: translate(-50%, -50%) rotate(0deg); }
+   100% { transform: translate(-50%, -50%) rotate(360deg); }
+ }
+ 
+ @keyframes iconPulse {
+   0% { 
+     opacity: 0.3;
+     transform: scale(0.9);
+   }
+   100% { 
+     opacity: 0.6;
+     transform: scale(1.1);
+   }
+ }
+ 
+ @keyframes beamPulse {
+   0% { opacity: 0.3; }
+   100% { opacity: 0.7; }
+ }
+ 
+ @keyframes activePulse {
+   0% { transform: translate(-50%, -50%) scale(1); }
+   50% { transform: translate(-50%, -50%) scale(1.4); }
+   100% { transform: translate(-50%, -50%) scale(1); }
+ }
+ 
+/*  @keyframes fireFloat {
+   0% { 
+     transform: translateY(0) scale(1);
+     opacity: 0.3;
+   }
+   50% { 
+     transform: translateY(-20px) scale(1.2);
+     opacity: 0.8;
+   }
+   100% { 
+     transform: translateY(-40px) scale(0.8);
+     opacity: 0;
+   }
+ } */
+ 
+ /* Адаптивность */
+ @media (max-width: 1024px) {
+   .central-crystal {
+     width: 250px;
+     height: 250px;
+   }
+   
+   .crystal-text {
+     font-size: 28px;
+     gap: 3px;
+     letter-spacing: 3px;
+   }
+   
+   .fire-letter {
+     font-size: 28px;
+   }
+   
+   .section-item {
+     width: 100px;
+     height: 100px;
+   }
+   
+   .section-icon {
+     width: 50px;
+     height: 50px;
+   }
+   
+   .icon-symbol {
+     font-size: 20px;
+   }
+   
+   .section-text {
+     padding: 8px 16px;
+     min-width: 120px;
+   }
+   
+   .section-title {
+     font-size: 12px;
+   }
+ }
+ 
+ @media (max-width: 768px) {
+   .central-crystal {
+     width: 200px;
+     height: 200px;
+   }
+   
+   .crystal-text {
+     font-size: 22px;
+     gap: 2px;
+     letter-spacing: 2px;
+   }
+   
+   .fire-letter {
+     font-size: 22px;
+   }
+   
+   .section-item {
+     width: 80px;
+     height: 80px;
+   }
+   
+   .section-icon {
+     width: 40px;
+     height: 40px;
+   }
+   
+   .icon-symbol {
+     font-size: 16px;
+   }
+   
+   .section-text {
+     padding: 6px 12px;
+     min-width: 100px;
+   }
+   
+   .section-title {
+     font-size: 11px;
+   }
+   
+   /* На мобильных располагаем секции ближе к центру */
+   .section-item:nth-child(1) { left: 50%; top: 20%; }
+   .section-item:nth-child(2) { left: 80%; top: 35%; }
+   .section-item:nth-child(3) { left: 80%; top: 65%; }
+   .section-item:nth-child(4) { left: 50%; top: 80%; }
+   .section-item:nth-child(5) { left: 20%; top: 65%; }
+   .section-item:nth-child(6) { left: 20%; top: 35%; }
+ }
+ 
+ @media (max-width: 480px) {
+   .central-crystal {
+     width: 180px;
+     height: 180px;
+   }
+   
+   .crystal-text {
+     font-size: 20px;
+     gap: 1px;
+     letter-spacing: 1px;
+   }
+   
+   .fire-letter {
+     font-size: 20px;
+   }
+   
+   .flag-icon {
+     font-size: 20px;
+   }
+   
+   .section-item {
+     width: 70px;
+     height: 70px;
+   }
+   
+   .section-icon {
+     width: 35px;
+     height: 35px;
+   }
+   
+   .icon-symbol {
+     font-size: 14px;
+   }
+   
+   .section-text {
+     padding: 5px 10px;
+     min-width: 90px;
+   }
+   
+   .section-title {
+     font-size: 10px;
+   }
+ }

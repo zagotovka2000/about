@@ -5,8 +5,6 @@ import App from './App';
 
 // Заменяем createRoot на старый метод render
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <App />,
   document.getElementById('root')
 );
