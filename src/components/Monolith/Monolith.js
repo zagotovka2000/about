@@ -167,6 +167,8 @@ const Monolith = ({ sections, onSectionClick }) => {
         <div className="crystal-ring ring-4"></div>
         <div className="crystal-ring ring-5"></div>
         <div className="crystal-ring ring-6"></div>
+        <div className="crystal-ring ring-7"></div>
+        <div className="crystal-ring ring-8"></div>
       </div>
 
       {/* Секции вокруг монолита */}

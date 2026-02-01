@@ -268,7 +268,7 @@
  }
  .ring-5 {
    width: 300%;
-   height: 250%;
+   height: 220%;
    animation: ringRotate 5s infinite linear ; /* Ускоряем */
    border-color: rgba(195, 255, 0, 0.6); /* Делаем непрозрачными */
    border-width: 4px; /* Делаем еще толще */
@@ -276,11 +276,29 @@
    box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
  }
  .ring-6 {
-   width: 250%;
+   width: 220%;
    height: 300%;
    animation: ringRotate 5s infinite linear reverse; /* Ускоряем */
    border-color: rgba(46, 4, 233, 0.6); /* Делаем непрозрачными */
    border-width: 4px; /* Делаем еще толще */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
+ }
+ .ring-7 {
+   width: 220%;
+   height: 300%;
+   animation: ringRotate 15s infinite linear ; /* Ускоряем */
+   border-color: rgba(120, 208, 225, 0.6); /* Делаем непрозрачными */
+   border-width: 5px; /* Делаем еще толще */
+   border-style: dashed; /* Делаем пунктирным для разнообразия */
+   box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
+ }
+ .ring-8 {
+   width: 220%;
+   height: 300%;
+   animation: ringRotate 15s infinite linear reverse; /* Ускоряем */
+   border-color: rgba(146, 168, 172, 0.6); /* Делаем непрозрачными */
+   border-width: 5px; /* Делаем еще толще */
    border-style: dashed; /* Делаем пунктирным для разнообразия */
    box-shadow: 0 0 20px rgba(255, 255, 100, 0.3);
  }

@@ -5,9 +5,9 @@ const War = () => {
   const [activeWar, setActiveWar] = useState(null);
 
   const wars = [
-    { id: 'war1508', fileName: 'GW150825.txt', date: '15.08.2025' },
-    { id: 'war1908', fileName: 'GW190825.txt', date: '19.08.2025' },
-    { id: 'war2208', fileName: 'GW220825.txt', date: '22.08.2025' },
+    { id: 'war1508', fileName: 'GW150825.txt', date: '15.12.2025' },
+    { id: 'war1908', fileName: 'GW190825.txt', date: '19.12.2025' },
+    { id: 'war2208', fileName: 'GW220825.txt', date: '22.12.2025' },
   ];
 
   const toggleWar = (warId) => {
@@ -81,11 +81,8 @@ const War = () => {
   return (
    <div className="war-container">
      <div className="war-header">
-       <h3>Войны гильдии</h3>
        <p className="war-description">
-         ВГ-атаки только по назначенным целям, иначе внезапно вам выдадут 
-         артефакт за шиворот. Список чемпионов формируется, исходя из аморальных
-         соображений генерала.
+         Высокий поклон нашему новому главнокомандующему Виларту. ВГ бьем по целям, если Виларт не сообщит,что атакуем иначе. Кто наконячит на ВГ на ровном месте, Виларт выбирает наказание для испытанта из вкладки "Наказания" и выдает ему за артефакт за шиворот. Список чемпионов формируется, исходя из аморальных соображений главнокомандующего и по его внезапному озарению.
        </p>
      </div>
 
@@ -106,10 +103,11 @@ const War = () => {
            {activeWar === war.id && (
              <div className="war-card-content">
                {/* Здесь будет компонент WarComponent */}
-               <p>Данные о войне {war.date}</p>
+               <p className='btn'>Данные о войне {war.date}</p>
                <button className="war-download-btn">
                  Скачать данные
                </button>
+              <p className="txtLoadBattle">Выгрузку боев пока больше не делаем</p> 
              </div>
            )}
          </div>
