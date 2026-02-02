@@ -189,3 +189,55 @@
      padding: 15px 20px;
    }
  }
+/* Modal.css - Добавьте/обновите эти стили */
+.modal-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.85);
+   backdrop-filter: blur(15px);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+   animation: fadeIn 0.3s ease;
+ }
+ 
+ /* Основное изменение - 90% ширины */
+ .modal-container {
+   background: linear-gradient(145deg, #1a1a2e, #16213e);
+   border: 3px solid #c8a165;
+   border-radius: 20px;
+   width: 90%; /* 90% ширины окна */
+   max-width: 1600px; /* Увеличим максимальную ширину */
+   max-height: 85vh;
+   overflow: hidden;
+   box-shadow: 
+     0 30px 60px rgba(0, 0, 0, 0.7),
+     inset 0 1px 0 rgba(255, 255, 255, 0.15);
+   animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+   position: relative;
+ }
+ 
+ /* Остальные стили остаются прежними или обновляются по желанию */
+ .modal-content {
+   padding: 30px;
+   overflow-y: auto;
+   max-height: calc(85vh - 140px);
+   background: rgba(10, 10, 10, 0.8);
+ }
+ 
+ /* Для мобильных устройств можно оставить адаптивность */
+ @media (max-width: 768px) {
+   .modal-container {
+     width: 95%;
+     max-height: 90vh;
+   }
+   
+   .modal-content {
+     max-height: calc(90vh - 130px);
+     padding: 20px;
+   }
+ }

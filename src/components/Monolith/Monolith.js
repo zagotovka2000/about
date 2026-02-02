@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Monolith.css';
-import flagImage from '../../flag.png';
-
+/* import flagImage from '../../flag.png';
+ */
 const Monolith = ({ sections, onSectionClick }) => {
   const containerRef = useRef(null);
   const crystalRef = useRef(null);
@@ -61,17 +61,17 @@ const Monolith = ({ sections, onSectionClick }) => {
   const letters = ['М', 'О', 'Н', 'О', 'Л', 'И', 'Т'];
   
   // Огненные цвета для градиента
-  const fireColors = [
+/*   const fireColors = [
     '#FF0000', '#FF3300', '#FF6600', 
     '#FF9900', '#FFCC00', '#FFFF00'
-  ];
+  ]; */
 
   // Получаем первую букву названия секции
   const getFirstLetter = (title) => {
     // Для кириллических букв
-    const russianLetters = {
+/*     const russianLetters = {
       'В': 'В', 'С': 'С', 'А': 'А', 'Т': 'Т', 'Н': 'Н'
-    };
+    }; */
     return title.charAt(0);
   };
 

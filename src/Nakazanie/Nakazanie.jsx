@@ -1,5 +1,4 @@
 import styles from "./nakazanie.module.css";
-import Table from '../Table/Table'
 const Nakazanie = () => {
   return (
     <div className={styles.conteiner}>

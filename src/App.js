@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Monolith from './components/Monolith/Monolith';
 import Modal from './components/Modal/Modal';
 import AudioManager from './components/Audio/AudioManager';
@@ -12,7 +12,6 @@ import Asgard from './Asgard/Asgard';
 import Territory from './Territory/Territory';
 import Activ from './Activ/Activ';
 import Nakazanie from './Nakazanie/Nakazanie';
-import Tournament from './Tournament/Tournament';
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);

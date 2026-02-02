@@ -10,11 +10,11 @@ const War = () => {
     { id: 'war2208', fileName: 'GW220825.txt', date: '22.12.2025' },
   ];
 
-  const toggleWar = (warId) => {
+/*   const toggleWar = (warId) => {
     setActiveWar(activeWar === warId ? null : warId);
-  };
+  }; */
 
-  const generateDefensesPacks = async (fileName) => {
+/*   const generateDefensesPacks = async (fileName) => {
     try {
       const response = await fetch(`/${fileName}`);
       const text = await response.text();
@@ -76,7 +76,7 @@ const War = () => {
       console.error('Ошибка при генерации файла:', error);
       alert('Ошибка при генерации файла: ' + error.message);
     }
-  };
+  }; */
 
   return (
    <div className="war-container">

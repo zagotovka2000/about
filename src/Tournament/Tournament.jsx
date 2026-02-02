@@ -48,9 +48,9 @@ const Tournament = () => {
     winner: "'_'"
   };
 
-  useEffect(() => {
+/*   useEffect(() => {
     setTournamentData(sampleTournamentData);
-  }, []);
+  }, []); */
 
   const TournamentBracket = () => {
     return (
