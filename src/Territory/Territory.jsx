@@ -1,5 +1,5 @@
 // Territory.js
-import React, { useState, useEffect, useMemo,useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './territory.css';
 
 const Territory = () => {
@@ -33,75 +33,147 @@ const Territory = () => {
     require35Points: true,
   });
 
+  // Функция для извлечения существ из данных
+  const extractCreaturesFromData = useCallback((data, creaturesSet) => {
+    data.forEach(item => {
+      // Проверяем поле "Атакующий"
+      if (item['Атакующий'] && typeof item['Атакующий'] === 'string' && item['Атакующий'].includes('|')) {
+        const parts = item['Атакующий'].split('|');
+        if (parts[0] && parts[0].trim()) {
+          const creatureName = parts[0].trim();
+          if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
+            creaturesSet.add(creatureName);
+          }
+        }
+      }
+      
+      // Проверяем поле "Защищающийся"
+      if (item['Защищающийся'] && typeof item['Защищающийся'] === 'string' && item['Защищающийся'].includes('|')) {
+        const parts = item['Защищающийся'].split('|');
+        if (parts[0] && parts[0].trim()) {
+          const creatureName = parts[0].trim();
+          if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
+            creaturesSet.add(creatureName);
+          }
+        }
+      }
+    });
+  }, []);
+
   // Загрузка всех JSON файлов
+  const loadAllJsonFiles = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      
+      // Загружаем оба файла
+      const [attackResponse, defenseResponse] = await Promise.all([
+        fetch('/smBattle/pphrla1.json'),
+        fetch('/smBattle/pphrla2.json')
+      ]);
+      
+      const attackJson = await attackResponse.json();
+      const defenseJson = await defenseResponse.json();
+      
+      console.log('Загружен файл атаки, записей:', attackJson.length);
+      console.log('Загружен файл защиты, записей:', defenseJson.length);
+      
+      setAttackData(attackJson);
+      setDefenseData(defenseJson);
+      
+      // Извлекаем существа из обоих файлов
+      const allCreatures = new Set();
+      extractCreaturesFromData(attackJson, allCreatures);
+      extractCreaturesFromData(defenseJson, allCreatures);
+      
+      const sortedCreatures = Array.from(allCreatures).sort();
+      setAvailableCreatures(sortedCreatures);
+      console.log('Всего уникальных существ:', sortedCreatures.length);
+      
+    } catch (error) {
+      console.error('Ошибка загрузки JSON файлов:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [extractCreaturesFromData]);
+
+  // Инициализация - загрузка данных
   useEffect(() => {
     loadAllJsonFiles();
   }, [loadAllJsonFiles]);
 
-  // Загрузка всех JSON файлов
-  const loadAllJsonFiles = useCallback(async () => { // Используем useCallback
-   try {
-     setIsLoading(true);
-     
-     // Загружаем оба файла
-     const [attackResponse, defenseResponse] = await Promise.all([
-       fetch('/smBattle/pphrla1.json'),
-       fetch('/smBattle/pphrla2.json')
-     ]);
-     
-     const attackJson = await attackResponse.json();
-     const defenseJson = await defenseResponse.json();
-     
-     console.log('Загружен файл атаки, записей:', attackJson.length);
-     console.log('Загружен файл защиты, записей:', defenseJson.length);
-     
-     setAttackData(attackJson);
-     setDefenseData(defenseJson);
-     
-     // Извлекаем существа из обоих файлов
-     const allCreatures = new Set();
-     extractCreaturesFromData(attackJson, allCreatures);
-     extractCreaturesFromData(defenseJson, allCreatures);
-     
-     const sortedCreatures = Array.from(allCreatures).sort();
-     setAvailableCreatures(sortedCreatures);
-     console.log('Всего уникальных существ:', sortedCreatures.length);
-     
-   } catch (error) {
-     console.error('Ошибка загрузки JSON файлов:', error);
-   } finally {
-     setIsLoading(false);
-   }
- }, []);
- useEffect(() => {
-   loadAllJsonFiles();
- }, [loadAllJsonFiles]);
-  // Функция для извлечения существ из данных
-  const extractCreaturesFromData = useCallback((data, creaturesSet) => { // Используем useCallback
-   data.forEach(item => {
-     // Проверяем поле "Атакующий"
-     if (item['Атакующий'] && typeof item['Атакующий'] === 'string' && item['Атакующий'].includes('|')) {
-       const parts = item['Атакующий'].split('|');
-       if (parts[0] && parts[0].trim()) {
-         const creatureName = parts[0].trim();
-         if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
-           creaturesSet.add(creatureName);
-         }
-       }
-     }
-     
-     // Проверяем поле "Защищающийся"
-     if (item['Защищающийся'] && typeof item['Защищающийся'] === 'string' && item['Защищающийся'].includes('|')) {
-       const parts = item['Защищающийся'].split('|');
-       if (parts[0] && parts[0].trim()) {
-         const creatureName = parts[0].trim();
-         if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
-           creaturesSet.add(creatureName);
-         }
-       }
-     }
-   });
- }, []);
+  // Группировка батлов по укреплению для файла защиты
+  const groupBattlesByFortification = (data) => {
+    const groups = {};
+    
+    data.forEach(battle => {
+      const fortification = battle['Укрепление'] || 'unknown';
+      if (!groups[fortification]) {
+        groups[fortification] = [];
+      }
+      groups[fortification].push(battle);
+    });
+    
+    return groups;
+  };
+
+  // Поиск группы атаки по укреплению
+  const findAttackGroupForFortification = (fortification, attackData) => {
+    const group = [];
+    let found = false;
+    
+    // Ищем все записи с таким же укреплением
+    attackData.forEach(battle => {
+      if (battle['Укрепление'] === fortification) {
+        group.push(battle);
+        found = true;
+      }
+    });
+    
+    return found ? group : null;
+  };
+
+  // Извлечение информации об атаке из группы
+  const extractAttackInfo = (attackGroup) => {
+    const info = {
+      points: null,
+      attackerName: null,
+      attackingCreatures: []
+    };
+    
+    attackGroup.forEach(row => {
+      // Очки
+      if (row['Очки'] && !info.points) {
+        info.points = row['Очки'];
+      }
+      
+      // Имя атакующего (в строке с очками)
+      if (row['Очки'] && row['Атакующий'] && !row['Атакующий'].includes('|')) {
+        info.attackerName = row['Атакующий'];
+      }
+      
+      // Атакующие существа
+      if (row['Атакующий'] && typeof row['Атакующий'] === 'string' && row['Атакующий'].includes('|')) {
+        const parts = row['Атакующий'].split('|');
+        const creatureName = parts[0].trim();
+        info.attackingCreatures.push({
+          name: creatureName,
+          fullInfo: row['Атакующий']
+        });
+      }
+    });
+    
+    return info;
+  };
+
+  // Извлечение имени защищающегося
+  const extractDefenderName = (defenseGroup) => {
+    for (const row of defenseGroup) {
+      if (row['Защищающийся'] && !row['Защищающийся'].includes('|')) {
+        return row['Защищающийся'];
+      }
+    }
+    return null;
+  };
 
   // Основная функция поиска - ИЩЕМ В ФАЙЛЕ ЗАЩИТЫ
   const handleSearch = () => {
@@ -257,80 +329,6 @@ const Territory = () => {
     console.log('Найдено результатов:', sortedResults.length);
     setSearchResults(sortedResults);
     setIsSearching(false);
-  };
-
-  // Группировка батлов по укреплению для файла защиты
-  const groupBattlesByFortification = (data) => {
-    const groups = {};
-    
-    data.forEach(battle => {
-      const fortification = battle['Укрепление'] || 'unknown';
-      if (!groups[fortification]) {
-        groups[fortification] = [];
-      }
-      groups[fortification].push(battle);
-    });
-    
-    return groups;
-  };
-
-  // Поиск группы атаки по укреплению
-  const findAttackGroupForFortification = (fortification, attackData) => {
-    const group = [];
-    let found = false;
-    
-    // Ищем все записи с таким же укреплением
-    attackData.forEach(battle => {
-      if (battle['Укрепление'] === fortification) {
-        group.push(battle);
-        found = true;
-      }
-    });
-    
-    return found ? group : null;
-  };
-
-  // Извлечение информации об атаке из группы
-  const extractAttackInfo = (attackGroup) => {
-    const info = {
-      points: null,
-      attackerName: null,
-      attackingCreatures: []
-    };
-    
-    attackGroup.forEach(row => {
-      // Очки
-      if (row['Очки'] && !info.points) {
-        info.points = row['Очки'];
-      }
-      
-      // Имя атакующего (в строке с очками)
-      if (row['Очки'] && row['Атакующий'] && !row['Атакующий'].includes('|')) {
-        info.attackerName = row['Атакующий'];
-      }
-      
-      // Атакующие существа
-      if (row['Атакующий'] && typeof row['Атакующий'] === 'string' && row['Атакующий'].includes('|')) {
-        const parts = row['Атакующий'].split('|');
-        const creatureName = parts[0].trim();
-        info.attackingCreatures.push({
-          name: creatureName,
-          fullInfo: row['Атакующий']
-        });
-      }
-    });
-    
-    return info;
-  };
-
-  // Извлечение имени защищающегося
-  const extractDefenderName = (defenseGroup) => {
-    for (const row of defenseGroup) {
-      if (row['Защищающийся'] && !row['Защищающийся'].includes('|')) {
-        return row['Защищающийся'];
-      }
-    }
-    return null;
   };
 
   // Разделение существ на питомцев и героев
