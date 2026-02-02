@@ -36,7 +36,7 @@ const Territory = () => {
   // Загрузка всех JSON файлов
   useEffect(() => {
     loadAllJsonFiles();
-  }, []);
+  }, [loadAllJsonFiles]);
 
   // Загрузка всех JSON файлов
   const loadAllJsonFiles = async () => {

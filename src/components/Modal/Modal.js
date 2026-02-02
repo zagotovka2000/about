@@ -24,7 +24,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'auto';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose,handleClose]);
 
   if (!isOpen) return null;
 
