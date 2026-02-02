@@ -1,5 +1,5 @@
 // Territory.js
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo,useCallback } from 'react';
 import './territory.css';
 
 const Territory = () => {
@@ -39,67 +39,69 @@ const Territory = () => {
   }, [loadAllJsonFiles]);
 
   // Загрузка всех JSON файлов
-  const loadAllJsonFiles = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Загружаем оба файла
-      const [attackResponse, defenseResponse] = await Promise.all([
-        fetch('/smBattle/pphrla1.json'),
-        fetch('/smBattle/pphrla2.json')
-      ]);
-      
-      const attackJson = await attackResponse.json();
-      const defenseJson = await defenseResponse.json();
-      
-      console.log('Загружен файл атаки, записей:', attackJson.length);
-      console.log('Загружен файл защиты, записей:', defenseJson.length);
-      
-      setAttackData(attackJson);
-      setDefenseData(defenseJson);
-      
-      // Извлекаем существа из обоих файлов
-      const allCreatures = new Set();
-      extractCreaturesFromData(attackJson, allCreatures);
-      extractCreaturesFromData(defenseJson, allCreatures);
-      
-      const sortedCreatures = Array.from(allCreatures).sort();
-      setAvailableCreatures(sortedCreatures);
-      console.log('Всего уникальных существ:', sortedCreatures.length);
-      
-    } catch (error) {
-      console.error('Ошибка загрузки JSON файлов:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  const loadAllJsonFiles = useCallback(async () => { // Используем useCallback
+   try {
+     setIsLoading(true);
+     
+     // Загружаем оба файла
+     const [attackResponse, defenseResponse] = await Promise.all([
+       fetch('/smBattle/pphrla1.json'),
+       fetch('/smBattle/pphrla2.json')
+     ]);
+     
+     const attackJson = await attackResponse.json();
+     const defenseJson = await defenseResponse.json();
+     
+     console.log('Загружен файл атаки, записей:', attackJson.length);
+     console.log('Загружен файл защиты, записей:', defenseJson.length);
+     
+     setAttackData(attackJson);
+     setDefenseData(defenseJson);
+     
+     // Извлекаем существа из обоих файлов
+     const allCreatures = new Set();
+     extractCreaturesFromData(attackJson, allCreatures);
+     extractCreaturesFromData(defenseJson, allCreatures);
+     
+     const sortedCreatures = Array.from(allCreatures).sort();
+     setAvailableCreatures(sortedCreatures);
+     console.log('Всего уникальных существ:', sortedCreatures.length);
+     
+   } catch (error) {
+     console.error('Ошибка загрузки JSON файлов:', error);
+   } finally {
+     setIsLoading(false);
+   }
+ }, []);
+ useEffect(() => {
+   loadAllJsonFiles();
+ }, [loadAllJsonFiles]);
   // Функция для извлечения существ из данных
-  const extractCreaturesFromData = (data, creaturesSet) => {
-    data.forEach(item => {
-      // Проверяем поле "Атакующий"
-      if (item['Атакующий'] && typeof item['Атакующий'] === 'string' && item['Атакующий'].includes('|')) {
-        const parts = item['Атакующий'].split('|');
-        if (parts[0] && parts[0].trim()) {
-          const creatureName = parts[0].trim();
-          if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
-            creaturesSet.add(creatureName);
-          }
-        }
-      }
-      
-      // Проверяем поле "Защищающийся"
-      if (item['Защищающийся'] && typeof item['Защищающийся'] === 'string' && item['Защищающийся'].includes('|')) {
-        const parts = item['Защищающийся'].split('|');
-        if (parts[0] && parts[0].trim()) {
-          const creatureName = parts[0].trim();
-          if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
-            creaturesSet.add(creatureName);
-          }
-        }
-      }
-    });
-  };
+  const extractCreaturesFromData = useCallback((data, creaturesSet) => { // Используем useCallback
+   data.forEach(item => {
+     // Проверяем поле "Атакующий"
+     if (item['Атакующий'] && typeof item['Атакующий'] === 'string' && item['Атакующий'].includes('|')) {
+       const parts = item['Атакующий'].split('|');
+       if (parts[0] && parts[0].trim()) {
+         const creatureName = parts[0].trim();
+         if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
+           creaturesSet.add(creatureName);
+         }
+       }
+     }
+     
+     // Проверяем поле "Защищающийся"
+     if (item['Защищающийся'] && typeof item['Защищающийся'] === 'string' && item['Защищающийся'].includes('|')) {
+       const parts = item['Защищающийся'].split('|');
+       if (parts[0] && parts[0].trim()) {
+         const creatureName = parts[0].trim();
+         if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
+           creaturesSet.add(creatureName);
+         }
+       }
+     }
+   });
+ }, []);
 
   // Основная функция поиска - ИЩЕМ В ФАЙЛЕ ЗАЩИТЫ
   const handleSearch = () => {
