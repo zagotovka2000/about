@@ -28,7 +28,6 @@ function App() {
     { id: 'territory', title: 'ПОДБОР', component: <Territory />, position: 'window-left' },
     { id: 'activ', title: 'АКТИВНОСТЬ', component: <Activ />, position: 'window-center' },
     { id: 'nakazanie', title: 'НАКАЗАНИЯ', component: <Nakazanie />, position: 'window-right' },
-
   ];
 
   const handleSectionClick = (section) => {
