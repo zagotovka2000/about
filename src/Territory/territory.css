@@ -1010,3 +1010,509 @@
  .battle-result-item.partial {
    border-left: 4px solid #6c757d;
  }
+/* Territory.css - дополнения */
+
+/* Territory.css дополнения */
+
+/* Стили для команды с патронажами */
+.team-with-patronage {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 15px;
+   padding: 15px;
+ }
+ 
+ .general-pet-container {
+   position: relative;
+   width: 70px;
+   height: 70px;
+   margin-bottom: 10px;
+ }
+ 
+ .general-pet-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 3px solid gold;
+   background-color: white;
+ }
+ 
+ .general-pet-fallback {
+   width: 70px;
+   height: 70px;
+   border-radius: 50%;
+   border: 3px solid gold;
+   background-color: #f8f9fa;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 12px;
+   font-weight: bold;
+   text-align: center;
+ }
+ 
+ .heroes-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 15px;
+   justify-content: center;
+ }
+ 
+ .hero-patron-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+ 
+ .hero-container {
+   position: relative;
+   width: 60px;
+   height: 60px;
+ }
+ 
+ .hero-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 2px solid #3498db;
+   background-color: white;
+ }
+ 
+ .hero-fallback {
+   width: 60px;
+   height: 60px;
+   border-radius: 50%;
+   border: 2px solid #3498db;
+   background-color: #f8f9fa;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 11px;
+   font-weight: bold;
+   text-align: center;
+ }
+ 
+ .patronage-image {
+   position: absolute;
+   bottom: -5px;
+   right: -5px;
+   width: 25px;
+   height: 25px;
+   border-radius: 50%;
+   border: 1px solid gold;
+   background-color: white;
+   object-fit: contain;
+ }
+ 
+ .patron-fallback {
+   position: absolute;
+   bottom: -5px;
+   right: -5px;
+   width: 25px;
+   height: 25px;
+   border-radius: 50%;
+   border: 1px solid gold;
+   background-color: #f8f9fa;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 9px;
+   font-weight: bold;
+ }
+ 
+ .team-power {
+   font-size: 16px;
+   font-weight: bold;
+   color: #2c3e50;
+   background-color: #f8f9fa;
+   padding: 8px 15px;
+   border-radius: 20px;
+   border: 1px solid #ddd;
+   margin-top: 10px;
+ }
+ 
+ /* Контейнеры команд */
+ .team-container {
+   flex: 1;
+   min-width: 300px;
+   max-width: 400px;
+   border-radius: 10px;
+   padding: 0;
+ }
+ 
+ .attacking-team {
+   background: linear-gradient(135deg, #fff5f5 0%, #ffeaea 100%);
+   border: 2px solid #ff7675;
+ }
+ 
+ .defending-team {
+   background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+   border: 2px solid #74b9ff;
+ }
+ 
+ .team-title {
+   background-color: rgba(0,0,0,0.05);
+   padding: 10px;
+   text-align: center;
+   font-weight: bold;
+   color: #2c3e50;
+   border-bottom: 1px solid rgba(0,0,0,0.1);
+   font-size: 16px;
+ }
+ 
+ .player-name {
+   text-align: center;
+   padding: 8px;
+   font-weight: bold;
+   color: #34495e;
+   background-color: rgba(255,255,255,0.7);
+   border-bottom: 1px solid rgba(0,0,0,0.1);
+ }
+ 
+ .battle-teams-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 20px;
+   justify-content: center;
+   margin-bottom: 20px;
+ }
+ 
+ .teams-divider {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-width: 60px;
+ }
+ 
+ .vs-text {
+   background: linear-gradient(135deg, #ff9f43 0%, #ff8c2e 100%);
+   color: white;
+   width: 50px;
+   height: 50px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: bold;
+   font-size: 18px;
+   box-shadow: 0 4px 8px rgba(255, 159, 67, 0.3);
+ }
+ 
+ .battle-footer {
+   padding-top: 15px;
+   border-top: 1px dashed #ddd;
+ }
+ 
+ .selected-summary {
+   text-align: center;
+ }
+ 
+ .selected-creatures-list {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+   justify-content: center;
+   margin-top: 8px;
+ }
+ 
+ .selected-creature-tag {
+   background-color: #2ecc71;
+   color: white;
+   padding: 4px 12px;
+   border-radius: 15px;
+   font-size: 12px;
+   font-weight: bold;
+ }
+ 
+ /* Адаптивность */
+ @media (max-width: 768px) {
+   .team-container {
+     min-width: 100%;
+   }
+   
+   .teams-divider {
+     min-width: 100%;
+     height: 40px;
+   }
+   
+   .hero-container {
+     width: 50px;
+     height: 50px;
+   }
+   
+   .general-pet-container {
+     width: 60px;
+     height: 60px;
+   }
+   
+   .general-pet-fallback {
+     width: 60px;
+     height: 60px;
+   }
+ }
+/* Territory.css - исправления */
+
+.territory-container {
+   width: 100%;
+   max-width: 1400px;
+   margin: 0 auto;
+   padding: 20px;
+ }
+ 
+ .territory-title {
+   text-align: center;
+   margin-bottom: 30px;
+   color: #2c3e50;
+ }
+ 
+ /* Общие стили для пачки */
+ .team-with-patronage {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 15px;
+   padding: 15px;
+ }
+ 
+ .general-pet-container {
+   position: relative;
+   width: 80px;
+   height: 80px;
+   margin-bottom: 10px;
+ }
+ 
+ .general-pet-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 3px solid gold;
+   background-color: white;
+ }
+ 
+ .general-pet-fallback {
+   display: none;
+   width: 80px;
+   height: 80px;
+   border-radius: 50%;
+   border: 3px solid gold;
+   background-color: #f8f9fa;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 12px;
+   font-weight: bold;
+ }
+ 
+ .heroes-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 15px;
+   justify-content: center;
+   margin-bottom: 15px;
+ }
+ 
+ .hero-patron-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+ 
+ .hero-container {
+   position: relative;
+   width: 70px;
+   height: 70px;
+ }
+ 
+ .hero-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 2px solid #3498db;
+   background-color: white;
+ }
+ 
+ .hero-fallback {
+   display: none;
+   width: 70px;
+   height: 70px;
+   border-radius: 50%;
+   border: 2px solid #3498db;
+   background-color: #f8f9fa;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 11px;
+   font-weight: bold;
+   text-align: center;
+   padding: 5px;
+ }
+ 
+ .patronage-image {
+   position: absolute;
+   bottom: -5px;
+   right: -5px;
+   width: 25px;
+   height: 25px;
+   border-radius: 50%;
+   border: 2px solid gold;
+   background-color: white;
+   object-fit: contain;
+ }
+ 
+ .patron-fallback {
+   display: none;
+   position: absolute;
+   bottom: -5px;
+   right: -5px;
+   width: 25px;
+   height: 25px;
+   border-radius: 50%;
+   border: 2px solid gold;
+   background-color: #f8f9fa;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 9px;
+   font-weight: bold;
+ }
+ 
+ .team-power {
+   font-size: 16px;
+   font-weight: bold;
+   color: #2c3e50;
+   background-color: #f8f9fa;
+   padding: 8px 16px;
+   border-radius: 20px;
+   border: 2px solid #ddd;
+ }
+ 
+ /* Контейнеры команд */
+ .battle-teams-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 20px;
+   justify-content: center;
+   margin-bottom: 20px;
+ }
+ 
+ .team-container {
+   flex: 1;
+   min-width: 300px;
+   max-width: 500px;
+   border-radius: 10px;
+   overflow: hidden;
+ }
+ 
+ .attacking-team {
+   background: linear-gradient(135deg, #fff5f5 0%, #ffeaea 100%);
+   border: 2px solid #ff7675;
+ }
+ 
+ .defending-team {
+   background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+   border: 2px solid #74b9ff;
+ }
+ 
+ .team-title {
+   background-color: rgba(0,0,0,0.1);
+   padding: 12px;
+   text-align: center;
+   font-weight: bold;
+   color: #2c3e50;
+   font-size: 16px;
+ }
+ 
+ .player-name {
+   text-align: center;
+   padding: 10px;
+   font-weight: bold;
+   color: #34495e;
+   background-color: rgba(255,255,255,0.8);
+   border-bottom: 1px solid rgba(0,0,0,0.1);
+ }
+ 
+ .teams-divider {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-width: 80px;
+ }
+ 
+ .vs-text {
+   background: linear-gradient(135deg, #ff9f43 0%, #ff8c2e 100%);
+   color: white;
+   width: 60px;
+   height: 60px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: bold;
+   font-size: 20px;
+   box-shadow: 0 4px 8px rgba(255, 159, 67, 0.3);
+ }
+ 
+ /* Результаты */
+ .selected-summary {
+   text-align: center;
+   padding-top: 15px;
+   border-top: 2px dashed #ddd;
+ }
+ 
+ .selected-creatures-list {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+   justify-content: center;
+   margin-top: 10px;
+ }
+ 
+ .selected-creature-tag {
+   background-color: #2ecc71;
+   color: white;
+   padding: 5px 12px;
+   border-radius: 15px;
+   font-size: 12px;
+   font-weight: bold;
+ }
+ 
+ .pet-tag {
+   background-color: #9b59b6;
+ }
+ 
+ /* Загрузка */
+ .loading-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.8);
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   color: white;
+   font-size: 20px;
+   z-index: 1000;
+ }
+ 
+ .loading-overlay .spinner {
+   width: 60px;
+   height: 60px;
+   border: 6px solid #f3f3f3;
+   border-top: 6px solid #3498db;
+   border-radius: 50%;
+   animation: spin 1s linear infinite;
+   margin-bottom: 20px;
+ }
+ 
+ @keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+ }

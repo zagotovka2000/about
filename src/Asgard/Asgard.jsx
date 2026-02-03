@@ -22,7 +22,7 @@ const Asgard = () => {
           onClick={() => toggleWeek(27)}
           className="toggleButton"
         >
-          Маэстро 27 неделя {activeWeek === 27 ? '▲' : '▼'}
+          Маэстро 01.02.2026 {activeWeek === 27 ? '▲' : '▼'}
         </button>
         
       </div>

@@ -2,22 +2,21 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './territory.css';
 
+// Выносим питомцев наружу, чтобы они не пересоздавались
+const patronazhs = ['Акс','Аль','Век','Каи','Мар','Мер','Оли','Хор'];
+
 const Territory = () => {
-  // Состояние для выбранных существ (6 ячеек) - горизонтально
+  // Состояние для выбранных существ (6 ячеек)
   const [selectedCreatures, setSelectedCreatures] = useState(Array(6).fill(null));
-  // Список доступных существ из ВСЕХ файлов
+  // Список доступных существ
   const [availableCreatures, setAvailableCreatures] = useState([]);
   // Результаты поиска
   const [searchResults, setSearchResults] = useState([]);
   // Статус поиска
   const [isSearching, setIsSearching] = useState(false);
-  // Все данные из файла атаки
-  const [attackData, setAttackData] = useState([]);
-  // Все данные из файла защиты
-  const [defenseData, setDefenseData] = useState([]);
-  // Состояние для отображения нижнего контейнера
-  const [showResults, setShowResults] = useState(false);
-  // Модальное окно выбора существ для ячейки
+  // Все данные из файлов
+  const [battleData, setBattleData] = useState([]);
+  // Модальное окно выбора существ
   const [selectionModal, setSelectionModal] = useState({
     isOpen: false,
     cellIndex: null,
@@ -27,322 +26,321 @@ const Territory = () => {
   const [selectionList, setSelectionList] = useState([]);
   // Статус загрузки данных
   const [isLoading, setIsLoading] = useState(true);
-  // Настройки поиска
-  const [searchSettings, setSearchSettings] = useState({
-    matchType: 'partial', // 'partial' или 'exact'
-    require35Points: true,
-  });
 
-  // Функция для извлечения существ из данных
-  const extractCreaturesFromData = useCallback((data, creaturesSet) => {
-    data.forEach(item => {
-      // Проверяем поле "Атакующий"
-      if (item['Атакующий'] && typeof item['Атакующий'] === 'string' && item['Атакующий'].includes('|')) {
-        const parts = item['Атакующий'].split('|');
-        if (parts[0] && parts[0].trim()) {
-          const creatureName = parts[0].trim();
-          if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
-            creaturesSet.add(creatureName);
-          }
-        }
-      }
-      
-      // Проверяем поле "Защищающийся"
-      if (item['Защищающийся'] && typeof item['Защищающийся'] === 'string' && item['Защищающийся'].includes('|')) {
-        const parts = item['Защищающийся'].split('|');
-        if (parts[0] && parts[0].trim()) {
-          const creatureName = parts[0].trim();
-          if (!/^\d+$/.test(creatureName) && creatureName.length > 1) {
-            creaturesSet.add(creatureName);
-          }
-        }
+  // Функция извлечения героев из строки команды
+  const extractHeroesFromTeam = useCallback((teamString) => {
+    if (!teamString) return [];
+    
+    const heroes = [];
+    const parts = teamString.trim().split(/\s+/);
+    
+    parts.forEach(part => {
+      const match = part.match(/^([А-Яа-яA-Za-zЁё\-']+)\(/);
+      if (match && match[1]) {
+        heroes.push(match[1]);
       }
     });
+    
+    return heroes;
   }, []);
 
-  // Загрузка всех JSON файлов
-  const loadAllJsonFiles = useCallback(async () => {
+  // Функция извлечения патронажей из строки питомцев
+  const extractPatronages = useCallback((petsString) => {
+    if (!petsString || petsString.trim() === '' || petsString === '###') {
+      return Array(5).fill(null);
+    }
+    
+    const patronages = Array(5).fill(null);
+    const parts = petsString.trim().split(/\s+/);
+    
+    for (let i = 0; i < Math.min(parts.length, 5); i++) {
+      if (parts[i] && parts[i] !== '###') {
+        const match = parts[i].match(/^([А-Яа-яA-Za-zЁё\-']+)\(/);
+        if (match && match[1]) {
+          patronages[i] = match[1];
+        }
+      }
+    }
+    
+    return patronages;
+  }, []);
+
+  // Функция загрузки файлов - только один раз при монтировании
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
+      console.log('Загрузка данных...');
       
-      // Загружаем оба файла
-      const [attackResponse, defenseResponse] = await Promise.all([
-        fetch('/smBattle/pphrla1.json'),
-        fetch('/smBattle/pphrla2.json')
-      ]);
+      // Загружаем только один файл для теста
+      const filePath = '/smBattle/wataha.txt';
       
-      const attackJson = await attackResponse.json();
-      const defenseJson = await defenseResponse.json();
+      // Добавляем кэширование, чтобы избежать повторных загрузок
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${filePath}?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8'
+        }
+      });
       
-      console.log('Загружен файл атаки, записей:', attackJson.length);
-      console.log('Загружен файл защиты, записей:', defenseJson.length);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
-      setAttackData(attackJson);
-      setDefenseData(defenseJson);
+      const text = await response.text();
+      console.log(`Файл загружен, размер: ${text.length} символов`);
       
-      // Извлекаем существа из обоих файлов
-      const allCreatures = new Set();
-      extractCreaturesFromData(attackJson, allCreatures);
-      extractCreaturesFromData(defenseJson, allCreatures);
+      // Парсим файл
+      const lines = text.split('\n').filter(line => line.trim() !== '');
+      const battles = [];
       
-      const sortedCreatures = Array.from(allCreatures).sort();
+      // Пропускаем заголовок если есть
+      const startIndex = lines[0].includes('date time') ? 1 : 0;
+      
+      for (let i = startIndex; i < lines.length; i++) {
+        const line = lines[i];
+        const parts = line.split('\t');
+        
+        if (parts.length >= 18) {
+          const battle = {
+            dateTime: parts[0]?.trim() || '',
+            attackerName: parts[2]?.trim() || '',
+            attackerPower: parts[3]?.trim() || '',
+            attackerTeam: parts[4]?.trim() || '',
+            defenderName: parts[6]?.trim() || '',
+            defenderPower: parts[7]?.trim() || '',
+            defenderTeam: parts[8]?.trim() || '',
+            points: parts[9]?.trim() || '',
+            attackerPets: parts[10]?.trim() || '',
+            defenderPets: parts[11]?.trim() || '',
+            replay: parts[17]?.trim() || ''
+          };
+          battles.push(battle);
+        }
+      }
+      
+      console.log(`Извлечено боев: ${battles.length}`);
+      setBattleData(battles);
+      
+      // Извлекаем уникальных существ
+      const creaturesSet = new Set();
+      battles.forEach(battle => {
+        // Герои из атакующей пачки
+        const attackers = extractHeroesFromTeam(battle.attackerTeam);
+        attackers.forEach(hero => {
+          if (hero && !patronazhs.includes(hero)) {
+            creaturesSet.add(hero);
+          }
+        });
+        
+        // Герои из защитной пачки
+        const defenders = extractHeroesFromTeam(battle.defenderTeam);
+        defenders.forEach(hero => {
+          if (hero && !patronazhs.includes(hero)) {
+            creaturesSet.add(hero);
+          }
+        });
+      });
+      
+      const sortedCreatures = Array.from(creaturesSet).sort();
       setAvailableCreatures(sortedCreatures);
-      console.log('Всего уникальных существ:', sortedCreatures.length);
+      console.log('Уникальных героев найдено:', sortedCreatures.length);
       
     } catch (error) {
-      console.error('Ошибка загрузки JSON файлов:', error);
+      console.error('Ошибка загрузки файла:', error);
+      // Используем тестовые данные
+      setAvailableCreatures(['Аль','Тея','Дор','Хай','Сел','Крв','Авг','Ори','Неб','Дан','Кей','Гал','ЛаК','Фаф','Исм','Эле','Баб','Ясм','Лир','Акс','Себ','Мор','Кир','Аст','Пеп','Руф','Хор','Эйд','Муш','Йор','Фол','Гус','Пол','Дже','Ара','Мод','Арт','Три','Цин','Айз','Айр','Сат','Авр','Гел','Век','Каи','Мар','Мер','Оли','К\'А','Кри','Ами','Фен','Бис','Лап','Айт','Дант','Ню','Чер','Чу','Шив','Юли','Зен','Астм','Атл','Клео','Изи','Кейн','Лю','Май','Фа','Хел','Эш']);
     } finally {
       setIsLoading(false);
+      console.log('Загрузка завершена');
     }
-  }, [extractCreaturesFromData]);
+  }, [extractHeroesFromTeam]);
 
-  // Инициализация - загрузка данных
+  // Инициализация - загрузка данных только один раз
   useEffect(() => {
-    loadAllJsonFiles();
-  }, [loadAllJsonFiles]);
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Группировка батлов по укреплению для файла защиты
-  const groupBattlesByFortification = (data) => {
-    const groups = {};
-    
-    data.forEach(battle => {
-      const fortification = battle['Укрепление'] || 'unknown';
-      if (!groups[fortification]) {
-        groups[fortification] = [];
-      }
-      groups[fortification].push(battle);
-    });
-    
-    return groups;
-  };
-
-  // Поиск группы атаки по укреплению
-  const findAttackGroupForFortification = (fortification, attackData) => {
-    const group = [];
-    let found = false;
-    
-    // Ищем все записи с таким же укреплением
-    attackData.forEach(battle => {
-      if (battle['Укрепление'] === fortification) {
-        group.push(battle);
-        found = true;
-      }
-    });
-    
-    return found ? group : null;
-  };
-
-  // Извлечение информации об атаке из группы
-  const extractAttackInfo = (attackGroup) => {
-    const info = {
-      points: null,
-      attackerName: null,
-      attackingCreatures: []
-    };
-    
-    attackGroup.forEach(row => {
-      // Очки
-      if (row['Очки'] && !info.points) {
-        info.points = row['Очки'];
-      }
-      
-      // Имя атакующего (в строке с очками)
-      if (row['Очки'] && row['Атакующий'] && !row['Атакующий'].includes('|')) {
-        info.attackerName = row['Атакующий'];
-      }
-      
-      // Атакующие существа
-      if (row['Атакующий'] && typeof row['Атакующий'] === 'string' && row['Атакующий'].includes('|')) {
-        const parts = row['Атакующий'].split('|');
-        const creatureName = parts[0].trim();
-        info.attackingCreatures.push({
-          name: creatureName,
-          fullInfo: row['Атакующий']
-        });
-      }
-    });
-    
-    return info;
-  };
-
-  // Извлечение имени защищающегося
-  const extractDefenderName = (defenseGroup) => {
-    for (const row of defenseGroup) {
-      if (row['Защищающийся'] && !row['Защищающийся'].includes('|')) {
-        return row['Защищающийся'];
-      }
-    }
-    return null;
-  };
-
-  // Основная функция поиска - ИЩЕМ В ФАЙЛЕ ЗАЩИТЫ
-  const handleSearch = () => {
+  // Основная функция поиска
+  const handleSearch = useCallback(() => {
     if (isLoading) {
       alert('Данные еще загружаются. Пожалуйста, подождите.');
       return;
     }
     
     setIsSearching(true);
-    setShowResults(true);
+    setSearchResults([]);
     
-    // Получаем выбранных существ (без null)
-    const selected = selectedCreatures.filter(creature => creature !== null);
+    // Получаем выбранных существ
+    const selectedPet = selectedCreatures[0]; // Первая ячейка - питомец
+    const selectedHeroes = selectedCreatures.slice(1).filter(hero => hero !== null); // Остальные - герои
     
-    if (selected.length === 0) {
-      setSearchResults([]);
+    if (selectedHeroes.length === 0) {
       setIsSearching(false);
-      alert('Выберите хотя бы одно существо для поиска.');
+      alert('Выберите хотя бы одного героя для поиска.');
       return;
     }
 
-    console.log('Ищем совпадения для:', selected);
-    console.log('Настройки поиска:', searchSettings);
+    console.log('Начинаем поиск...');
+    console.log('Выбранный питомец:', selectedPet);
+    console.log('Выбранные герои:', selectedHeroes);
     
     const results = [];
     
-    // Группируем данные защиты по боям
-    const defenseGroups = groupBattlesByFortification(defenseData);
-    console.log('Групп в защите:', Object.keys(defenseGroups).length);
-    
-    // Для каждой группы в защите проверяем совпадения
-    Object.entries(defenseGroups).forEach(([fortification, defenseGroup]) => {
-      // Ищем соответствующую группу в атаке по тому же укреплению
-      const attackGroup = findAttackGroupForFortification(fortification, attackData);
-      
-      if (!attackGroup) {
-        console.log(`Не найдена атака для укрепления: ${fortification}`);
-        return;
-      }
-      
-      // Извлекаем всех защищающихся существ из этой группы
-      const defendingCreatures = [];
-      const defendingCreaturesWithInfo = [];
-      
-      defenseGroup.forEach((row, rowIndex) => {
-        const defender = row['Защищающийся'];
-        if (defender && typeof defender === 'string' && defender.includes('|')) {
-          const parts = defender.split('|');
-          const creatureName = parts[0].trim();
-          
-          defendingCreatures.push(creatureName);
-          defendingCreaturesWithInfo.push({
-            name: creatureName,
-            fullInfo: defender,
-            battlePosition: rowIndex + 1,
-            isSelected: selected.includes(creatureName)
-          });
-        }
-      });
-      
-      // Убираем дубликаты
-      const uniqueDefending = [...new Set(defendingCreatures)];
-      
-      // Проверяем, какие выбранные существа есть в защите
-      const matchedCreatures = selected.filter(creature => 
-        uniqueDefending.includes(creature)
-      );
-      
-      if (matchedCreatures.length === 0) {
-        return; // Ничего не найдено в этой группе
-      }
-      
-      // Рассчитываем процент совпадения
-      const matchPercentage = (matchedCreatures.length / selected.length) * 100;
-      
-      // Определяем тип совпадения
-      let matchType = 'partial';
-      if (matchedCreatures.length === selected.length) {
-        if (selected.length === 6 && uniqueDefending.length === 6) {
-          matchType = 'full_exact';
-        } else if (selected.length === uniqueDefending.length) {
-          matchType = 'exact_subset';
-        } else {
-          matchType = 'all_selected_found';
-        }
-      }
-      
-      // Если ищем только точные совпадения, а это частичное - пропускаем
-      if (searchSettings.matchType === 'exact' && matchType !== 'full_exact' && matchType !== 'exact_subset') {
-        return;
-      }
-      
-      // Извлекаем информацию об атаке
-      const attackInfo = extractAttackInfo(attackGroup);
-      
-      // Проверяем условие по очкам
-      if (searchSettings.require35Points) {
-        const has35Points = attackGroup.some(row => {
-          if (!row['Очки']) return false;
-          const points = row['Очки'].toString().trim();
-          return points === '35' || points === '+35';
-        });
+    // Проходим по всем боям
+    battleData.forEach((battle, index) => {
+      try {
+        // Извлекаем героев из защитной пачки (первые 5 - герои, последний 6-й - общий питомец)
+        const defenderHeroes = extractHeroesFromTeam(battle.defenderTeam);
         
-        if (!has35Points) {
+        // Общий питомец защиты - последний герой в команде (6-й)
+        const defenderGeneralPet = defenderHeroes.length >= 6 ? defenderHeroes[5] : null;
+        
+        // Герои защиты (первые 5)
+        const defenderHeroesOnly = defenderHeroes.slice(0, 5);
+        
+        // Извлекаем патронажи защиты
+        const defenderPatronages = extractPatronages(battle.defenderPets);
+        
+        // Проверяем совпадение общего питомца (если выбран)
+        if (selectedPet && selectedPet !== defenderGeneralPet) {
           return;
         }
+        
+        // Проверяем совпадение героев (без учета позиций и порядка)
+        const allHeroesFound = selectedHeroes.every(hero => 
+          defenderHeroesOnly.includes(hero)
+        );
+        
+        if (!allHeroesFound) {
+          return;
+        }
+        
+        // Извлекаем данные атакующей пачки
+        const attackerHeroes = extractHeroesFromTeam(battle.attackerTeam);
+        const attackerPatronages = extractPatronages(battle.attackerPets);
+        
+        // Общий питомец атаки - первый в списке питомцев
+        const attackerGeneralPet = attackerPatronages[0] || null;
+        
+        // Если всё совпало - добавляем результат
+        results.push({
+          id: index,
+          attacker: {
+            name: battle.attackerName,
+            power: battle.attackerPower,
+            generalPet: attackerGeneralPet,
+            heroes: attackerHeroes.slice(0, 5), // Первые 5 героев
+            patronages: attackerPatronages.slice(1) // Патронажи для героев (со 2-го)
+          },
+          defender: {
+            name: battle.defenderName,
+            power: battle.defenderPower,
+            generalPet: defenderGeneralPet,
+            heroes: defenderHeroesOnly, // Первые 5 героев
+            patronages: defenderPatronages.slice(0, 5) // Патронажи для 5 героев
+          },
+          points: battle.points,
+          replay: battle.replay,
+          matchedHeroes: selectedHeroes.filter(hero => defenderHeroesOnly.includes(hero))
+        });
+      } catch (error) {
+        console.error('Ошибка при обработке боя:', error);
       }
-      
-      // Собираем информацию о бое
-      const battleInfo = {
-        id: fortification,
-        points: attackInfo.points || '?',
-        attackerName: attackInfo.attackerName || 'Неизвестно',
-        defenderName: extractDefenderName(defenseGroup) || 'Неизвестно',
-        attackingCreatures: attackInfo.attackingCreatures || [],
-        defendingCreatures: defendingCreaturesWithInfo,
-        matchType: matchType,
-        matchPercentage: matchPercentage,
-        matchDetails: {
-          selectedInDefense: matchedCreatures.length,
-          totalSelected: selected.length,
-          totalDefending: uniqueDefending.length
-        },
-        attackData: attackGroup,
-        defenseData: defenseGroup
-      };
-      
-      results.push(battleInfo);
     });
     
-    // Сортируем результаты
-    const sortedResults = results.sort((a, b) => {
-      // Сначала по типу совпадения
-      const typeOrder = {
-        'full_exact': 1,
-        'exact_subset': 2,
-        'all_selected_found': 3,
-        'partial': 4
-      };
-      
-      if (typeOrder[a.matchType] !== typeOrder[b.matchType]) {
-        return typeOrder[a.matchType] - typeOrder[b.matchType];
-      }
-      
-      // Затем по проценту совпадения
-      if (b.matchPercentage !== a.matchPercentage) {
-        return b.matchPercentage - a.matchPercentage;
-      }
-      
-      return 0;
-    });
-    
-    console.log('Найдено результатов:', sortedResults.length);
-    setSearchResults(sortedResults);
+    console.log('Найдено результатов:', results.length);
+    setSearchResults(results);
     setIsSearching(false);
-  };
+  }, [battleData, extractHeroesFromTeam, extractPatronages, isLoading, selectedCreatures]);
+
+  // Функция для отображения команды с патронажами
+  const renderTeamWithPatronage = useCallback((teamData, isAttacker = true) => {
+    if (!teamData || !teamData.heroes) {
+      return null;
+    }
+    
+    const { heroes, patronages, generalPet, power } = teamData;
+    
+    return (
+      <div className="team-with-patronage">
+        {/* Общий питомец - большая картинка */}
+        {generalPet && (
+          <div className="general-pet-container">
+            <img 
+              src={`/images/${generalPet}.png`}
+              alt={generalPet}
+              className="general-pet-image"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                const fallback = e.target.parentNode.querySelector('.general-pet-fallback');
+                if (fallback) fallback.style.display = 'block';
+              }}
+            />
+            <div className="general-pet-fallback">{generalPet}</div>
+          </div>
+        )}
+        
+        {/* Герои с патронажами */}
+        <div className="heroes-container">
+          {heroes.map((hero, index) => {
+            // Для атаки: первый герой без патронажа, остальные с патронажами
+            // Для защиты: все 5 героев могут иметь патронажи
+            const patronIndex = isAttacker 
+              ? (index === 0 ? null : index - 1) // Для атаки первый герой без патронажа
+              : index; // Для защиты все герои могут иметь патронажи
+            
+            const patron = patronIndex !== null && patronIndex < patronages.length 
+              ? patronages[patronIndex] 
+              : null;
+            
+            return (
+              <div key={index} className="hero-patron-container">
+                <div className="hero-container">
+                  <img 
+                    src={`/images/${hero}.png`}
+                    alt={hero}
+                    className="hero-image"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      const fallback = e.target.parentNode.querySelector('.hero-fallback');
+                      if (fallback) fallback.style.display = 'block';
+                    }}
+                  />
+                  <div className="hero-fallback">{hero}</div>
+                  
+                  {patron && (
+                    <img 
+                      src={`/images/${patron}.png`}
+                      alt={`Патронаж: ${patron}`}
+                      className="patronage-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallback = e.target.parentNode.querySelector('.patron-fallback');
+                        if (fallback) fallback.style.display = 'block';
+                      }}
+                    />
+                  )}
+                  {patron && <div className="patron-fallback">{patron}</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        {/* Мощь пачки */}
+        <div className="team-power">{power}</div>
+      </div>
+    );
+  }, []);
 
   // Разделение существ на питомцев и героев
   const { pets, heroes } = useMemo(() => {
-    const petsList = [];
-    const heroesList = [];
-    
-    availableCreatures.forEach(creature => {
-      if (creature.toLowerCase().includes('тотем')) {
-        petsList.push(creature);
-      } else {
-        heroesList.push(creature);
-      }
-    });
+    const petsList = [...patronazhs];
+    const heroesList = availableCreatures.filter(creature => 
+      !patronazhs.includes(creature)
+    );
     
     return { 
       pets: petsList.sort((a, b) => a.localeCompare(b)), 
@@ -351,7 +349,7 @@ const Territory = () => {
   }, [availableCreatures]);
 
   // Обработчик клика по ячейке
-  const handleCellClick = (index) => {
+  const handleCellClick = useCallback((index) => {
     if (isLoading) {
       alert('Данные еще загружаются. Пожалуйста, подождите.');
       return;
@@ -363,7 +361,9 @@ const Territory = () => {
     if (creatureType === 'pet') {
       availableForSelection = pets.filter(pet => !selectedCreatures.includes(pet));
     } else {
-      availableForSelection = heroes.filter(hero => !selectedCreatures.includes(hero));
+      availableForSelection = heroes.filter(hero => 
+        !selectedCreatures.includes(hero)
+      );
     }
     
     setSelectionList(availableForSelection);
@@ -372,50 +372,28 @@ const Territory = () => {
       cellIndex: index,
       creatureType
     });
-  };
+  }, [isLoading, pets, heroes, selectedCreatures]);
 
-  // Обработчик выбора существа из модального окна
-  const handleCreatureSelect = (creatureName) => {
+  // Обработчик выбора существа
+  const handleCreatureSelect = useCallback((creatureName) => {
     const newSelectedCreatures = [...selectedCreatures];
     newSelectedCreatures[selectionModal.cellIndex] = creatureName;
     setSelectedCreatures(newSelectedCreatures);
     setSelectionModal({ isOpen: false, cellIndex: null, creatureType: 'hero' });
-  };
+  }, [selectedCreatures, selectionModal.cellIndex]);
 
   // Обработчик очистки ячейки
-  const handleClearCell = (index) => {
+  const handleClearCell = useCallback((index) => {
     const newSelectedCreatures = [...selectedCreatures];
     newSelectedCreatures[index] = null;
     setSelectedCreatures(newSelectedCreatures);
-  };
+  }, [selectedCreatures]);
 
   // Очистка всех ячеек
-  const clearAllCells = () => {
+  const clearAllCells = useCallback(() => {
     setSelectedCreatures(Array(6).fill(null));
     setSearchResults([]);
-    setShowResults(false);
-  };
-
-  // Получение пути к иконке
-  const getIconPath = (creatureName) => {
-    return `/images/${creatureName}.png`;
-  };
-
-  // Получение текста для типа совпадения
-  const getMatchTypeText = (matchType, details) => {
-    switch (matchType) {
-      case 'full_exact':
-        return `✓ Точное совпадение 6 существ`;
-      case 'exact_subset':
-        return `✓ Точное совпадение ${details.totalSelected} существ`;
-      case 'all_selected_found':
-        return `✓ Найдены все ${details.totalSelected} выбранных существ`;
-      case 'partial':
-        return `✓ Найдено ${details.selectedInDefense} из ${details.totalSelected} существ`;
-      default:
-        return 'Совпадение';
-    }
-  };
+  }, []);
 
   // Показать предупреждение о загрузке
   if (isLoading) {
@@ -424,6 +402,9 @@ const Territory = () => {
         <div className="loading-overlay">
           <div className="spinner"></div>
           <div>Загрузка данных...</div>
+          <div style={{marginTop: '10px', fontSize: '14px', color: '#aaa'}}>
+            Загружаем файлы...
+          </div>
         </div>
       </div>
     );
@@ -431,52 +412,10 @@ const Territory = () => {
 
   return (
     <div className="territory-container">
-      {/* Верхний контейнер */}
       <div className="territory-upper-container">
         <h2 className="territory-title">Поиск защитных пачек</h2>
         
-        {/* Настройки поиска */}
-        <div className="search-settings-panel">
-          <div className="settings-group">
-            <label className="setting-label">
-              <input
-                type="checkbox"
-                checked={searchSettings.require35Points}
-                onChange={(e) => setSearchSettings({
-                  ...searchSettings,
-                  require35Points: e.target.checked
-                })}
-              />
-              Только бои с 35 очками
-            </label>
-            
-            <div className="match-type-selector">
-              <span className="setting-label">Тип поиска:</span>
-              <div className="match-type-buttons">
-                <button
-                  className={`match-type-btn ${searchSettings.matchType === 'partial' ? 'active' : ''}`}
-                  onClick={() => setSearchSettings({...searchSettings, matchType: 'partial'})}
-                >
-                  Частичный
-                </button>
-                <button
-                  className={`match-type-btn ${searchSettings.matchType === 'exact' ? 'active' : ''}`}
-                  onClick={() => setSearchSettings({...searchSettings, matchType: 'exact'})}
-                >
-                  Точный
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="search-info">
-            <div><strong>Файлы:</strong> pphrla1.json (атака), pphrla2.json (защита)</div>
-            <div><strong>Выбрано:</strong> {selectedCreatures.filter(c => c).length} из 6 существ</div>
-            <div>Поиск ведется в файле защиты (pphrla2.json)</div>
-          </div>
-        </div>
-        
-        {/* Горизонтальные 6 ячеек для выбранных существ */}
+        {/* 6 ячеек для выбора */}
         <div className="selected-creatures-container">
           <div className="selected-creatures-grid">
             {selectedCreatures.map((creature, index) => (
@@ -488,17 +427,19 @@ const Territory = () => {
                 {creature ? (
                   <>
                     <img 
-                      src={getIconPath(creature)} 
+                      src={`/images/${creature}.png`}
                       alt={creature}
                       className="creature-image"
                       onError={(e) => {
                         e.target.style.display = 'none';
-                        e.target.parentNode.querySelector('.creature-name-fallback').textContent = creature;
-                        e.target.parentNode.querySelector('.creature-name-fallback').style.display = 'block';
+                        const fallback = e.target.parentNode.querySelector('.creature-fallback');
+                        if (fallback) fallback.style.display = 'block';
                       }}
                     />
+                    <div className="creature-fallback" style={{display: 'none'}}>
+                      {creature}
+                    </div>
                     <div className="creature-name">{creature}</div>
-                    <div className="creature-name-fallback" style={{display: 'none'}}></div>
                     <button 
                       className="clear-cell-button"
                       onClick={(e) => {
@@ -508,20 +449,15 @@ const Territory = () => {
                     >
                       ×
                     </button>
-                    <div className="cell-label">
-                      {index === 0 ? 'Питомец' : `Герой ${index}`}
-                    </div>
                   </>
                 ) : (
-                  <>
-                    <div className="empty-cell">
-                      {index === 0 ? 'Выберите питомца' : `Выберите героя ${index}`}
-                    </div>
-                    <div className="cell-label">
-                      {index === 0 ? 'Питомец' : `Герой ${index}`}
-                    </div>
-                  </>
+                  <div className="empty-cell">
+                    {index === 0 ? 'Питомец' : `Герой ${index}`}
+                  </div>
                 )}
+                <div className="cell-label">
+                  {index === 0 ? 'Только питомцы' : `Герой ${index}`}
+                </div>
               </div>
             ))}
           </div>
@@ -531,9 +467,9 @@ const Territory = () => {
             <button 
               onClick={handleSearch} 
               className="search-button"
-              disabled={isSearching || selectedCreatures.every(creature => creature === null)}
+              disabled={isSearching || selectedCreatures.slice(1).every(creature => creature === null)}
             >
-              {isSearching ? 'Поиск...' : 'Найти в защите'}
+              {isSearching ? 'Поиск...' : 'Найти в файлах'}
             </button>
             <button 
               onClick={clearAllCells} 
@@ -543,25 +479,22 @@ const Territory = () => {
             </button>
           </div>
         </div>
-
-        {/* Информация о выбранных существах */}
+        
         <div className="selection-info">
-          <p>
-            <strong>Питомец:</strong> только в первой ячейке. 
-            <strong> Герои:</strong> только уникальные, без повторений в остальных ячейках.
-          </p>
-          <p>Доступно питомцев: {pets.length}, героев: {heroes.length}</p>
-          <p><em>Поиск осуществляется в файле защиты (pphrla2.json)</em></p>
+          <p><strong>Первая ячейка:</strong> только для питомцев ({patronazhs.join(', ')}).</p>
+          <p><strong>Остальные ячейки:</strong> только для героев.</p>
+          <p>Все существа должны быть уникальными.</p>
+          <p>Поиск ведется по защитным пачкам в загруженных файлах.</p>
         </div>
       </div>
 
-      {/* Модальное окно выбора существ */}
+      {/* Модальное окно выбора */}
       {selectionModal.isOpen && (
         <div className="creature-selection-modal">
           <div className="creature-selection-content">
             <div className="selection-modal-header">
               <h3>
-                {selectionModal.cellIndex === 0 ? 'Выберите питомца' : `Выберите героя для ячейки ${selectionModal.cellIndex}`}
+                {selectionModal.cellIndex === 0 ? 'Выберите питомца' : `Выберите героя ${selectionModal.cellIndex}`}
                 <br />
                 <small>(Доступно: {selectionList.length})</small>
               </h3>
@@ -576,9 +509,9 @@ const Territory = () => {
             <div className="selection-list-container">
               {selectionList.length === 0 ? (
                 <div className="no-available-creatures">
-                  {selectedCreatures.filter(c => c).length === availableCreatures.length 
-                    ? 'Все существа уже выбраны. Очистите некоторые ячейки.' 
-                    : 'Нет доступных существ для выбора в этой категории.'}
+                  {selectedCreatures.filter(c => c).length === (pets.length + heroes.length)
+                    ? 'Все существа уже выбраны' 
+                    : 'Нет доступных существ'}
                 </div>
               ) : (
                 <div className="selection-grid">
@@ -589,18 +522,18 @@ const Territory = () => {
                       onClick={() => handleCreatureSelect(creature)}
                     >
                       <img 
-                        src={getIconPath(creature)} 
+                        src={`/images/${creature}.png`}
                         alt={creature}
                         className="selection-image"
                         onError={(e) => {
                           e.target.style.display = 'none';
-                          const fallback = document.createElement('div');
-                          fallback.className = 'selection-name-fallback';
-                          fallback.textContent = creature;
-                          fallback.style.display = 'block';
-                          e.target.parentNode.appendChild(fallback);
+                          const fallback = e.target.parentNode.querySelector('.selection-fallback');
+                          if (fallback) fallback.style.display = 'block';
                         }}
                       />
+                      <div className="selection-fallback" style={{display: 'none'}}>
+                        {creature}
+                      </div>
                       <div className="selection-name">{creature}</div>
                     </div>
                   ))}
@@ -620,156 +553,75 @@ const Territory = () => {
         </div>
       )}
 
-      {/* Нижний контейнер с результатами */}
-      {showResults && (
+      {/* Результаты поиска */}
+      {searchResults.length > 0 && (
         <div className="territory-lower-container">
           <div className="results-header">
             <h3 className="results-title">
-              Результаты поиска: {searchResults.length} совпадений
+              Найдено защитных пачек: {searchResults.length}
             </h3>
-            <div className="results-summary">
-              Найдено защитных пачек с выбранными существами
-            </div>
           </div>
           
-          {isSearching ? (
-            <div className="search-loading">
-              <div className="spinner"></div>
-              Поиск в файле защиты...
-            </div>
-          ) : searchResults.length === 0 ? (
-            <div className="no-results">
-              <div className="warning-icon">⚠️</div>
-              <p>Ничего не найдено. Попробуйте:</p>
-              <ul className="hint-list">
-                <li>Выбрать других существ</li>
-                <li>Отключить фильтр "Только 35 очков"</li>
-                <li>Использовать частичный поиск</li>
-              </ul>
-              <div className="data-stats">
-                <p><strong>Статистика данных:</strong></p>
-                <p>Записей в атаке: {attackData.length}</p>
-                <p>Записей в защите: {defenseData.length}</p>
-              </div>
-            </div>
-          ) : (
-            <div className="results-list">
-              {searchResults.map((result, index) => (
-                <div key={index} className={`battle-result-item ${result.matchType}`}>
-                  <div className="battle-header">
-                    <div className="battle-info">
-                      <strong>Бой #{index + 1}:</strong> {result.id}
-                    </div>
-                    <div className="battle-header-right">
-                      <span className="battle-points">{result.points} очков</span>
-                      <span className={`match-percentage ${result.matchType}`}>
-                        {result.matchPercentage.toFixed(0)}%
-                      </span>
-                    </div>
+          <div className="results-list">
+            {searchResults.map((result, index) => (
+              <div key={index} className="battle-result-item">
+                <div className="battle-header">
+                  <div className="battle-info">
+                    <strong>Бой #{index + 1}</strong> • {result.points} очков
+                  </div>
+                  {result.replay && (
+                    <a 
+                      href={result.replay} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="replay-link"
+                    >
+                      Смотреть бой
+                    </a>
+                  )}
+                </div>
+                
+                <div className="battle-teams-container">
+                  {/* Атакующая пачка */}
+                  <div className="team-container attacking-team">
+                    <div className="team-title">Атакующая пачка</div>
+                    <div className="player-name">{result.attacker.name}</div>
+                    {renderTeamWithPatronage(result.attacker, true)}
                   </div>
                   
-                  <div className="match-info">
-                    <div className={`match-type-indicator ${result.matchType}`}>
-                      {getMatchTypeText(result.matchType, result.matchDetails)}
-                    </div>
-                    <div className="match-details">
-                      Совпадение: {result.matchDetails.selectedInDefense}/{result.matchDetails.totalSelected}
-                    </div>
+                  {/* Разделитель */}
+                  <div className="teams-divider">
+                    <div className="vs-text">VS</div>
                   </div>
                   
-                  <div className="battle-teams-container">
-                    {/* Атакующая пачка */}
-                    <div className="team-container attacking-team">
-                      <h4 className="team-title">Атакующая пачка (pphrla1.json):</h4>
-                      <div className="player-name">{result.attackerName}</div>
-                      
-                      <div className="creatures-list">
-                        {result.attackingCreatures.map((creature, idx) => (
-                          <div key={idx} className="creature-info">
-                            <div className="creature-info-header">
-                              <img 
-                                src={getIconPath(creature.name)} 
-                                alt={creature.name}
-                                className="creature-info-icon"
-                                onError={(e) => {
-                                  e.target.style.display = 'none';
-                                  const fallback = document.createElement('div');
-                                  fallback.textContent = creature.name;
-                                  fallback.style.marginLeft = '0';
-                                  e.target.parentNode.appendChild(fallback);
-                                }}
-                              />
-                              <div className="creature-info-name">{creature.name}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* Разделитель */}
-                    <div className="teams-divider">
-                      <div className="vs-text">VS</div>
-                    </div>
-                    
-                    {/* Защитная пачка */}
-                    <div className="team-container defending-team">
-                      <h4 className="team-title">Защитная пачка (pphrla2.json):</h4>
-                      <div className="player-name">{result.defenderName}</div>
-                      
-                      <div className="creatures-list">
-                        {result.defendingCreatures.map((creature, idx) => {
-                          const isSelected = selectedCreatures.includes(creature.name);
-                          return (
-                            <div 
-                              key={idx} 
-                              className={`creature-info ${isSelected ? 'selected-creature' : ''}`}
-                            >
-                              <div className="creature-info-header">
-                                <img 
-                                  src={getIconPath(creature.name)} 
-                                  alt={creature.name}
-                                  className="creature-info-icon"
-                                  onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    const fallback = document.createElement('div');
-                                    fallback.textContent = creature.name;
-                                    fallback.style.marginLeft = '0';
-                                    e.target.parentNode.appendChild(fallback);
-                                  }}
-                                />
-                                <div className="creature-info-name">
-                                  {creature.name}
-                                  {isSelected && <span className="selected-marker">✓</span>}
-                                </div>
-                              </div>
-                              <div className="creature-position-info">
-                                Позиция: {creature.battlePosition}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                  {/* Защитная пачка */}
+                  <div className="team-container defending-team">
+                    <div className="team-title">Защитная пачка</div>
+                    <div className="player-name">{result.defender.name}</div>
+                    {renderTeamWithPatronage(result.defender, false)}
                   </div>
-                  
-                  <div className="battle-footer">
-                    <div className="selected-summary">
-                      <strong>Найдены в защите:</strong>
-                      <div className="selected-creatures-list">
-                        {result.defendingCreatures
-                          .filter(creature => selectedCreatures.includes(creature.name))
-                          .map((creature, idx) => (
-                            <span key={idx} className="selected-creature-tag">
-                              {creature.name}
-                            </span>
-                          ))}
-                      </div>
+                </div>
+                
+                <div className="battle-footer">
+                  <div className="selected-summary">
+                    <strong>Совпадения в защите:</strong>
+                    <div className="selected-creatures-list">
+                      {result.matchedHeroes.map((hero, idx) => (
+                        <span key={idx} className="selected-creature-tag">
+                          {hero}
+                        </span>
+                      ))}
+                      {selectedCreatures[0] && (
+                        <span className="selected-creature-tag pet-tag">
+                          {selectedCreatures[0]} (питомец)
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

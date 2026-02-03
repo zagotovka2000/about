@@ -85,63 +85,68 @@ const Week27 = () => {
       return match ? { hero: match[1], power: match[2] } : null;
     }).filter(Boolean);
   };
-
   const renderTeamWithPatronage = (teamString, patronageString) => {
-    if (!teamString) return null;
-    
-    const heroes = teamString.split(' ').filter(Boolean);
-    const patronagePairs = extractPatronagePairs(patronageString);
-
-    return (
-      <div className="team-with-patronage">
-        {heroes.map((hero, index) => {
-          if (index === 0) {
-            return (
-              <div key={index} className="hero-container">
-                <img 
-                  src={`/images/${hero}.png`}
-                  alt={''}
-                  title={hero}
-                  className="hero-image"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-            );
-          }
-          
-          const patronPair = patronagePairs[index - 1];
-          const patron = patronPair ? patronPair.hero : null;
-
-          return (
-            <div key={index} className="hero-container">
-              <img 
-                src={`/images/${hero}.png`}
-                alt={''}
-                title={hero}
-                className="hero-image"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
-              {patron && (
-                <img 
-                  src={`/images/${patron}.png`}
-                  alt={''}
-                  className="patronage-image"
-                  title={`Покровитель: ${patron}`}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
+   if (!teamString) return null;
+   
+   const heroes = teamString.split(' ').filter(Boolean);
+   const patronagePairs = extractPatronagePairs(patronageString);
+ 
+   return (
+     <div className="team-with-patronage">
+       {heroes.map((heroWithLevel, index) => {
+         // Извлекаем имя героя без уровня (всё до открывающей скобки)
+         const heroName = heroWithLevel.split('(')[0].trim();
+         
+         if (index === 0) {
+           return (
+             <div key={index} className="hero-container">
+               <img 
+                 src={`/images/${heroName}.png`}
+                 alt={heroName}
+                 title={heroWithLevel}
+                 className="hero-image"
+                 onError={(e) => {
+                   console.error(`Failed to load image: /images/${heroName}.png`);
+                   e.target.style.display = 'none';
+                 }}
+               />
+             </div>
+           );
+         }
+         
+         const patronPair = patronagePairs[index - 1];
+         const patron = patronPair ? patronPair.hero : null;
+ 
+         return (
+           <div key={index} className="hero-container">
+             <img 
+               src={`/images/${heroName}.png`}
+               alt={heroName}
+               title={heroWithLevel}
+               className="hero-image"
+               onError={(e) => {
+                 console.error(`Failed to load image: /images/${heroName}.png`);
+                 e.target.style.display = 'none';
+               }}
+             />
+             {patron && (
+               <img 
+                 src={`/images/${patron}.png`}
+                 alt={`Покровитель: ${patron}`}
+                 className="patronage-image"
+                 title={`Покровитель: ${patron}`}
+                 onError={(e) => {
+                   console.error(`Failed to load patron image: /images/${patron}.png`);
+                   e.target.style.display = 'none';
+                 }}
+               />
+             )}
+           </div>
+         );
+       })}
+     </div>
+   );
+ };
 
   if (loading) {
     return <div className="loading">Loading battle data...</div>;
