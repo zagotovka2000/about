@@ -25,7 +25,7 @@ function App() {
     { id: 'war', title: 'ВОЙНА', component: <War />, position: 'gate' },
     { id: 'sm', title: 'СТОЛКНОВЕНИЕ', component: <Sm />, position: 'tower-left' },
     { id: 'asgard', title: 'АСГАРД', component: <Asgard />, position: 'tower-right' },
-    { id: 'territory', title: 'ТЕРРИТОРИЯ', component: <Territory />, position: 'window-left' },
+    { id: 'territory', title: 'ПОДБОР', component: <Territory />, position: 'window-left' },
     { id: 'activ', title: 'АКТИВНОСТЬ', component: <Activ />, position: 'window-center' },
     { id: 'nakazanie', title: 'НАКАЗАНИЯ', component: <Nakazanie />, position: 'window-right' },
 
