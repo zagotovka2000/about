@@ -101,7 +101,8 @@ const Territory = () => {
         const attackerTeam = battle.attackerTeam;
         if (attackerTeam) {
           // Ищем имена героев в формате "Имя(цифры)"
-          const heroMatches = attackerTeam.match(/([А-Яа-яA-Za-zЁё\'\-]+)\(\d+\)/g);
+          // ИСПРАВЛЕНО: убраны ненужные escape-символы
+          const heroMatches = attackerTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
           if (heroMatches) {
             // Пропускаем первого - это общий питомец, остальные - герои
             heroMatches.slice(1).forEach(match => {
@@ -116,7 +117,8 @@ const Territory = () => {
         // Извлекаем героев из защитной команды
         const defenderTeam = battle.defenderTeam;
         if (defenderTeam) {
-          const heroMatches = defenderTeam.match(/([А-Яа-яA-Za-zЁё\'\-]+)\(\d+\)/g);
+          // ИСПРАВЛЕНО: убраны ненужные escape-символы
+          const heroMatches = defenderTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
           if (heroMatches) {
             // Все кроме последнего - герои (последний - общий питомец)
             heroMatches.slice(0, -1).forEach(match => {
@@ -352,7 +354,8 @@ const Territory = () => {
       return null;
     }
     
-    const { heroes, patronages, generalPet, power, name } = teamData;
+    // ИСПРАВЛЕНО: удалена неиспользуемая переменная 'name'
+    const { heroes, patronages, generalPet, power } = teamData;
     
     console.log(`renderTeamWithPatronage ${isAttacker ? 'атака' : 'защита'}:`, {
       heroes,
