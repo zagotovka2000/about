@@ -691,7 +691,7 @@ const Territory = () => {
         <div className="territory-lower-container">
           <div className="results-header">
             <h3 className="results-title">
-              Найдено защитных пачек: {searchResults.length}
+              Найдено пачек: {searchResults.length}
             </h3>
           </div>
           
