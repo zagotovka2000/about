@@ -80,7 +80,7 @@ const AudioManager = () => {
         });
       }
     };
-
+ 
     // Функция для отключения/включения всех звуков
     const toggleAudio = () => {
       setIsAudioEnabled(prev => {
