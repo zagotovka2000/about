@@ -5,6 +5,15 @@ import './territory.css';
 // Выносим питомцев наружу
 const patronazhs = ['Акс','Аль','Век','Каи','Мар','Мер','Оли','Хор','Фен','Бис'];
 
+// Массив файлов для загрузки
+const dataArray = [
+  'HEXOGONE_LEGION_2.0.txt',
+  'tamago_kake_gohan.txt', 
+  'wataha.txt',
+  'Wings_of_Destiny.txt',
+  'Ya-Nolja.txt'
+];
+
 const Territory = () => {
   // Состояние для выбранных существ (6 ячеек)
   const [selectedCreatures, setSelectedCreatures] = useState(Array(6).fill(null));
@@ -27,130 +36,340 @@ const Territory = () => {
   // Статус загрузки данных
   const [isLoading, setIsLoading] = useState(true);
 
-  // Функция загрузки файлов
-  const loadData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      console.log('Загрузка данных...');
-      
-      // Загружаем файл
-      const filePath = '/smBattle/wataha.txt';
-      const response = await fetch(filePath);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const text = await response.text();
-      console.log(`Файл загружен, размер: ${text.length} символов`);
-      
-      // Разбиваем на строки
-      const lines = text.split('\n').filter(line => line.trim() !== '');
-      console.log(`Всего строк: ${lines.length}`);
-      
-      // Первая строка - заголовок, пропускаем
-      const dataLines = lines.slice(1);
-      console.log(`Строк данных: ${dataLines.length}`);
-      
-      // Парсим каждую строку
-      const battles = [];
-      
-      dataLines.forEach((line, index) => {
-        try {
-          // Разбиваем по табуляции
-          const parts = line.split('\t');
-          
-          // Минимальное количество частей для корректного парсинга
-          if (parts.length >= 12) {
-            const battle = {
-              dateTime: parts[0]?.trim() || '',
-              attackerName: parts[2]?.trim() || '',
-              attackerPower: parts[3]?.trim() || '',
-              attackerTeam: parts[4]?.trim() || '',
-              defenderName: parts[6]?.trim() || '',
-              defenderPower: parts[7]?.trim() || '',
-              defenderTeam: parts[8]?.trim() || '',
-              points: parts[9]?.trim() || '',
-              attackerPets: parts[10]?.trim() || '',
-              defenderPets: parts[11]?.trim() || '',
-              replay: parts.length > 17 ? parts[17]?.trim() : ''
-            };
-            
-            // Проверяем, что есть необходимые данные
-            if (battle.attackerTeam && battle.defenderTeam) {
-              battles.push(battle);
-            }
-          }
-        } catch (error) {
-          console.error(`Ошибка парсинга строки ${index}:`, error);
-        }
-      });
-      
-      console.log(`Извлечено боев: ${battles.length}`);
-      
-      if (battles.length > 0) {
-        console.log('Первый бой:', battles[0]);
-      }
-      
-      setBattleData(battles);
-      
-      // Извлекаем уникальных существ
-      const creaturesSet = new Set();
-      battles.slice(0, 50).forEach(battle => {
-        // Извлекаем героев из атакующей команды
-        const attackerTeam = battle.attackerTeam;
-        if (attackerTeam) {
-          // Ищем имена героев в формате "Имя(цифры)"
-          // ИСПРАВЛЕНО: убраны ненужные escape-символы
-          const heroMatches = attackerTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
-          if (heroMatches) {
-            // Пропускаем первого - это общий питомец, остальные - герои
-            heroMatches.slice(1).forEach(match => {
-              const heroName = match.split('(')[0];
-              if (heroName && !patronazhs.includes(heroName)) {
-                creaturesSet.add(heroName);
-              }
-            });
-          }
-        }
-        
-        // Извлекаем героев из защитной команды
-        const defenderTeam = battle.defenderTeam;
-        if (defenderTeam) {
-          // ИСПРАВЛЕНО: убраны ненужные escape-символы
-          const heroMatches = defenderTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
-          if (heroMatches) {
-            // Все кроме последнего - герои (последний - общий питомец)
-            heroMatches.slice(0, -1).forEach(match => {
-              const heroName = match.split('(')[0];
-              if (heroName && !patronazhs.includes(heroName)) {
-                creaturesSet.add(heroName);
-              }
-            });
-          }
-        }
-      });
-      
-      const sortedCreatures = Array.from(creaturesSet).sort();
-      setAvailableCreatures(sortedCreatures);
-      console.log('Уникальных героев найдено:', sortedCreatures.length);
-      console.log('Пример героев:', sortedCreatures.slice(0, 10));
-      
-    } catch (error) {
-      console.error('Ошибка загрузки файла:', error);
-      // Используем тестовые данные
-      setAvailableCreatures(['Аль','Тея','Дор','Хай','Сел','Крв','Авг','Ори','Неб','Дан','Кей','Гал','ЛаК','Фаф','Исм','Эле','Баб','Ясм','Лир','Акс','Себ','Мор','Кир','Аст','Пеп','Руф','Хор','Эйд','Муш','Йор','Фол','Гус','Пол','Дже','Ара','Мод','Арт','Три','Цин','Айз','Айр','Сат','Авр','Гел','Век','Каи','Мар','Мер','Оли','К\'А','Кри','Ами','Фен','Бис','Лап','Айт','Дант','Ню','Чер','Чу','Шив','Юли','Зен','Астм','Атл','Клео','Изи','Кейн','Лю','Май','Фа','Хел','Эш']);
-    } finally {
-      setIsLoading(false);
-      console.log('Загрузка завершена');
-    }
-  }, []);
+
+// Функция загрузки файлов
+const loadData = useCallback(async () => {
+   try {
+     setIsLoading(true);
+     console.log('Загрузка данных из', dataArray.length, 'файлов...');
+     
+     const basePath = '/smBattle/';
+     let allBattles = [];
+     
+     // Загружаем и парсим каждый файл последовательно
+     for (const fileName of dataArray) {
+       try {
+         const filePath = basePath + fileName;
+         console.log(`Загрузка файла: ${filePath}`);
+         
+         const response = await fetch(filePath);
+         
+         if (!response.ok) {
+           console.warn(`Не удалось загрузить файл ${fileName}: ${response.status}`);
+           continue;
+         }
+         
+         const text = await response.text();
+         console.log(`Файл ${fileName} загружен, размер: ${text.length} символов`);
+         
+         // Разбиваем на строки
+         const lines = text.split('\n').filter(line => line.trim() !== '');
+         console.log(`В файле ${fileName} строк: ${lines.length}`);
+         
+         // Первая строка - заголовок, пропускаем
+         const dataLines = lines.slice(1);
+         let battlesInThisFile = 0;
+         
+         // Определяем формат файла по первой строке
+         const firstLine = dataLines[0] || '';
+         const hasTabs = firstLine.includes('\t');
+         
+         console.log(`Формат файла ${fileName}:`, hasTabs ? 'табуляция' : 'пробелы');
+         
+         // Парсим каждую строку
+         dataLines.forEach((line, index) => {
+           try {
+             let parts = [];
+             let battle = null;
+             
+             if (hasTabs) {
+               // Формат с табуляцией (HEXOGONE_LEGION_2.0.txt)
+               parts = line.split('\t').filter(part => part.trim() !== '');
+               
+               if (parts.length >= 12) {
+                 battle = {
+                   dateTime: parts[0]?.trim() || '',
+                   attackerName: parts[2]?.trim() || '',
+                   attackerPower: parts[3]?.trim() || '',
+                   attackerTeam: parts[4]?.trim() || '',
+                   defenderName: parts[6]?.trim() || '',
+                   defenderPower: parts[7]?.trim() || '',
+                   defenderTeam: parts[8]?.trim() || '',
+                   points: parts[9]?.trim() || '',
+                   attackerPets: parts[10]?.trim() || '',
+                   defenderPets: parts[11]?.trim() || '',
+                   replay: parts.length > 17 ? parts[17]?.trim() : '',
+                   sourceFile: fileName
+                 };
+               }
+             } else {
+               // Формат с пробелами (остальные файлы)
+               // Сначала попробуем разбить по 2+ пробелам
+               parts = line.split(/\s{2,}/).filter(part => part.trim() !== '');
+               
+               if (parts.length >= 10) {
+                 // Пробуем извлечь данные из частей
+                 // Для файлов с пробелами структура может быть разной
+                 // Найдем индексы полей
+                 let attackerName = '';
+                 let attackerPower = '';
+                 let attackerTeam = '';
+                 let defenderName = '';
+                 let defenderPower = '';
+                 let defenderTeam = '';
+                 let points = '';
+                 let attackerPets = '';
+                 let defenderPets = '';
+                 
+                 // Ищем дату/время (первое поле)
+                 const dateTime = parts[0]?.trim() || '';
+                 
+                 // Анализируем оставшиеся части
+                 // Поищем команду атакующего (содержит 6 элементов в формате Имя(число))
+                 for (let i = 1; i < parts.length; i++) {
+                   const part = parts[i];
+                   if (part && part.includes('(') && !attackerTeam) {
+                     // Проверим, содержит ли часть 6 элементов команды
+                     const teamMatch = part.match(/(?:[А-Яа-яЁёA-Za-z']+\(\d+\)\s+){5}[А-Яа-яЁёA-Za-z']+\(\d+\)/);
+                     if (teamMatch) {
+                       attackerTeam = teamMatch[0].trim();
+                       
+                       // Перед командой может быть сила атакующего
+                       if (i > 1) {
+                         const prevPart = parts[i-1];
+                         if (prevPart && /^\d+$/.test(prevPart)) {
+                           attackerPower = prevPart;
+                           // Еще раньше может быть имя атакующего
+                           if (i > 2) {
+                             attackerName = parts[i-2];
+                           }
+                         }
+                       }
+                     }
+                   }
+                   
+                   // Ищем команду защитника
+                   if (attackerTeam && !defenderTeam && i > 1) {
+                     // Ищем после команды атакующего
+                     const part = parts[i];
+                     if (part && part.includes('(')) {
+                       const teamMatch = part.match(/(?:[А-Яа-яЁёA-Za-z']+\(\d+\)\s+){5}[А-Яа-яЁёA-Za-z']+\(\d+\)/);
+                       if (teamMatch) {
+                         defenderTeam = teamMatch[0].trim();
+                         
+                         // Перед командой защитника может быть сила защитника
+                         if (i > 1) {
+                           const prevPart = parts[i-1];
+                           if (prevPart && /^\d+$/.test(prevPart)) {
+                             defenderPower = prevPart;
+                             // Еще раньше может быть имя защитника
+                             if (i > 2) {
+                               defenderName = parts[i-2];
+                             }
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }
+                 
+                 // Ищем очки и питомцев
+                 for (let i = 0; i < parts.length; i++) {
+                   const part = parts[i];
+                   
+                   // Очки - это небольшое число
+                   if (part && /^\d{1,3}$/.test(part.trim()) && !points) {
+                     points = part.trim();
+                   }
+                   
+                   // Питомцы - содержат имена питомцев или ###
+                   if (part && (part.includes('###') || 
+                       part.includes('Акс(') || part.includes('Аль(') || 
+                       part.includes('Век(') || part.includes('Каи(') ||
+                       part.includes('Мар(') || part.includes('Мер(') ||
+                       part.includes('Оли(') || part.includes('Хор(') ||
+                       part.includes('Фен(') || part.includes('Бис('))) {
+                     
+                     if (!attackerPets && attackerTeam && defenderTeam) {
+                       attackerPets = part.trim();
+                     } else if (!defenderPets && attackerPets) {
+                       defenderPets = part.trim();
+                     }
+                   }
+                 }
+                 
+                 // Создаем объект боя, если нашли основные данные
+                 if (attackerTeam && defenderTeam) {
+                   battle = {
+                     dateTime,
+                     attackerName: attackerName || 'Неизвестно',
+                     attackerPower: attackerPower || '0',
+                     attackerTeam,
+                     defenderName: defenderName || 'Неизвестно',
+                     defenderPower: defenderPower || '0',
+                     defenderTeam,
+                     points: points || '0',
+                     attackerPets: attackerPets || '',
+                     defenderPets: defenderPets || '',
+                     replay: '',
+                     sourceFile: fileName
+                   };
+                 }
+               }
+             }
+             
+             // Добавляем бой, если он был успешно распарсен
+             if (battle && battle.attackerTeam && battle.defenderTeam) {
+               allBattles.push(battle);
+               battlesInThisFile++;
+             }
+             
+           } catch (error) {
+             console.error(`Ошибка парсинга строки ${index} в файле ${fileName}:`, error);
+           }
+         });
+         
+         console.log(`Из файла ${fileName} извлечено боев: ${battlesInThisFile}`);
+         
+         // Если из файла не извлекли ни одного боя, попробуем альтернативный парсинг
+         if (battlesInThisFile === 0) {
+           console.log(`Пробуем альтернативный парсинг для ${fileName}`);
+           
+           // Альтернативный парсинг с помощью регулярных выражений
+           dataLines.forEach((line, index) => {
+             try {
+               // Пытаемся извлечь данные с помощью регулярных выражений
+               // Ищем команду атакующего
+               const attackerTeamMatch = line.match(/((?:[А-Яа-яЁёA-Za-z']+\(\d+\)\s+){5}[А-Яа-яЁёA-Za-z']+\(\d+\))/);
+               const attackerTeam = attackerTeamMatch ? attackerTeamMatch[1] : '';
+               
+               if (attackerTeam) {
+                 // Ищем команду защитника после команды атакующего
+                 const afterAttacker = line.substring(attackerTeamMatch.index + attackerTeamMatch[0].length);
+                 const defenderTeamMatch = afterAttacker.match(/((?:[А-Яа-яЁёA-Za-z']+\(\d+\)\s+){5}[А-Яа-яЁёA-Za-z']+\(\d+\))/);
+                 const defenderTeam = defenderTeamMatch ? defenderTeamMatch[1] : '';
+                 
+                 if (defenderTeam) {
+                   // Ищем дату/время в начале строки
+                   const dateTimeMatch = line.match(/(\d{2}\/\d{2}\s+\d{2}:\d{2})/);
+                   const dateTime = dateTimeMatch ? dateTimeMatch[1] : '';
+                   
+                   // Создаем упрощенный объект боя
+                   const battle = {
+                     dateTime,
+                     attackerName: 'Неизвестно',
+                     attackerPower: '0',
+                     attackerTeam,
+                     defenderName: 'Неизвестно',
+                     defenderPower: '0',
+                     defenderTeam,
+                     points: '0',
+                     attackerPets: '',
+                     defenderPets: '',
+                     replay: '',
+                     sourceFile: fileName
+                   };
+                   
+                   allBattles.push(battle);
+                 }
+               }
+             } catch (error) {
+               console.error(`Ошибка альтернативного парсинга строки ${index} в файле ${fileName}:`, error);
+             }
+           });
+           
+           console.log(`После альтернативного парсинга из файла ${fileName} извлечено боев: ${allBattles.length - battlesInThisFile}`);
+         }
+         
+       } catch (error) {
+         console.error(`Ошибка загрузки файла ${fileName}:`, error);
+       }
+     }
+     
+     console.log(`Всего извлечено боев: ${allBattles.length}`);
+     
+     // Удаляем дубликаты (если есть)
+     const uniqueBattles = [];
+     const seen = new Set();
+     
+     allBattles.forEach(battle => {
+       const key = `${battle.dateTime}-${battle.attackerTeam}-${battle.defenderTeam}`;
+       if (!seen.has(key)) {
+         seen.add(key);
+         uniqueBattles.push(battle);
+       }
+     });
+     
+     console.log(`После удаления дубликатов: ${uniqueBattles.length} боев`);
+     
+     if (uniqueBattles.length > 0) {
+       console.log('Пример боя:', uniqueBattles[0]);
+     }
+     
+     setBattleData(uniqueBattles);
+     
+     // Извлекаем уникальных существ из всех боев
+     const creaturesSet = new Set();
+     
+     // Используем все бои для извлечения существ
+     uniqueBattles.forEach(battle => {
+       // Извлекаем героев из атакующей команды
+       const attackerTeam = battle.attackerTeam;
+       if (attackerTeam) {
+         // Ищем имена героев в формате "Имя(цифры)"
+         const heroMatches = attackerTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
+         if (heroMatches) {
+           // Пропускаем первого - это общий питомец, остальные - герои
+           const heroes = heroMatches.slice(1);
+           heroes.forEach(match => {
+             const heroName = match.split('(')[0];
+             if (heroName && !patronazhs.includes(heroName)) {
+               creaturesSet.add(heroName);
+             }
+           });
+         }
+       }
+       
+       // Извлекаем героев из защитной команды
+       const defenderTeam = battle.defenderTeam;
+       if (defenderTeam) {
+         const heroMatches = defenderTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
+         if (heroMatches) {
+           // Все кроме последнего - герои (последний - общий питомец)
+           const heroes = heroMatches.slice(0, -1);
+           heroes.forEach(match => {
+             const heroName = match.split('(')[0];
+             if (heroName && !patronazhs.includes(heroName)) {
+               creaturesSet.add(heroName);
+             }
+           });
+         }
+       }
+     });
+     
+     const sortedCreatures = Array.from(creaturesSet).sort();
+     setAvailableCreatures(sortedCreatures);
+     console.log('Уникальных героев найдено:', sortedCreatures.length);
+     console.log('Пример героев:', sortedCreatures.slice(0, 10));
+     
+   } catch (error) {
+     console.error('Ошибка загрузки файлов:', error);
+     // Используем тестовые данные
+     setAvailableCreatures(['Аль','Тея','Дор','Хай','Сел','Крв','Авг','Ори','Неб','Дан','Кей','Гал','ЛаК','Фаф','Исм','Эле','Баб','Ясм','Лир','Акс','Себ','Мор','Кир','Аст','Пеп','Руф','Хор','Эйд','Муш','Йор','Фол','Гус','Пол','Дже','Ара','Мод','Арт','Три','Цин','Айз','Айр','Сат','Авр','Гел','Век','Каи','Мар','Мер','Оли','К\'А','Кри','Ами','Фен','Бис','Лап','Айт','Дант','Ню','Чер','Чу','Шив','Юли','Зен','Астм','Атл','Клео','Изи','Кейн','Лю','Май','Фа','Хел','Эш']);
+   } finally {
+     setIsLoading(false);
+     console.log('Загрузка завершена');
+   }
+ }, []);
 
   // Инициализация - загрузка данных только один раз
   useEffect(() => {
     loadData();
   }, [loadData]);
 
+  // Остальной код остается без изменений...
+  // [Все остальные функции остаются без изменений]
+  
   // Функция извлечения данных из атакующей пачки
   const extractAttackerData = useCallback((teamString, petsString) => {
     if (!teamString) return { generalPet: null, heroes: [], patronages: [] };
@@ -225,10 +444,6 @@ const Territory = () => {
       // Разбиваем строку питомцев по пробелам и фильтруем пустые строки
       const petParts = petsString.trim().split(/\s+/).filter(p => p !== '');
       
-      console.log('defenderPets:', petsString);
-      console.log('petParts:', petParts);
-      console.log('heroes:', result.heroes);
-      
       // Сопоставляем патронажи с героями по порядку
       for (let i = 0; i < result.heroes.length; i++) {
         if (i < petParts.length) {
@@ -249,7 +464,6 @@ const Territory = () => {
       result.patronages = Array(result.heroes.length).fill('###');
     }
     
-    console.log('Результат извлечения защиты:', result);
     return result;
   }, []);
 
@@ -354,21 +568,13 @@ const Territory = () => {
       return null;
     }
     
-    // ИСПРАВЛЕНО: удалена неиспользуемая переменная 'name'
     const { heroes, patronages, generalPet, power } = teamData;
-    
-    console.log(`renderTeamWithPatronage ${isAttacker ? 'атака' : 'защита'}:`, {
-      heroes,
-      patronages,
-      generalPet
-    });
     
     return (
       <div className="team-with-patronage">
         {/* Общий питомец */}
         <div className="general-pet-section">
           <div className="general-pet-label">
-            {isAttacker ? 'Общий питомец атаки' : 'Общий питомец защиты'}
           </div>
           {generalPet && (
             <div className="general-pet-container">
@@ -454,10 +660,7 @@ const Territory = () => {
         </div>
         
         {/* Мощь пачки */}
-        <div className="team-power">
-          <span className="power-label">Мощь:</span>
-          <span className="power-value">{power}</span>
-        </div>
+
       </div>
     );
   }, []);
@@ -528,7 +731,7 @@ const Territory = () => {
       <div className="territory-container">
         <div className="loading-overlay">
           <div className="spinner"></div>
-          <div>Загрузка данных...</div>
+          <div>Загрузка данных из {dataArray.length} файлов...</div>
         </div>
       </div>
     );
@@ -541,9 +744,8 @@ const Territory = () => {
         
         {/* Информация о данных */}
         <div className="data-info">
+          <p>Загружено файлов: {dataArray.length}</p>
           <p>Загружено боев: {battleData.length}</p>
-          <p>Доступно героев: {heroes.length}</p>
-          <p>Доступно питомцев: {pets.length}</p>
         </div>
         
         {/* 6 ячеек для выбора */}
@@ -613,10 +815,7 @@ const Territory = () => {
           </div>
         </div>
         
-        <div className="selection-info">
-
-          <p>Можно искать только по питомцу, только по героям или по комбинации.</p>
-        </div>
+  
       </div>
 
       {/* Модальное окно выбора */}
@@ -699,9 +898,7 @@ const Territory = () => {
             {searchResults.map((result, index) => (
               <div key={index} className="battle-result-item">
                 <div className="battle-header">
-                  <div className="battle-info">
-                    <strong>#{index + 1}</strong> {result.attacker.name} vs {result.defender.name}
-                  </div>
+
                   {result.replay && (
                     <a 
                       href={result.replay} 
@@ -735,11 +932,7 @@ const Territory = () => {
                   <div className="selected-summary">
                     <strong>Совпадения в защите:</strong>
                     <div className="selected-creatures-list">
-                      {result.matchedHeroes.map((hero, idx) => (
-                        <span key={idx} className="selected-creature-tag">
-                          {hero}
-                        </span>
-                      ))}
+     
                       {selectedCreatures[0] && (
                         <span className="selected-creature-tag pet-tag">
                           {selectedCreatures[0]} (питомец)
