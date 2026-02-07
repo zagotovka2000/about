@@ -65,6 +65,6 @@ const AudioButton = ({
       </button>
     </div>
   );
-};
+}; 
 
 export default AudioButton;
