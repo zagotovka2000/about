@@ -568,7 +568,7 @@ const loadData = useCallback(async () => {
       return null;
     }
     
-    const { heroes, patronages, generalPet, power } = teamData;
+    const { heroes, patronages, generalPet } = teamData;
     
     return (
       <div className="team-with-patronage">

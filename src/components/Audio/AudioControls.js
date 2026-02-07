@@ -7,11 +7,11 @@ const AudioControls = () => {
     }
   };
 
-  const playAutoSound = () => {
+/*   const playAutoSound = () => {
     if (window.audioManager && window.audioManager.playAutoSound) {
       window.audioManager.playAutoSound();
     }
-  };
+  }; */
 
   return (
     <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000 }}>
