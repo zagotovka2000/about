@@ -16,11 +16,15 @@
       "node": "24.x", 
       "npm": "6.x"
     },
-   "scripts": {
+    "scripts": {
       "start": "react-scripts start",
+      "build": "react-scripts build",
       "test": "react-scripts test",
-      "build": "react-scripts"
-   },
+      "eject": "react-scripts eject"
+    },
+    "engines": {
+      "node": "18.x"
+    },
    "eslintConfig": {
       "extends": [
          "react-app",
