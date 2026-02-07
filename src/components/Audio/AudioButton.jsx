@@ -1,5 +1,5 @@
 // components/Audio/AudioButton.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const AudioButton = ({ 
   position = 'fixed',
@@ -21,11 +21,19 @@ const AudioButton = ({
     });
   };
 
-  const playAutoSound = () => {
-    if (window.audioManager && window.audioManager.playAutoSound) {
-      window.audioManager.playAutoSound();
+  // Если нужно воспроизвести звук при загрузке, используйте useEffect
+  useEffect(() => {
+    // Если функция playAutoSound нужна при монтировании компонента
+    // if (window.audioManager && window.audioManager.playAutoSound) {
+    //   window.audioManager.playAutoSound();
+    // }
+    
+    // Инициализация состояния из аудио менеджера, если он существует
+    if (window.audioManager && window.audioManager.isAudioEnabled) {
+      const enabled = window.audioManager.isAudioEnabled();
+      setIsAudioEnabled(enabled);
     }
-  };
+  }, []);
 
   return (
     <div style={{ 
@@ -55,7 +63,6 @@ const AudioButton = ({
         {isAudioEnabled ? '🔊' : '🔇'}
         <span>{isAudioEnabled ? 'ВКЛ' : 'ВЫКЛ'}</span>
       </button>
-
     </div>
   );
 };
