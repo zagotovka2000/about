@@ -13,13 +13,14 @@
       "react-scripts": "4.0.3"
    },
    "engines": {
-      "node": "16.x"
+      "node": "16.x", 
+      "npm": "6.x"
     },
    "scripts": {
       "start": "react-scripts start",
       "test": "react-scripts test",
-      "build": "react-scripts build && node fix-filenames.js",
-      "build:legacy": "NODE_OPTIONS=--openssl-legacy-provider npm run build",
+      "build": "react-scripts --openssl-legacy-provider build",
+      "build:safe": "CI=false react-scripts --openssl-legacy-provider build",
       "predeploy": "npm run build",
       "deploy": "netlify deploy --prod --dir=build"
    },

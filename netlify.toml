@@ -3,7 +3,9 @@
   publish = "build"
 
 [build.environment]
-  NODE_VERSION = "18"  # или "20" или "16"
+  NODE_VERSION = "16"  # Используйте Node.js 16 на Netlify
 
+# Или для максимальной совместимости
 [context.production.environment]
+  NODE_VERSION = "14"
   NODE_OPTIONS = "--openssl-legacy-provider"
