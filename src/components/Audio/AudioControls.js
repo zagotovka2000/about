@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react'; // Добавьте useEffect
 
 const AudioControls = () => {
   const toggleAudio = () => {
@@ -7,12 +7,16 @@ const AudioControls = () => {
     }
   };
 
-  const playAutoSound = () => {
-    if (window.audioManager && window.audioManager.playAutoSound) {
-      window.audioManager.playAutoSound();
-    }
-  };
-  playAutoSound()
+  // Используйте useEffect для вызова playAutoSound при монтировании компонента
+  useEffect(() => {
+    const playAutoSound = () => {
+      if (window.audioManager && window.audioManager.playAutoSound) {
+        window.audioManager.playAutoSound();
+      }
+    };
+    playAutoSound();
+  }, []); // Пустой массив зависимостей = выполнить только при монтировании
+
   return (
     <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000 }}>
       <button 
@@ -31,8 +35,6 @@ const AudioControls = () => {
           ? window.audioManager.isAudioEnabled() ? 'Выключить звук' : 'Включить звук'
           : 'Включить звук'}
       </button>
-      
-   
     </div>
   );
 };
