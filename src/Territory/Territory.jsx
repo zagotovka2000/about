@@ -703,7 +703,6 @@ const Territory = () => {
                     {renderTeamWithPatronage(result.defender, false)}
                   </div>
                 </div>
-                
                 <div className="battle-footer">
                   <div className="selected-summary">
                     <strong>Совпадения в защите:</strong>
