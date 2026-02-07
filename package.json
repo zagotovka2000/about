@@ -19,10 +19,7 @@
    "scripts": {
       "start": "react-scripts start",
       "test": "react-scripts test",
-      "build": "react-scripts --openssl-legacy-provider build",
-      "build:safe": "CI=false react-scripts --openssl-legacy-provider build",
-      "predeploy": "npm run build",
-      "deploy": "netlify deploy --prod --dir=build"
+      "build": "react-scripts"
    },
    "eslintConfig": {
       "extends": [

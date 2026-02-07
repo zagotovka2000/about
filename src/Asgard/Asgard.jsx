@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "./asgard.css"
 import Week27 from "./week27/week27";
+import Week28 from './week28/week28';
 
 const Asgard = () => {
   const [activeWeek, setActiveWeek] = useState(null);
@@ -24,11 +25,16 @@ const Asgard = () => {
         >
           Маэстро 01.02.2026 {activeWeek === 27 ? '▲' : '▼'}
         </button>
-        
+        <button 
+          onClick={() => toggleWeek(28)}  // ← ИСПРАВЛЕНО: было toggleWeek(27)
+          className="toggleButton"
+        >
+          Ош 07.02.2026 {activeWeek === 28 ? '▲' : '▼'} 
+        </button>
       </div>
       
       {activeWeek === 27 && <Week27 />}
-      <p> Со следующей недели возобновим выгрузку боев на Маэстро с фильтрацией урона.  </p>
+      {activeWeek === 28 && <Week28 />}
     </div>
   );
 };
