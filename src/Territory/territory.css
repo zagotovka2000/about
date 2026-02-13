@@ -1377,3 +1377,15 @@
    padding: 5px 10px;
    font-size: 12px;
  }
+ .territory-lower-container.no-results {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 200px;
+ }
+ 
+ .no-results-message {
+   font-size: 1.5rem;
+   color: #666;
+   text-align: center;
+ }

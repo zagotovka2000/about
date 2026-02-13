@@ -17,6 +17,7 @@ const Territory = () => {
   });
   const [selectionList, setSelectionList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasSearched, setHasSearched] = useState(false); // флаг, был ли выполнен поиск
 
   const loadData = useCallback(async () => {
     try {
@@ -250,19 +251,19 @@ const Territory = () => {
       return;
     }
     
-    setIsSearching(true);
-    setSearchResults([]);
-    
     // Получаем выбранных существ
     const selectedPet = selectedCreatures[0]; // Первая ячейка - питомец
     const selectedHeroes = selectedCreatures.slice(1).filter(hero => hero !== null); // Остальные - герои
     
     if (selectedHeroes.length === 0 && !selectedPet) {
-      setIsSearching(false);
       alert('Выберите хотя бы одного героя или питомца для поиска.');
       return;
     }
 
+    setHasSearched(true); // запоминаем, что поиск выполнен
+    setIsSearching(true);
+    setSearchResults([]);
+    
     console.log('Начинаем поиск...');
     console.log('Выбранный питомец:', selectedPet);
     console.log('Выбранные герои:', selectedHeroes);
@@ -377,9 +378,7 @@ const Territory = () => {
         
         {/* Герои с патронажами */}
         <div className="heroes-section">
-          <div className="heroes-label">
-            Герои {isAttacker ? 'атаки' : 'защиты'}:
-          </div>
+         
           <div className="heroes-container">
             {heroes.map((hero, index) => {
               // Для всех команд берем патронаж из массива
@@ -496,6 +495,7 @@ const Territory = () => {
 
   // Очистка всех ячеек
   const clearAllCells = useCallback(() => {
+    setHasSearched(false); // сбрасываем флаг поиска
     setSelectedCreatures(Array(6).fill(null));
     setSearchResults([]);
   }, []);
@@ -657,35 +657,23 @@ const Territory = () => {
         </div>
       )}
 
-      {/* Результаты поиска */}
-      {searchResults.length > 0 && (
+      {/* Результаты поиска или сообщение об отсутствии */}
+      {hasSearched && !isSearching && searchResults.length === 0 ? (
+        <div className="territory-lower-container no-results">
+          <div className="no-results-message">В СМ такую пачку еще не побеждали</div>
+        </div>
+      ) : searchResults.length > 0 && (
         <div className="territory-lower-container">
           <div className="results-header">
             <h3 className="results-title">
-              Найдено пачек: {searchResults.length}
+           кем побеждалось &larr;  Найдено {searchResults.length} боев &rarr; кого побеждалось
             </h3>
           </div>
           
           <div className="results-list">
             {searchResults.map((result, index) => (
               <div key={index} className="battle-result-item">
-                <div className="battle-header">
-                  <div className="battle-info">
-                    <span className="battle-date">{result.attacker.name} vs {result.defender.name}</span>
-                    <span className="battle-points">Очки: {result.points}</span>
-                  </div>
-                  
-                  {result.replay && (
-                    <a 
-                      href={result.replay} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="replay-link"
-                    >
-                      Смотреть бой
-                    </a>
-                  )}
-                </div>
+
                 
                 <div className="battle-teams-container">
                   {/* Атакующая пачка */}
@@ -707,13 +695,7 @@ const Territory = () => {
                   <div className="selected-summary">
                     <strong>Совпадения в защите:</strong>
                     <div className="selected-creatures-list">
-                      {selectedCreatures.slice(1).map((hero, idx) => 
-                        hero && result.matchedHeroes.includes(hero) && (
-                          <span key={idx} className="selected-creature-tag hero-tag">
-                            {hero}
-                          </span>
-                        )
-                      )}
+                     
                       {selectedCreatures[0] && (
                         <span className="selected-creature-tag pet-tag">
                           {selectedCreatures[0]} (питомец)

@@ -172,7 +172,7 @@ const Week27 = () => {
           >
             Сортир. по урону{getSortIndicator('damage')}
           </div>
-          <div className="header-cell replay" role="columnheader">Запись</div>
+
         </div>
 
         {sortedData.map((battle, index) => {
@@ -189,11 +189,7 @@ const Week27 = () => {
               <div className={`table-cell damage ${damageClass}`} role="cell" data-label="Урон">
                 {battle.damage.toLocaleString()}
               </div>
-              <div className="table-cell replay" role="cell" data-label="Запись">
-                <a href={battle.replay} target="_blank" rel="noopener noreferrer" className="replay-link">
-                  Бой
-                </a>
-              </div>
+
             </div>
           );
         })}
