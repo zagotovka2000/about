@@ -1,6 +1,41 @@
 // War.js
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './War.css';
+  // ---------- Константы ----------
+  const TITAN_TYPES = {
+   light: ['Сол', 'Ияр', 'Риг', 'Амо'],
+   dark: ['Тен', 'Бру', 'Мор', 'Кер'],
+   water: ['Сиг', 'Тид', 'Нов', 'Маи', 'Гип'],
+   fire: ['Ара', 'Мол', 'Аше', 'Игн', 'Вул'],
+   wood: ['Эде', 'Анг', 'Ава', 'Сил', 'Вер']
+ };
+
+ const TYPE_TO_TOTEM = {
+   light: 'С',
+   dark: 'Т',
+   water: 'В',
+   fire: 'О',
+   wood: 'Д'
+ };
+
+ const TITAN_WEIGHTS = {
+   'Вер': 2,
+   'Аше': 2,
+   'Тид': 2
+ };
+
+ const TYPE_THRESHOLDS = {
+   light: 2,
+   dark: 2,
+   water: 3,
+   fire: 3,
+   wood: 3
+ };
+
+ const SKILL_GROUPS = {
+   group1: ['ПВ', 'ЛП', 'ГН', 'ТП', 'ШГ', 'ГС'],
+   group2: ['ПД', 'ПР', 'ЭЭ', 'ТК', 'ЗС']
+ };
 
 const War = () => {
   const [selectedTitans, setSelectedTitans] = useState(Array(7).fill(null));
@@ -26,41 +61,6 @@ const War = () => {
     group: null,
   });
 
-  // ---------- Константы ----------
-  const TITAN_TYPES = {
-    light: ['Сол', 'Ияр', 'Риг', 'Амо'],
-    dark: ['Тен', 'Бру', 'Мор', 'Кер'],
-    water: ['Сиг', 'Тид', 'Нов', 'Маи', 'Гип'],
-    fire: ['Ара', 'Мол', 'Аше', 'Игн', 'Вул'],
-    wood: ['Эде', 'Анг', 'Ава', 'Сил', 'Вер']
-  };
-
-  const TYPE_TO_TOTEM = {
-    light: 'С',
-    dark: 'Т',
-    water: 'В',
-    fire: 'О',
-    wood: 'Д'
-  };
-
-  const TITAN_WEIGHTS = {
-    'Вер': 2,
-    'Аше': 2,
-    'Тид': 2
-  };
-
-  const TYPE_THRESHOLDS = {
-    light: 2,
-    dark: 2,
-    water: 3,
-    fire: 3,
-    wood: 3
-  };
-
-  const SKILL_GROUPS = {
-    group1: ['ПВ', 'ЛП', 'ГН', 'ТП', 'ШГ', 'ГС'],
-    group2: ['ПД', 'ПР', 'ЭЭ', 'ТК', 'ЗС']
-  };
 
   // ---------- Вспомогательные функции ----------
   const getTitanType = useCallback((titanName) => {
