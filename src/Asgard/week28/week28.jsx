@@ -101,12 +101,12 @@ const Week28 = () => {
            return (
              <div key={index} className="hero-container">
                <img 
-                 src={`/images/${heroName}.png`}
+                 src={`/images/heroes/${heroName}.png`}
                  alt={heroName}
                  title={heroWithLevel}
                  className="hero-image"
                  onError={(e) => {
-                   console.error(`Failed to load image: /images/${heroName}.png`);
+                   console.error(`Failed to load image: /images/heroes/${heroName}.png`);
                    e.target.style.display = 'none';
                  }}
                />
@@ -120,23 +120,23 @@ const Week28 = () => {
          return (
            <div key={index} className="hero-container">
              <img 
-               src={`/images/${heroName}.png`}
+               src={`/images/heroes/${heroName}.png`}
                alt={heroName}
                title={heroWithLevel}
                className="hero-image"
                onError={(e) => {
-                 console.error(`Failed to load image: /images/${heroName}.png`);
+                 console.error(`Failed to load image: /images/heroes/${heroName}.png`);
                  e.target.style.display = 'none';
                }}
              />
              {patron && (
                <img 
-                 src={`/images/${patron}.png`}
+                 src={`/images/heroes/${patron}.png`}
                  alt={`Покровитель: ${patron}`}
                  className="patronage-image"
                  title={`Покровитель: ${patron}`}
                  onError={(e) => {
-                   console.error(`Failed to load patron image: /images/${patron}.png`);
+                   console.error(`Failed to load patron image: /images/heroes/${patron}.png`);
                    e.target.style.display = 'none';
                  }}
                />

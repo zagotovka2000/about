@@ -358,7 +358,7 @@ const Territory = () => {
           {generalPet && (
             <div className="general-pet-container">
               <img 
-                src={`/images/${generalPet}.png`}
+                src={`/images/heroes/${generalPet}.png`}
                 alt={generalPet}
                 className="general-pet-image"
                 onError={(e) => {
@@ -389,7 +389,7 @@ const Territory = () => {
                   <div className="hero-with-patron">
                     <div className="hero-container">
                       <img 
-                        src={`/images/${hero}.png`}
+                        src={`/images/heroes/${hero}.png`}
                         alt={hero}
                         className="hero-image"
                         onError={(e) => {
@@ -409,7 +409,7 @@ const Territory = () => {
                     <div className="patronage-overlay">
                       <div className="patronage-label">Патронаж:</div>
                       <img 
-                        src={`/images/${patron}.png`}
+                        src={`/images/heroes/${patron}.png`}
                         alt={`Патронаж: ${patron === '###' ? 'нет' : patron}`}
                         className="patronage-image"
                         onError={(e) => {
@@ -534,7 +534,7 @@ const Territory = () => {
                 {creature ? (
                   <>
                     <img 
-                      src={`/images/${creature}.png`}
+                      src={`/images/heroes/${creature}.png`}
                       alt={creature}
                       className="creature-image"
                       onError={(e) => {
@@ -624,7 +624,7 @@ const Territory = () => {
                       onClick={() => handleCreatureSelect(creature)}
                     >
                       <img 
-                        src={`/images/${creature}.png`}
+                        src={`/images/heroes/${creature}.png`}
                         alt={creature}
                         className="selection-image"
                         onError={(e) => {

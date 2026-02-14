@@ -23,10 +23,10 @@ function App() {
 
 
   const sections = [
-    { id: 'war', title: 'ВОЙНА', component: <War />, position: 'gate' },
+   { id: 'territory', title: 'ГЕРОИ', component: <Territory />, position: 'window-left' },
+   { id: 'war', title: 'ТИТАНЫ', component: <War />, position: 'gate' },
     { id: 'sm', title: 'СТОЛКНОВЕНИЕ', component: <Sm />, position: 'tower-left' },
     { id: 'asgard', title: 'АСГАРД', component: <Asgard />, position: 'tower-right' },
-    { id: 'territory', title: 'ПОДБОР', component: <Territory />, position: 'window-left' },
     { id: 'activ', title: 'АКТИВНОСТЬ', component: <Activ />, position: 'window-center' },
     { id: 'nakazanie', title: 'НАКАЗАНИЯ', component: <Nakazanie />, position: 'window-right' },
   ];

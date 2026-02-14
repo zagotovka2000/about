@@ -1,31 +1,1012 @@
-
+/* War.css */
 .war-container {
-  background: rgba(10, 20, 40, 0.8);
-  border: 1px solid rgba(0, 200, 255, 0.3);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 
-    0 0 30px rgba(0, 150, 255, 0.2),
-    inset 0 0 20px rgba(0, 100, 255, 0.1);
+   width: 100%;
+   max-width: 1400px;
+   margin: 0 auto;
+   padding: 20px;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+ 
+ .war-title {
+   text-align: center;
+   margin-bottom: 20px;
+   color: #2c3e50;
+   font-size: 28px;
+   font-weight: 600;
+ }
+ 
+ .data-info {
+   background: #f8f9fa;
+   border-radius: 8px;
+   padding: 15px;
+   margin-bottom: 20px;
+   border-left: 4px solid #e67e22; /* оранжевый акцент для титанов */
+ }
+ 
+ .data-info p {
+   margin: 5px 0;
+   color: #555;
+ }
+ 
+ /* Верхний контейнер */
+ .war-upper-container {
+   background-color: #fff;
+   padding: 25px;
+   border-radius: 12px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   margin-bottom: 30px;
+ }
+ 
+ /* Горизонтальные ячейки */
+ .selected-titans-container {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+   margin-bottom: 20px;
+ }
+ 
+ .selected-titans-grid {
+   display: flex;
+   gap: 15px;
+   justify-content: center;
+   flex-wrap: wrap;
+ }
+ 
+ /* Базовая ячейка */
+ .titan-cell {
+   background-color: white;
+   border: 2px solid #ddd;
+   border-radius: 12px;
+   padding: 15px;
+   text-align: center;
+   width: 120px;
+   min-height: 150px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: space-between;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   position: relative;
+ }
+ 
+ .titan-cell:hover {
+   transform: translateY(-5px);
+   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+ }
+ 
+ /* Активная ячейка титана (индексы 2-6) */
+ .titan-cell-active {
+   border-color: #e67e22;
+   background-color: #fef5e7;
+ }
+ 
+ .titan-cell-active:hover {
+   border-color: #d35400;
+ }
+ 
+ /* Ячейка тотема (неактивная) */
+ .totem-cell {
+   border-color: #95a5a6;
+   background-color: #ecf0f1;
+   cursor: default;
+   opacity: 0.8;
+ }
+ 
+ .totem-cell:hover {
+   transform: none;
+   box-shadow: none;
+ }
+ 
+ .totem-cell .empty-cell {
+   color: #7f8c8d;
+ }
+ 
+ /* Заполненная ячейка */
+ .titan-cell.filled {
+   border-color: #27ae60;
+ }
+ 
+ .titan-image {
+   width: 60px;
+   height: 60px;
+   object-fit: contain;
+   margin-bottom: 10px;
+   border-radius: 50%;
+   border: 2px solid #e0e0e0;
+ }
+ 
+ .titan-fallback {
+   display: none;
+   width: 60px;
+   height: 60px;
+   border-radius: 50%;
+   background: #f0f0f0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 11px;
+   font-weight: bold;
+   margin-bottom: 10px;
+ }
+ 
+ .titan-name {
+   font-size: 13px;
+   color: #2c3e50;
+   font-weight: 600;
+   word-break: break-word;
+   text-align: center;
+   margin-bottom: 5px;
+ }
+ 
+ .empty-cell {
+   color: #95a5a6;
+   font-size: 14px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: 100%;
+   padding: 10px;
+   text-align: center;
+ }
+ 
+ .clear-cell-button {
+   position: absolute;
+   top: 8px;
+   right: 8px;
+   width: 24px;
+   height: 24px;
+   background-color: #e74c3c;
+   color: white;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 16px;
+   line-height: 1;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   opacity: 0;
+   transition: opacity 0.3s ease;
+ }
+ 
+ .titan-cell-active:hover .clear-cell-button {
+   opacity: 1;
+ }
+ 
+ .clear-cell-button:hover {
+   background-color: #c0392b;
+   transform: scale(1.1);
+ }
+ 
+ .cell-label {
+   font-size: 11px;
+   color: #7f8c8d;
+   background-color: rgba(255, 255, 255, 0.9);
+   padding: 3px 8px;
+   border-radius: 10px;
+   border: 1px solid #eee;
+   margin-top: 5px;
+ }
+ 
+ /* Кнопки управления */
+ .controls-container {
+   display: flex;
+   gap: 15px;
+   justify-content: center;
+ }
+ 
+ .search-button {
+   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+   color: white;
+   border: none;
+   padding: 14px 28px;
+   border-radius: 8px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   min-width: 200px;
+ }
+ 
+ .search-button:hover:not(:disabled) {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 12px rgba(46, 204, 113, 0.3);
+ }
+ 
+ .search-button:disabled {
+   background: #bdc3c7;
+   cursor: not-allowed;
+ }
+ 
+ .clear-all-button {
+   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+   color: white;
+   border: none;
+   padding: 14px 24px;
+   border-radius: 8px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+ }
+ 
+ .clear-all-button:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 12px rgba(231, 76, 60, 0.3);
+ }
+ 
+ /* Модальное окно выбора титана */
+ .titan-selection-modal {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.8);
+   backdrop-filter: blur(5px);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+   padding: 20px;
+ }
+ 
+ .titan-selection-content {
+   background: white;
+   border-radius: 16px;
+   width: 100%;
+   max-width: 800px;
+   max-height: 80vh;
+   overflow: hidden;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+ }
+ 
+ .selection-modal-header {
+   background: #e67e22; /* оранжевый */
+   color: white;
+   padding: 20px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+ }
+ 
+ .selection-modal-header h3 {
+   margin: 0;
+   font-size: 20px;
+ }
+ 
+ .selection-modal-header small {
+   font-size: 14px;
+   opacity: 0.9;
+ }
+ 
+ .close-selection-modal {
+   background: rgba(255, 255, 255, 0.2);
+   color: white;
+   border: none;
+   width: 36px;
+   height: 36px;
+   border-radius: 50%;
+   font-size: 24px;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: background 0.3s ease;
+ }
+ 
+ .close-selection-modal:hover {
+   background: rgba(255, 255, 255, 0.3);
+ }
+ 
+ .selection-list-container {
+   padding: 20px;
+   max-height: 60vh;
+   overflow-y: auto;
+ }
+ 
+ .no-available-creatures {
+   text-align: center;
+   padding: 40px 20px;
+   color: #7f8c8d;
+   font-size: 16px;
+ }
+ 
+ .selection-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+   gap: 15px;
+ }
+ 
+ .selection-item {
+   background: #f8f9fa;
+   border-radius: 10px;
+   padding: 15px;
+   text-align: center;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   border: 2px solid transparent;
+ }
+ 
+ .selection-item:hover {
+   background: #fef5e7;
+   transform: translateY(-3px);
+   border-color: #e67e22;
+   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .selection-image {
+   width: 60px;
+   height: 60px;
+   object-fit: contain;
+   margin-bottom: 10px;
+   border-radius: 50%;
+   border: 2px solid #e0e0e0;
+ }
+ 
+ .selection-fallback {
+   display: none;
+   width: 60px;
+   height: 60px;
+   border-radius: 50%;
+   background: #f0f0f0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 11px;
+   font-weight: bold;
+   margin: 0 auto 10px;
+ }
+ 
+ .selection-name {
+   font-size: 13px;
+   color: #2c3e50;
+   font-weight: 600;
+   word-break: break-word;
+ }
+ 
+ .selection-modal-footer {
+   padding: 20px;
+   background: #f8f9fa;
+   border-top: 1px solid #eee;
+   text-align: center;
+ }
+ 
+ .cancel-selection {
+   background: #95a5a6;
+   color: white;
+   border: none;
+   padding: 12px 30px;
+   border-radius: 8px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: background 0.3s ease;
+ }
+ 
+ .cancel-selection:hover {
+   background: #7f8c8d;
+ }
+ 
+ /* Результаты поиска */
+ .war-lower-container {
+   background-color: #fff;
+   padding: 25px;
+   border-radius: 12px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .war-lower-container.no-results {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 200px;
+ }
+ 
+ .no-results-message {
+   font-size: 1.5rem;
+   color: #666;
+   text-align: center;
+ }
+ 
+ .results-header {
+   margin-bottom: 20px;
+   text-align: center;
+ }
+ 
+ .results-title {
+   color: #2c3e50;
+   font-size: 22px;
+   font-weight: 600;
+ }
+ 
+ .results-list {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+ }
+ 
+ .battle-result-item {
+   background: #f8f9fa;
+   border-radius: 12px;
+   padding: 20px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+   border: 1px solid #e0e0e0;
+ }
+ 
+ .battle-teams-container {
+   display: flex;
+   flex-wrap: nowrap;
+   gap: 30px;
+   justify-content: space-between;
+   align-items: stretch;
+   margin-bottom: 20px;
+ }
+ 
+ .team-container {
+   flex: 1;
+   min-width: 45%;
+   max-width: 48%;
+   border-radius: 12px;
+   overflow: hidden;
+   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+   padding: 15px;
+ }
+ 
+ .attacking-team {
+   background: linear-gradient(135deg, #fff5f5 0%, #ffeaea 100%);
+   border: 3px solid #ff7675;
+ }
+ 
+ .defending-team {
+   background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+   border: 3px solid #74b9ff;
+ }
+ 
+ .team-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 15px;
+   padding-bottom: 10px;
+   border-bottom: 2px solid rgba(0,0,0,0.05);
+ }
+ 
+ .player-name {
+   font-weight: 600;
+   color: #2c3e50;
+   font-size: 16px;
+ }
+ 
+ .player-power {
+   background: #3498db;
+   color: white;
+   padding: 4px 12px;
+   border-radius: 20px;
+   font-size: 14px;
+   font-weight: 600;
+ }
+ 
+ /* Команда титанов */
+ .titans-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 15px;
+   justify-content: center;
+   margin: 15px 0;
+ }
+ 
+ .titan-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 5px;
+   min-width: 70px;
+ }
+ 
+ .titan-item .titan-image {
+   width: 55px;
+   height: 55px;
+   border-radius: 50%;
+   border: 2px solid #e67e22;
+   background-color: white;
+   box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+   transition: transform 0.2s ease;
+
+ }
+ .titan-item .titan-image:hover {
+   transform: scale(1.2);
+   z-index: 10;
+ }
+ .titan-item .titan-name {
+   font-size: 12px;
+   font-weight: 600;
+   color: #2c3e50;
+ }
+ 
+ /* Информация о тотеме */
+ .totem-info {
+   margin-top: 15px;
+   padding: 10px;
+   background-color: rgba(255,255,255,0.6);
+   border-radius: 8px;
+   border-left: 4px solid #f39c12;
+ }
+ 
+ .totem-label {
+   font-size: 12px;
+   font-weight: 600;
+   color: #7f8c8d;
+   margin-bottom: 5px;
+ }
+ 
+ .totem-value {
+   font-size: 14px;
+   font-weight: 600;
+   color: #2c3e50;
+ }
+ 
+ .totem-desc {
+   font-size: 12px;
+   color: #555;
+   margin-top: 5px;
+   font-style: italic;
+ }
+ 
+ /* Разделитель VS */
+ .teams-divider {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-width: 60px;
+   max-width: 60px;
+   flex-shrink: 0;
+ }
+ 
+ .vs-text {
+   background: linear-gradient(135deg, #ff9f43 0%, #ff8c2e 100%);
+   color: white;
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: bold;
+   font-size: 14px;
+   box-shadow: 0 3px 6px rgba(255, 159, 67, 0.3);
+ }
+ 
+ /* Ссылка на повтор */
+ .replay-link {
+   margin-top: 15px;
+   text-align: center;
+ }
+ 
+ .replay-link a {
+   display: inline-block;
+   background: #3498db;
+   color: white;
+   padding: 8px 20px;
+   border-radius: 20px;
+   text-decoration: none;
+   font-weight: 600;
+   transition: background 0.3s ease;
+ }
+ 
+ .replay-link a:hover {
+   background: #2980b9;
+ }
+ 
+ /* Адаптивность */
+ @media (max-width: 992px) {
+   .battle-teams-container {
+     flex-direction: column;
+     gap: 20px;
+   }
+ 
+   .team-container {
+     min-width: 100%;
+     max-width: 100%;
+   }
+ 
+   .teams-divider {
+     min-width: 100%;
+     height: 40px;
+     order: 1;
+   }
+ 
+   .vs-text {
+     width: 50px;
+     height: 50px;
+   }
+ }
+ 
+ @media (max-width: 768px) {
+   .selected-titans-grid {
+     gap: 10px;
+   }
+ 
+   .titan-cell {
+     width: 100px;
+     min-height: 130px;
+   }
+ 
+   .titans-container {
+     gap: 10px;
+   }
+ 
+   .titan-item {
+     min-width: 60px;
+   }
+ 
+   .titan-item .titan-image {
+     width: 45px;
+     height: 45px;
+   }
+ 
+   .selection-grid {
+     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+     gap: 10px;
+   }
+ }
+ 
+ /* Загрузка и ошибки (как в Territory) */
+ .loading-overlay {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   min-height: 400px;
+   color: #2c3e50;
+ }
+ 
+ .spinner {
+   width: 50px;
+   height: 50px;
+   border: 5px solid #f3f3f3;
+   border-top: 5px solid #e67e22;
+   border-radius: 50%;
+   animation: spin 1s linear infinite;
+   margin-bottom: 20px;
+ }
+ 
+ @keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+ }
+ 
+ .error-message {
+   text-align: center;
+   padding: 40px;
+   background: #fff;
+   border-radius: 12px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .error-message h2 {
+   color: #e74c3c;
+   margin-bottom: 15px;
+ }
+ 
+ .error-message button {
+   background: #3498db;
+   color: white;
+   border: none;
+   padding: 12px 24px;
+   border-radius: 6px;
+   font-size: 16px;
+   cursor: pointer;
+   margin-top: 20px;
+   transition: background 0.3s ease;
+ }
+ 
+ .error-message button:hover {
+   background: #2980b9;
+ }
+
+/* ===== ФИНАЛЬНЫЕ СТИЛИ ДЛЯ ТОТЕМОВ С МЕТАЛЛИЧЕСКОЙ РАМКОЙ ===== */
+.totems-section {
+  margin-top: 15px;
+  width: 100%;
 }
 
-.war-header h3 {
-  color: #00ffff;
-  font-family: 'Orbitron', sans-serif;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+/* Контейнер для списка тотемов – без общей рамки, только выравнивание */
+.totems-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 }
-.btn{
-   margin: 15px;
+
+/* Индивидуальный блок для каждого тотема с его умениями – металлическая рамка */
+.totem-with-skills {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+  border-radius: 20px;
+  padding: 8px 14px;
+  box-shadow: 
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    inset 0 -2px 4px rgba(0,0,0,0.6),
+    0 8px 16px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
-.txtLoadBattle{
-   margin: 15px;
+
+/* Лёгкий блик сверху */
+.totem-with-skills::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  border-radius: 50%;
 }
-.war-description{
-   line-height: 1.6;
-   margin-bottom: 1em;
+
+.totem-with-skills:hover {
+   transform: translateY(4px);                /* смещаем вниз, имитируя нажатие */
+   box-shadow: 
+     inset 0 4px 6px rgba(0, 0, 0, 0.5),      /* тёмная внутренняя тень сверху */
+     inset 0 -2px 4px rgba(255, 255, 255, 0.4), /* светлая внутренняя тень снизу */
+     0 2px 4px rgba(0, 0, 0, 0.2);             /* лёгкая внешняя тень, чтобы элемент не "провалился" в фон */
+   border-color: rgba(200, 170, 0, 0.5);       /* можно слегка затемнить рамку */
+ }
+
+/* Направление в зависимости от стороны */
+.totem-with-skills[data-side="attack"] {
+  flex-direction: row;
 }
-h3{
-   text-align: center;
-   line-height: 1.6;
-   margin-bottom: 1em;
+.totem-with-skills[data-side="defense"] {
+  flex-direction: row-reverse;
 }
+
+/* Контейнер для иконок умений */
+.skills-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 110px;
+}
+
+/* Иконка умения с рангом */
+.skill-wrapper {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.skill-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 2px solid #b0b0b0;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  transition: border-color 0.2s, transform 0.1s;
+  image-rendering: crisp-edges;
+}
+.skill-wrapper:hover .skill-icon {
+  border-color: #e67e22;
+  transform: scale(1.8);
+}
+.skill-rank {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,0.85);
+  color: white;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 14px 0 10px 0;
+  line-height: 1;
+  text-shadow: 0 0 3px black;
+  min-width: 22px;
+  text-align: center;
+  backdrop-filter: blur(1px);
+  border-left: 1px solid rgba(255,255,255,0.3);
+  border-top: 1px solid rgba(255,255,255,0.3);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Увеличенный тотем */
+.totem-icon-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.totem-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: #2a2a2a;
+  border: 2px solid #888;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.2);
+}
+.totem-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #444;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #eee;
+  border: 1px solid #666;
+}
+.totem-level-badge {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 3px 0;
+  border-radius: 12px 12px 0 0;
+  line-height: 1;
+  z-index: 2;
+  text-shadow: 0 0 4px black;
+  backdrop-filter: blur(1px);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Звёзды тотема (внизу) */
+.totem-stars {
+   position: absolute;
+   bottom: 3px;
+   left: 50%;
+   transform: translateX(-50%);
+   display: flex;
+   justify-content: center;
+   gap: 4px;
+   align-items: flex-end; 
+   pointer-events: none;
+   z-index: 2;
+ }
+
+ .star-icon {
+   width: 30%;
+   height: 30%;
+   object-fit: contain;
+   filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
+   flex-shrink: 0;
+ }
+ 
+ .star-icon-max {
+   position: absolute;
+   bottom: -8px;
+   left: 50%;
+   transform: translateX(-50%);
+   display: flex;
+   justify-content: center;
+   gap: 4px;
+   align-items: flex-end; 
+   pointer-events: none;
+   z-index: 2;
+   width: 70px;
+   height: 40px;
+   flex-shrink: 0;
+ }
+
+/* Адаптивность для планшетов */
+@media (max-width: 992px) {
+  .totem-with-skills {
+    gap: 8px;
+    padding: 6px 10px;
+  }
+  .skill-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+  .totem-icon-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+  .totem-level-badge {
+    font-size: 18px;
+  }
+
+  .star-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .star-icon-max {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .skill-rank {
+    font-size: 14px;
+    padding: 2px 6px;
+  }
+}
+
+/* Стили для слотов умений тотемов в верхней панели */
+.totem-skills-container {
+   display: flex;
+   gap: 8px;
+   margin-top: 10px;
+   justify-content: center;
+ }
+ 
+ .totem-skill-slot {
+   width: 40px;
+   height: 40px;
+   border: 2px solid #888;
+   border-radius: 8px;
+   background: #2a2a2a;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   color: white;
+   font-size: 20px;
+   font-weight: bold;
+ }
+ 
+ .totem-skill-slot:hover {
+   border-color: #e67e22;
+   transform: scale(1.1);
+ }
+ 
+ .totem-skill-slot.filled {
+   background: #1e1e1e;
+   border-color: #e67e22;
+ }
+ 
+ .totem-skill-slot .skill-icon {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 6px;
+ }
+ 
+ /* Модальное окно выбора умения (можно использовать те же стили, что и для титанов) */
+ .skill-selection-modal {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.8);
+   backdrop-filter: blur(5px);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+   padding: 20px;
+ }
+ 
+ .skill-selection-content {
+   background: white;
+   border-radius: 16px;
+   width: 100%;
+   max-width: 600px;
+   max-height: 80vh;
+   overflow: hidden;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+ }
