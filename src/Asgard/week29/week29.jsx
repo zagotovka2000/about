@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './week28.css';
+import './week29.css';
 
-const Week28 = () => {
+const Week29 = () => {
   const [battleData, setBattleData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: 'damage', direction: 'desc' });
@@ -9,7 +9,7 @@ const Week28 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/week28.txt');
+        const response = await fetch('/week29.txt');
         const text = await response.text();
         processData(text);
       } catch (error) {
@@ -93,6 +93,8 @@ const Week28 = () => {
      }
    });
  };
+
+
   const renderTeamWithPatronage = (teamString, patronageString) => {
    if (!teamString) return null;
    
@@ -205,4 +207,4 @@ const Week28 = () => {
   );
 };
 
-export default Week28;
+export default Week29;

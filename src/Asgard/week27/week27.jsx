@@ -79,12 +79,20 @@ const Week27 = () => {
   };
 
   const extractPatronagePairs = (patronageString) => {
-    if (!patronageString) return [];
-    return patronageString.split(' ').map(item => {
-      const match = item.match(/^([^(]+)\((\d+)\)$/);
-      return match ? { hero: match[1], power: match[2] } : null;
-    }).filter(Boolean);
-  };
+   if (!patronageString) return [];
+   // Разделяем по пробелам, удаляем пустые строки (учёт множественных пробелов)
+   const tokens = patronageString.split(/\s+/).filter(token => token.length > 0);
+   return tokens.map(token => {
+     const match = token.match(/^([^(]+)\((\d+)\)$/);
+     if (match) {
+       // Стандартный формат: Имя(число)
+       return { hero: match[1], power: match[2] };
+     } else {
+       // Нестандартный формат (например, "###") – считаем весь токен именем
+       return { hero: token, power: null };
+     }
+   });
+ };
   const renderTeamWithPatronage = (teamString, patronageString) => {
    if (!teamString) return null;
    
