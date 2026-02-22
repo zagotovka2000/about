@@ -41,7 +41,8 @@ const WeekData = ({ weekNumber }) => {
       item.attackerName !== "att name" && 
       item.attackerName.trim() !== "" && 
       !isNaN(item.damage) && 
-      item.replay !== "бой"
+      item.replay !== "бой" &&
+      item.level === "160" // ✅ фильтр только для 160 уровня
     );
     setBattleData(data);
     setLoading(false);
