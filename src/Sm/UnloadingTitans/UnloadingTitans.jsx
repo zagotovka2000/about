@@ -2,36 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './UnloadingTitans.css';
 
-// ---------- Вспомогательные функции (скопированы из War.js) ----------
-const TITAN_TYPES = {
-  light: ['Сол', 'Ияр', 'Риг', 'Амо'],
-  dark: ['Тен', 'Бру', 'Мор', 'Кер'],
-  water: ['Сиг', 'Тид', 'Нов', 'Маи', 'Гип'],
-  fire: ['Ара', 'Мол', 'Аше', 'Игн', 'Вул'],
-  wood: ['Эде', 'Анг', 'Ава', 'Сил', 'Вер']
-};
 
-const TYPE_TO_TOTEM = {
-  light: 'С',
-  dark: 'Т',
-  water: 'В',
-  fire: 'О',
-  wood: 'Д'
-};
-
-const TITAN_WEIGHTS = {
-  'Вер': 2,
-  'Аше': 2,
-  'Тид': 2
-};
-
-const TYPE_THRESHOLDS = {
-  light: 2,
-  dark: 2,
-  water: 3,
-  fire: 3,
-  wood: 3
-};
 
 // Парсер TSV
 const parseTSV = (text) => {

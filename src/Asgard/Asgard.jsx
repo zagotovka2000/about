@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import "./asgard.css"
-import Week27 from "./week27/week27";
-import Week28 from './week28/week28';
-import Week29 from './week29/week29';
+import WeekData from './WeekData/WeekData';
+import "./asgard.css";
+
+// Конфигурация недель
+const weeksConfig = [
+  { number: 27, label: 'Маэстро 01.02.2026' },
+  { number: 28, label: 'Ош 07.02.2026' },
+  { number: 29, label: 'Маэстро 15.02.2026' },
+  { number: 30, label: 'Ош 22.02.2026' },
+/*   { number: 31, label: 'Новый босс 01.03.2026' },  */
+
+];
 
 const Asgard = () => {
   const [activeWeek, setActiveWeek] = useState(null);
@@ -20,31 +28,22 @@ const Asgard = () => {
       </header>
       
       <div className="buttonsContainer">
-        <button 
-          onClick={() => toggleWeek(27)}
-          className="toggleButton"
-        >
-          Маэстро 01.02.2026 {activeWeek === 27 ? '▲' : '▼'}
-        </button>
-        <button 
-          onClick={() => toggleWeek(29)}  
-          className="toggleButton"
-        >
-          Маэстро 15.02.2026 {activeWeek === 29 ? '▲' : '▼'} 
-        </button>
-        <button 
-          onClick={() => toggleWeek(28)}  
-          className="toggleButton"
-        >
-          Ош 07.02.2026 {activeWeek === 28 ? '▲' : '▼'} 
-        </button>
+        {weeksConfig.map(week => (
+          <button
+            key={week.number}
+            onClick={() => toggleWeek(week.number)}
+            className="toggleButton"
+          >
+            {week.label} {activeWeek === week.number ? '▲' : '▼'}
+          </button>
+        ))}
       </div>
-      
-      {activeWeek === 27 && <Week27 />}
-      {activeWeek === 28 && <Week28 />}
-      {activeWeek === 29 && <Week29 />}
+
+      {/* Рендер активной недели */}
+      {activeWeek && <WeekData weekNumber={activeWeek} />}
     </div>
   );
 };
 
 export default Asgard;
+

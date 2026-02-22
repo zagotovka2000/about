@@ -284,10 +284,10 @@ const UnloadingWars = ({ fileName }) => {
         <div className="table-container" role="table" aria-label="Выгрузки боёв">
           <div className="table-header" role="rowgroup">
             <div className="header-cell attacker-header" onClick={() => requestSort('att name')}>
-              Атакующий{getSortIndicator('att name')}
+              Атака{getSortIndicator('att name')}
             </div>
             <div className="header-cell defender-header" onClick={() => requestSort('def name')}>
-              Защитник{getSortIndicator('def name')}
+              Защита{getSortIndicator('def name')}
             </div>
             <div className="header-cell points-header" onClick={() => requestSort('points')}>
               Очки

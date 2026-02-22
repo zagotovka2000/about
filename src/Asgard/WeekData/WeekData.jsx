@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import './week27.css';
+import React, { useState, useEffect, useMemo } from 'react';
+import './WeekData.css';
 
-const Week27 = () => {
+const WeekData = ({ weekNumber }) => {
   const [battleData, setBattleData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: 'damage', direction: 'desc' });
@@ -9,7 +9,7 @@ const Week27 = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/week27.txt');
+        const response = await fetch(`/weeks/week${weekNumber}.txt`);
         const text = await response.text();
         processData(text);
       } catch (error) {
@@ -19,11 +19,10 @@ const Week27 = () => {
     };
 
     fetchData();
-  }, []);
+  }, [weekNumber]);
 
   const processData = (text) => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
-
     const data = lines.map(line => {
       const columns = line.split('\t');
       return {
@@ -41,10 +40,9 @@ const Week27 = () => {
     }).filter(item => 
       item.attackerName !== "att name" && 
       item.attackerName.trim() !== "" && 
-      item.damage !== "не число" && 
+      !isNaN(item.damage) && 
       item.replay !== "бой"
     );
-
     setBattleData(data);
     setLoading(false);
   };
@@ -57,16 +55,12 @@ const Week27 = () => {
     setSortConfig({ key, direction });
   };
 
-  const sortedData = React.useMemo(() => {
+  const sortedData = useMemo(() => {
     const sortableData = [...battleData];
     if (sortConfig.key) {
       sortableData.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
-        }
+        if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
         return 0;
       });
     }
@@ -78,83 +72,76 @@ const Week27 = () => {
     return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
   };
 
+  // Вспомогательные функции для покровителей
   const extractPatronagePairs = (patronageString) => {
-   if (!patronageString) return [];
-   // Разделяем по пробелам, удаляем пустые строки (учёт множественных пробелов)
-   const tokens = patronageString.split(/\s+/).filter(token => token.length > 0);
-   return tokens.map(token => {
-     const match = token.match(/^([^(]+)\((\d+)\)$/);
-     if (match) {
-       // Стандартный формат: Имя(число)
-       return { hero: match[1], power: match[2] };
-     } else {
-       // Нестандартный формат (например, "###") – считаем весь токен именем
-       return { hero: token, power: null };
-     }
-   });
- };
+    if (!patronageString) return [];
+    const tokens = patronageString.split(/\s+/).filter(token => token.length > 0);
+    return tokens.map(token => {
+      const match = token.match(/^([^(]+)\((\d+)\)$/);
+      if (match) {
+        return { hero: match[1], power: match[2] };
+      } else {
+        return { hero: token, power: null };
+      }
+    });
+  };
+
   const renderTeamWithPatronage = (teamString, patronageString) => {
-   if (!teamString) return null;
-   
-   const heroes = teamString.split(' ').filter(Boolean);
-   const patronagePairs = extractPatronagePairs(patronageString);
- 
-   return (
-     <div className="team-with-patronage">
-       {heroes.map((heroWithLevel, index) => {
-         // Извлекаем имя героя без уровня (всё до открывающей скобки)
-         const heroName = heroWithLevel.split('(')[0].trim();
-         
-         if (index === 0) {
-           return (
-             <div key={index} className="hero-container">
-               <img 
-                 src={`/images/heroes/${heroName}.png`}
-                 alt={heroName}
-                 title={heroWithLevel}
-                 className="hero-image"
-                 onError={(e) => {
-                   console.error(`Failed to load image: /images/heroes/${heroName}.png`);
-                   e.target.style.display = 'none';
-                 }}
-               />
-             </div>
-           );
-         }
-         
-         const patronPair = patronagePairs[index - 1];
-         const patron = patronPair ? patronPair.hero : null;
- 
-         return (
-           <div key={index} className="hero-container">
-             <img 
-               src={`/images/heroes/${heroName}.png`}
-               alt={heroName}
-               title={heroWithLevel}
-               className="hero-image"
-               onError={(e) => {
-                 console.error(`Failed to load image: /images/heroes/${heroName}.png`);
-                 e.target.style.display = 'none';
-               }}
-             />
-             {patron && (
-               <img 
-                 src={`/images/heroes/${patron}.png`}
-                 alt={`Покровитель: ${patron}`}
-                 className="patronage-image"
-                 title={`Покровитель: ${patron}`}
-                 onError={(e) => {
-                   console.error(`Failed to load patron image: /images/heroes/${patron}.png`);
-                   e.target.style.display = 'none';
-                 }}
-               />
-             )}
-           </div>
-         );
-       })}
-     </div>
-   );
- };
+    if (!teamString) return null;
+    const heroes = teamString.split(' ').filter(Boolean);
+    const patronagePairs = extractPatronagePairs(patronageString);
+    return (
+      <div className="team-with-patronage">
+        {heroes.map((heroWithLevel, index) => {
+          const heroName = heroWithLevel.split('(')[0].trim();
+          if (index === 0) {
+            return (
+              <div key={index} className="hero-container">
+                <img 
+                  src={`/images/heroes/${heroName}.png`}
+                  alt={heroName}
+                  title={heroWithLevel}
+                  className="hero-image"
+                  onError={(e) => {
+                    console.error(`Failed to load image: /images/heroes/${heroName}.png`);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            );
+          }
+          const patronPair = patronagePairs[index - 1];
+          const patron = patronPair ? patronPair.hero : null;
+          return (
+            <div key={index} className="hero-container">
+              <img 
+                src={`/images/heroes/${heroName}.png`}
+                alt={heroName}
+                title={heroWithLevel}
+                className="hero-image"
+                onError={(e) => {
+                  console.error(`Failed to load image: /images/heroes/${heroName}.png`);
+                  e.target.style.display = 'none';
+                }}
+              />
+              {patron && (
+                <img 
+                  src={`/images/heroes/${patron}.png`}
+                  alt={`Покровитель: ${patron}`}
+                  className="patronage-image"
+                  title={`Покровитель: ${patron}`}
+                  onError={(e) => {
+                    console.error(`Failed to load patron image: /images/heroes/${patron}.png`);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   if (loading) {
     return <div className="loading">Loading battle data...</div>;
@@ -162,7 +149,6 @@ const Week27 = () => {
 
   return (
     <div className="app">
-      <h1>Week 27 Маэстро</h1>
       <div className="table-container" role="table" aria-label="Battle Results Table">
         <div className="table-header" role="rowgroup">
           <div 
@@ -180,7 +166,6 @@ const Week27 = () => {
           >
             Сортир. по урону{getSortIndicator('damage')}
           </div>
-
         </div>
 
         {sortedData.map((battle, index) => {
@@ -197,7 +182,6 @@ const Week27 = () => {
               <div className={`table-cell damage ${damageClass}`} role="cell" data-label="Урон">
                 {battle.damage.toLocaleString()}
               </div>
-
             </div>
           );
         })}
@@ -206,4 +190,4 @@ const Week27 = () => {
   );
 };
 
-export default Week27;
+export default WeekData;
