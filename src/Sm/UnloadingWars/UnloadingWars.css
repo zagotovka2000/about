@@ -1,0 +1,696 @@
+/* unloadingWars.css - обновленные стили для узких колонок */
+* {
+   box-sizing: border-box;
+ }
+ 
+ .app {
+   max-width: 1600px;
+   margin: 20px auto;
+   padding: 20px;
+   border-radius: 12px;
+   background-color: #ffffff;
+   overflow-x: auto;
+ }
+ 
+ .loading, .error, .no-data {
+   text-align: center;
+   padding: 40px;
+   font-size: 1.2rem;
+   color: #666;
+ }
+ 
+ .error {
+   color: #c0392b;
+ }
+ 
+ .table-container {
+   display: flex;
+   flex-direction: column;
+   border: 1px solid #e0e0e0;
+   border-radius: 8px;
+   overflow: hidden;
+   min-width: 1000px;
+   background: white;
+ }
+ 
+ .table-header {
+   display: flex;
+   background: linear-gradient(135deg, #2c3e50, #1e2b37);
+   color: white;
+   font-weight: 600;
+   align-items: center;
+   min-height: 50px;
+   border-bottom: 2px solid #0f1a24;
+ }
+ 
+ .header-cell {
+   padding: 12px;
+   border-right: 1px solid #3d5166;
+   text-align: center;
+   cursor: pointer;
+   transition: background-color 0.2s;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 1rem;
+   user-select: none;
+ }
+ 
+ .header-cell:hover {
+   background-color: #3d566e;
+   color: #ffd966;
+ }
+ 
+ .header-cell:last-child {
+   border-right: none;
+ }
+ 
+ .attacker-header, .defender-header {
+   flex: 3; /* увеличенный вес */
+ }
+ 
+ .points-header {
+   flex: 0 0 60px; /* фиксированная узкая ширина */
+   min-width: 60px;
+   max-width: 60px;
+ }
+ 
+ .replay-header {
+   flex: 0 0 80px; /* чуть шире для ссылки, но всё ещё узко */
+   min-width: 80px;
+   max-width: 80px;
+ }
+ 
+ .table-row {
+   display: flex;
+   border-bottom: 1px solid #eaeef2;
+   transition: background-color 0.25s ease;
+   align-items: stretch;
+   min-height: 120px;
+   background-color: white;
+ }
+ 
+ .table-row:hover {
+   background-color: #f0f7ff;
+   box-shadow: inset 0 0 0 2px #3498db;
+ }
+ 
+ .table-cell {
+   padding: 12px;
+   border-right: 1px solid #e0e7ef;
+   display: flex;
+   flex-direction: column;
+   word-break: break-word;
+   color: #1a2634;
+ }
+ 
+ .table-cell:last-child {
+   border-right: none;
+ }
+ 
+ .attacker-cell, .defender-cell {
+   flex: 3; /* увеличенный вес */
+ }
+ 
+ .points-cell {
+   flex: 0 0 60px;
+   min-width: 60px;
+   max-width: 60px;
+   justify-content: center;
+   align-items: center;
+   font-weight: bold;
+   color: #1e8449;
+   font-size: 1.2rem;
+ }
+ 
+ .replay-cell {
+   flex: 0 0 80px;
+   min-width: 80px;
+   max-width: 80px;
+   justify-content: center;
+   align-items: center;
+ }
+ 
+ .player-info {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   margin-bottom: 12px;
+   padding-bottom: 6px;
+   border-bottom: 1px solid #e0e7ef;
+ }
+ 
+ .player-name {
+   font-weight: 600;
+   color: #0b2b40;
+   font-size: 1rem;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 150px;
+ }
+ 
+ .player-power {
+   background-color: #ecf0f1;
+   padding: 2px 10px;
+   border-radius: 20px;
+   font-size: 0.9rem;
+   color: #2c3e50;
+   white-space: nowrap;
+ }
+ 
+ /* Стили для отображения команды */
+ .team-with-patronage {
+   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+ }
+ 
+ .general-pet-section {
+   flex: 0 0 auto; /* не растягивается */
+   margin-bottom: 0; /* убрать нижний отступ, если был */
+ }
+ 
+ .general-pet-container {
+   display: inline-block;
+   width: 50px; /* чуть уменьшим для экономии места */
+   height: 50px;
+ }
+ 
+ .general-pet-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 2px solid #f1c40f;
+   background-color: #fff;
+ }
+ 
+ .general-pet-fallback,
+ .hero-fallback,
+ .patron-fallback {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #ecf0f1;
+   border-radius: 50%;
+   font-size: 10px;
+   font-weight: bold;
+   color: #2c3e50;
+   border: 1px solid #bdc3c7;
+ }
+ 
+ .heroes-section {
+   flex: 1 1 auto; /* занимает оставшееся место */
+   min-width: 200px; /* минимальная ширина для переноса */
+ }
+ 
+ .heroes-container {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 10px;
+ }
+ 
+ .hero-patron-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 60px; /* немного уменьшим */
+ }
+ 
+ .hero-with-patron {
+   position: relative;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+ }
+ 
+ .hero-container {
+   width: 50px;
+   height: 50px;
+   position: relative;
+ }
+ 
+ .hero-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 2px solid #3498db;
+   background-color: #fff;
+   transition: transform 0.2s;
+ }
+ 
+ .hero-image:hover {
+   transform: scale(1.05);
+   border-color: #2980b9;
+ }
+ 
+ .patronage-overlay {
+   position: absolute;
+   bottom: -8px;
+   right: -8px;
+   width: 28px;
+   height: 28px;
+   z-index: 10;
+ }
+ 
+ .patronage-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 2px solid #e67e22;
+   background-color: white;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+   transition: transform 0.2s;
+ }
+ 
+ .patronage-image:hover {
+   transform: scale(1.2);
+ }
+ 
+ .hero-name {
+   font-size: 10px;
+   font-weight: 600;
+   margin-top: 4px;
+   color: #2c3e50;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 50px;
+ }
+ 
+ .patron-name {
+   font-size: 8px;
+   color: #e67e22;
+   font-weight: 500;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 50px;
+ }
+ 
+ .replay-link {
+   display: inline-block;
+   padding: 4px 8px;
+   background-color: #3498db;
+   color: white;
+   text-decoration: none;
+   border-radius: 20px;
+   font-size: 0.8rem;
+   transition: background-color 0.2s;
+   white-space: nowrap;
+ }
+ 
+ .replay-link:hover {
+   background-color: #2980b9;
+ }
+ 
+ /* Адаптивность */
+ @media (max-width: 1200px) {
+   .hero-patron-container {
+     width: 50px;
+   }
+   .hero-container {
+     width: 45px;
+     height: 45px;
+   }
+   .patronage-overlay {
+     width: 24px;
+     height: 24px;
+     bottom: -6px;
+     right: -6px;
+   }
+   .player-name {
+     max-width: 120px;
+   }
+ }
+ .points-low {
+   background-color: rgba(231, 76, 60, 0.3); /* красноватый */
+ }
+ .points-high {
+   background-color: rgba(46, 204, 113, 0.3); /* зеленоватый */
+ }
+/* unloadingWars.css — добавьте эти стили к уже существующим */
+.points-low {
+   background-color: rgba(231, 76, 60, 0.3); /* светло-красный */
+ }
+ 
+ .points-high {
+   background-color: rgba(46, 204, 113, 0.3); /* светло-зелёный */
+ }
+ 
+ .no-replay {
+   color: #999;
+   font-size: 0.9rem;
+   display: inline-block;
+   padding: 4px 8px;
+ }
+/* UnloadingTitans.css */
+.app {
+   width: 100%;
+   max-width: 1400px;
+   margin: 0 auto;
+   padding: 20px;
+   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+ }
+ 
+ .error {
+   color: #f44336;
+   padding: 10px;
+   background: #ffebee;
+   border-radius: 4px;
+   margin: 10px 0;
+ }
+ 
+ .loading {
+   color: #2196f3;
+   padding: 10px;
+   background: #e3f2fd;
+   border-radius: 4px;
+   margin: 10px 0;
+ }
+ 
+ .no-data {
+   color: #757575;
+   padding: 20px;
+   text-align: center;
+   background: #f5f5f5;
+   border-radius: 4px;
+   margin: 10px 0;
+ }
+ 
+ .table-container {
+   display: flex;
+   flex-direction: column;
+   border: 1px solid #ddd;
+   border-radius: 8px;
+   overflow: hidden;
+   background: white;
+   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+ }
+ 
+ .table-header {
+   display: flex;
+   background-color: #f5f5f5;
+   border-bottom: 2px solid #ddd;
+   font-weight: bold;
+ }
+ 
+ .header-cell {
+   flex: 1;
+   padding: 12px;
+   cursor: pointer;
+   user-select: none;
+   transition: background-color 0.2s;
+   border-right: 1px solid #ddd;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+ }
+ 
+ .header-cell:last-child {
+   border-right: none;
+ }
+ 
+ .header-cell:hover {
+   background-color: #e0e0e0;
+ }
+ 
+ .table-row {
+   display: flex;
+   border-bottom: 1px solid #eee;
+   transition: background-color 0.2s;
+ }
+ 
+ .table-row:hover {
+   background-color: #f9f9f9;
+ }
+ 
+ .table-cell {
+   flex: 1;
+   padding: 12px;
+   border-right: 1px solid #eee;
+   min-width: 0;
+ }
+ 
+ .table-cell:last-child {
+   border-right: none;
+ }
+ 
+ /* Специфичные для колонок */
+ .attacker-cell, .defender-cell {
+   flex: 3; /* Даём больше места под пачки */
+ }
+ 
+ .points-cell {
+   flex: 0.5;
+   text-align: center;
+   font-weight: bold;
+ }
+ 
+ .replay-cell {
+   flex: 0.5;
+   text-align: center;
+ }
+ 
+ .points-high {
+   color: #4caf50;
+ }
+ 
+ .points-low {
+   color: #f44336;
+ }
+ 
+ .player-info {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 8px;
+   font-weight: 500;
+ }
+ 
+ .player-name {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 150px;
+ }
+ 
+ .player-power {
+   color: #666;
+   font-size: 0.9em;
+ }
+ 
+ .replay-link {
+   color: #2196f3;
+   text-decoration: none;
+   padding: 4px 8px;
+   border-radius: 4px;
+   background: #e3f2fd;
+   display: inline-block;
+   transition: background-color 0.2s;
+ }
+ 
+ .replay-link:hover {
+   background: #bbdefb;
+ }
+ 
+ .no-replay {
+   color: #999;
+   font-size: 0.9em;
+ }
+ 
+ /* Стили для титанов и тотемов (из War.css) */
+ .titans-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+   margin-bottom: 12px;
+ }
+ 
+ .titan-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 60px;
+ }
+ 
+ .titan-image {
+   width: 50px;
+   height: 50px;
+   object-fit: contain;
+   border-radius: 25px;
+   background: #f0f0f0;
+   padding: 2px;
+ }
+ 
+ .titan-fallback {
+   width: 50px;
+   height: 50px;
+   border-radius: 25px;
+   background: #ddd;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 10px;
+   text-align: center;
+   color: #333;
+ }
+ 
+ .titan-name {
+   font-size: 10px;
+   margin-top: 2px;
+   color: #555;
+ }
+ 
+ .totems-section {
+   margin-top: 8px;
+ }
+ 
+ .totems-list {
+   display: flex;
+   flex-direction: row;
+   gap: 16px;
+   justify-content: flex-start;
+ }
+ 
+ .totem-with-skills {
+   display: flex;
+   align-items: center;
+   gap: 4px;
+ }
+ 
+ .totem-with-skills[data-side="attack"] .skills-right {
+   order: 2;
+ }
+ 
+ .totem-with-skills[data-side="defense"] .skills-left {
+   order: 1;
+ }
+ 
+ .totem-icon-wrapper {
+   position: relative;
+   width: 50px;
+   height: 50px;
+ }
+ 
+ .totem-icon {
+   width: 50px;
+   height: 50px;
+   object-fit: contain;
+   border-radius: 25px;
+   background: #e0e0e0;
+   padding: 2px;
+ }
+ 
+ .totem-fallback {
+   width: 50px;
+   height: 50px;
+   border-radius: 25px;
+   background: #ddd;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 12px;
+   color: #333;
+ }
+ 
+ .totem-level-badge {
+   position: absolute;
+   bottom: -5px;
+   right: -5px;
+   background: #ff9800;
+   color: white;
+   border-radius: 10px;
+   padding: 2px 4px;
+   font-size: 10px;
+   font-weight: bold;
+ }
+ 
+ .totem-stars {
+   position: absolute;
+   top: -5px;
+   left: -5px;
+   display: flex;
+   gap: 1px;
+ }
+ 
+ .star-icon {
+   width: 12px;
+   height: 12px;
+ }
+ 
+ .star-icon-max {
+   width: 16px;
+   height: 16px;
+ }
+ 
+ .skills-left, .skills-right {
+   display: flex;
+   flex-direction: column;
+   gap: 2px;
+ }
+ 
+ .skill-wrapper {
+   position: relative;
+   width: 24px;
+   height: 24px;
+ }
+ 
+ .skill-icon {
+   width: 24px;
+   height: 24px;
+   object-fit: contain;
+   border-radius: 12px;
+   background: #ccc;
+ }
+ 
+ .skill-rank {
+   position: absolute;
+   bottom: -2px;
+   right: -2px;
+   background: #2196f3;
+   color: white;
+   border-radius: 8px;
+   padding: 1px 2px;
+   font-size: 8px;
+   font-weight: bold;
+ }
+ 
+ /* Адаптация под мобильные */
+ @media (max-width: 768px) {
+   .titans-container {
+     gap: 4px;
+   }
+   .titan-item {
+     width: 40px;
+   }
+   .titan-image, .titan-fallback {
+     width: 35px;
+     height: 35px;
+   }
+   .totem-icon-wrapper {
+     width: 35px;
+     height: 35px;
+   }
+   .totem-icon {
+     width: 35px;
+     height: 35px;
+   }
+   .skill-wrapper {
+     width: 18px;
+     height: 18px;
+   }
+   .skill-icon {
+     width: 18px;
+     height: 18px;
+   }
+ }

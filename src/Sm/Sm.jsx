@@ -1,9 +1,37 @@
-import "./sm.css"
-const Sm = () => {
-  return (
-    <div className="conteiner">
-      <header className="header">
+import React, { useState } from 'react';
+import FileSelector from '../FileSelector/FileSelector';
+import UnloadingWars from './UnloadingWars/UnloadingWars';
+import './sm.css';
+import UnloadingTitans from './UnloadingTitans/UnloadingTitans';
 
+const AVAILABLE_FILES = [
+  'зомби 09.02 герои.txt',
+  'зомби 19.02 герои.txt',
+  'поляки 12.02 герои.txt',
+  'поляки 20.02 герои.txt'
+];
+const AVAILABLE_FILES_2 = [
+  'зомби 09.02 титаны.txt',
+  'зомби 19.02 титаны.txt',
+  'поляки 12.02 титаны.txt',
+  'поляки 20.02 титаны.txt'
+];
+const ALL_FILES = [...AVAILABLE_FILES, ...AVAILABLE_FILES_2];
+
+const Sm = () => {
+   const [activeFile, setActiveFile] = useState(null);
+ 
+   const handleFileSelect = (file) => {
+     setActiveFile(prev => prev === file ? null : file);
+   };
+ 
+   // Определяем, файл с титанами или героями
+   const isTitansFile = activeFile && activeFile.includes('титаны');
+ 
+   return (
+     <div className="conteiner">
+      <header className="header">
+     
         <p className="abzac">
         
          
@@ -23,6 +51,19 @@ const Sm = () => {
           </p>
         </p>
       </header>
+       <FileSelector 
+         files={ALL_FILES}
+         activeFile={activeFile}
+         onFileSelect={handleFileSelect}
+       />
+ 
+       {activeFile && (
+         isTitansFile 
+           ? <UnloadingTitans fileName={activeFile} />
+           : <UnloadingWars fileName={activeFile} />
+       )}
+ 
+
     </div>
   );
 };

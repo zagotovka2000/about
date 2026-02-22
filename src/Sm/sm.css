@@ -5,7 +5,9 @@
    text-align: justify;
 
 }
-
+.header{
+margin: 10px;
+}
 h3{
    text-align:center
 }
