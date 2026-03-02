@@ -41,8 +41,8 @@ const WeekData = ({ weekNumber }) => {
       item.attackerName !== "att name" && 
       item.attackerName.trim() !== "" && 
       !isNaN(item.damage) && 
-      item.replay !== "бой" &&
-      item.level === "160" // ✅ фильтр только для 160 уровня
+      item.replay !== "бой"
+      // Фильтр по level === "160" удалён — показываем все уровни
     );
     setBattleData(data);
     setLoading(false);
@@ -73,7 +73,7 @@ const WeekData = ({ weekNumber }) => {
     return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
   };
 
-  // Вспомогательные функции для покровителей
+  // Вспомогательные функции для покровителей (без изменений)
   const extractPatronagePairs = (patronageString) => {
     if (!patronageString) return [];
     const tokens = patronageString.split(/\s+/).filter(token => token.length > 0);
@@ -160,6 +160,8 @@ const WeekData = ({ weekNumber }) => {
             Сортировка по нику{getSortIndicator('attackerName')}
           </div>
           <div className="header-cell team" role="columnheader">Команда</div>
+          {/* Новая колонка "Босс" */}
+          <div className="header-cell boss" role="columnheader">Босс</div>
           <div 
             className="header-cell damage" 
             role="columnheader"
@@ -179,6 +181,10 @@ const WeekData = ({ weekNumber }) => {
               </div>
               <div className="table-cell team" role="cell" data-label="Команда">
                 {renderTeamWithPatronage(battle.attackerTeam, battle.attackerPatronage)}
+              </div>
+              {/* Ячейка с уровнем босса */}
+              <div className="table-cell boss" role="cell" data-label="Босс">
+                {battle.level}
               </div>
               <div className={`table-cell damage ${damageClass}`} role="cell" data-label="Урон">
                 {battle.damage.toLocaleString()}
