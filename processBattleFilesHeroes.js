@@ -330,31 +330,7 @@ function main() {
         saveToCSV(battles, csvPath);
       }
     });
-    
-    console.log('\n=== ИНСТРУКЦИЯ ДЛЯ КОМПОНЕНТА Territory.js ===');
-    console.log('1. В компоненте Territory.js измените массив файлов на:');
-    console.log('   const dataArray = [\'all_battles.csv\'];');
-    console.log('2. Измените basePath на:');
-    console.log('   const basePath = \'/smBattle/processed/\';');
-    console.log('3. В функции loadData используйте простой парсинг CSV:');
-    console.log(`
-Пример парсинга CSV:
-const response = await fetch(filePath);
-const text = await response.text();
-const lines = text.split('\\n').filter(line => line.trim() !== '');
-const header = lines[0].split(',');
-const dataLines = lines.slice(1);
-
-dataLines.forEach(line => {
-  const values = line.split(',').map(v => v.replace(/^"|"$/g, '').trim());
-  const battle = {};
-  header.forEach((key, index) => {
-    battle[key] = values[index] || '';
-  });
-  // Добавьте battle в массив
-});
-    `);
-    
+        
   } else {
     console.log('Не удалось обработать ни одного боя');
   }

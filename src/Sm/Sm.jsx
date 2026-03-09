@@ -5,20 +5,16 @@ import './sm.css';
 import UnloadingTitans from './UnloadingTitans/UnloadingTitans';
 
 const AVAILABLE_FILES = [
-  'зомби 09.02 герои.txt',
-  'зомби 19.02 герои.txt',
   'поляки 12.02 герои.txt',
   'поляки 20.02 герои.txt',
   'поляки 25.02 герои.txt',
-  'зомби 27.02 герои.txt',
+  'поляки 04.03 герои.txt',
 ];
 const AVAILABLE_FILES_2 = [
-  'зомби 09.02 титаны.txt',
-  'зомби 19.02 титаны.txt',
   'поляки 12.02 титаны.txt',
   'поляки 20.02 титаны.txt',
   'поляки 25.02 титаны.txt',
-  'зомби 27.02 титаны.txt',
+  'поляки 04.03 титаны.txt',
 ];
 const ALL_FILES = [...AVAILABLE_FILES, ...AVAILABLE_FILES_2];
 

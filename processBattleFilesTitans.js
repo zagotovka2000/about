@@ -191,11 +191,6 @@ function main() {
         saveToCSV(battles, csvPath);
       }
     });
-    
-    console.log('\n=== ИНСТРУКЦИЯ ДЛЯ КОМПОНЕНТА War.js ===');
-    console.log('1. В компоненте War.js измените загрузку данных на один файл:');
-    console.log('   const filePath = \'/smBattleTitan/processed/all_titan_battles.csv\';');
-    // ... остальная инструкция
   } else {
     console.log('Не удалось обработать ни одного боя');
   }
