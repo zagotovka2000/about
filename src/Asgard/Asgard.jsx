@@ -10,6 +10,7 @@ const weeksConfig = [
   { number: 30, label: 'Ош 22.02.2026' },
   { number: 31, label: 'Маэстро 02.03.2026' }, 
   { number: 32, label: 'Ош 09.03.2026' }, 
+  { number: 33, label: 'Маэстро 15.03.2026' }, 
 
 ];
 

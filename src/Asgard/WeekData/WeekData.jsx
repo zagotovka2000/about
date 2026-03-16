@@ -7,46 +7,62 @@ const WeekData = ({ weekNumber }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'damage', direction: 'desc' });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/weeks/week${weekNumber}.txt`);
-        const text = await response.text();
-        processData(text);
-      } catch (error) {
-        console.error('Error loading file:', error);
-        setLoading(false);
-      }
-    };
+   const fetchData = async () => {
+     try {
+       const response = await fetch(`/weeks/week${weekNumber}.txt`);
+       if (!response.ok) {
+         console.error(`HTTP error! status: ${response.status}`);
+         setLoading(false);
+         return;
+       }
+       const text = await response.text();
+       console.log('Raw text length:', text.length);
+       console.log('First 500 characters:', text.substring(0, 500));
+       processData(text);
+     } catch (error) {
+       console.error('Error loading file:', error);
+       setLoading(false);
+     }
+   };
+   fetchData();
+ }, [weekNumber]);
 
-    fetchData();
-  }, [weekNumber]);
-
-  const processData = (text) => {
-    const lines = text.split('\n').filter(line => line.trim() !== '');
-    const data = lines.map(line => {
-      const columns = line.split('\t');
-      return {
-        dateTime: columns[0],
-        level: columns[1],
-        week: columns[2],
-        attackerId: columns[3],
-        attackerName: columns[4],
-        attackerPower: columns[5],
-        attackerTeam: columns[6],
-        damage: parseInt(columns[7], 10),
-        attackerPatronage: columns[8],
-        replay: columns[9]
-      };
-    }).filter(item => 
-      item.attackerName !== "att name" && 
-      item.attackerName.trim() !== "" && 
-      !isNaN(item.damage) && 
-      item.replay !== "бой"
-      // Фильтр по level === "160" удалён — показываем все уровни
-    );
-    setBattleData(data);
-    setLoading(false);
-  };
+ const processData = (text) => {
+   const lines = text.split('\n').filter(line => line.trim() !== '');
+   console.log('Lines after split:', lines.length);
+   
+   const data = lines.map((line, index) => {
+     const columns = line.split('\t');
+     if (columns.length < 10) {
+       console.warn(`Line ${index} has only ${columns.length} columns:`, line);
+     }
+     return {
+       dateTime: columns[0],
+       level: columns[1],
+       week: columns[2],
+       attackerId: columns[3],
+       attackerName: columns[4],
+       attackerPower: columns[5],
+       attackerTeam: columns[6],
+       damage: parseInt(columns[7], 10),
+       attackerPatronage: columns[8],
+       replay: columns[9]
+     };
+   }).filter(item => {
+     const keep = item.attackerName !== "att name" && 
+                  item.attackerName.trim() !== "" && 
+                  !isNaN(item.damage) && 
+                  item.replay !== "бой";
+     if (!keep) {
+       console.log('Filtered out:', item);
+     }
+     return keep;
+   });
+   
+   console.log('Final data count:', data.length);
+   setBattleData(data);
+   setLoading(false);
+ };
 
   const requestSort = (key) => {
     let direction = 'asc';
@@ -145,7 +161,7 @@ const WeekData = ({ weekNumber }) => {
   };
 
   if (loading) {
-    return <div className="loading">Loading battle data...</div>;
+    return <div className="loading">ЗАГРУЗКА ЕБАЛЫ...</div>;
   }
 
   return (

@@ -9,12 +9,14 @@ const AVAILABLE_FILES = [
   'поляки 20.02 герои.txt',
   'поляки 25.02 герои.txt',
   'поляки 04.03 герои.txt',
+  'поляки 09.03 герои.txt',
 ];
 const AVAILABLE_FILES_2 = [
   'поляки 12.02 титаны.txt',
   'поляки 20.02 титаны.txt',
   'поляки 25.02 титаны.txt',
   'поляки 04.03 титаны.txt',
+  'поляки 09.03 титаны.txt',
 ];
 const ALL_FILES = [...AVAILABLE_FILES, ...AVAILABLE_FILES_2];
 
