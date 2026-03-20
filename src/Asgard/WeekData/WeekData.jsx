@@ -450,7 +450,7 @@ const WeekData = ({ weekNumber }) => {
 
         {displayData.length === 0 ? (
           <div className="no-results-message">Такой скудной ебатой еще никто не осмелился так бить</div>
-        ) : (
+        ) : ( 
           displayData.map((battle, index) => {
             const damageClass = battle.damage < 10000000 ? 'low-damage' : 'high-damage';
             return (
