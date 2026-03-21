@@ -1,34 +1,49 @@
 import { useEffect, useRef, useState } from 'react';
 
+// Список песен для случайного выбора
+const SONG_LIST = [
+  '/sounds/song1.mp3',
+  '/sounds/song2.mp3',
+  '/sounds/song3.mp3',
+  '/sounds/song4.mp3',
+  '/sounds/song5.mp3',
+  '/sounds/song6.mp3',
+  '/sounds/song7.mp3',
+  '/sounds/song8.mp3',
+  '/sounds/song9.mp3',
+  '/sounds/song10.mp3',
+];
+
 const AudioManager = () => {
   const clickRef = useRef(null);
   const openRef = useRef(null);
   const closeRef = useRef(null);
   const ambientRef = useRef(null);
-  const autoSoundRef = useRef(null); // Новый звук для автовоспроизведения
+  const autoSoundRef = useRef(null);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
 
   useEffect(() => {
-    // Создаем аудио элементы
+    // Создаём аудио элементы
     clickRef.current = new Audio();
     openRef.current = new Audio();
     closeRef.current = new Audio();
     ambientRef.current = new Audio();
-    autoSoundRef.current = new Audio(); // Создаем аудио для автовоспроизведения
+    autoSoundRef.current = new Audio();
 
-    // Настройка звуков
+    // Настройка основных звуков
     clickRef.current.src = '/sounds/click.mp3';
     openRef.current.src = '/sounds/open.mp3';
     closeRef.current.src = '/sounds/close.mp3';
     ambientRef.current.src = '/sounds/ambient.mp3';
     ambientRef.current.loop = true;
     ambientRef.current.volume = 0.3;
-    
-    // Настройка звука для автовоспроизведения
-    autoSoundRef.current.src = '/sounds/nefretle-ache-slow.mp3'; // или любой другой звук
+
+    // Выбираем случайную песню для автоматического воспроизведения
+    const randomIndex = Math.floor(Math.random() * SONG_LIST.length);
+    autoSoundRef.current.src = SONG_LIST[randomIndex];
     autoSoundRef.current.volume = 0.5;
 
-    // Функции для управления звуками
+    // Функции управления звуками
     const playClick = () => {
       if (clickRef.current && isAudioEnabled) {
         clickRef.current.currentTime = 0;
@@ -63,13 +78,12 @@ const AudioManager = () => {
       }
     };
 
-    // Функция для воспроизведения автоматического звука
     const playAutoSound = () => {
       if (autoSoundRef.current && isAudioEnabled) {
         autoSoundRef.current.currentTime = 0;
         autoSoundRef.current.play().catch(e => {
           console.log("Auto sound failed to play automatically:", e);
-          // Если автовоспроизведение заблокировано, попробуем при первом клике
+          // Если автовоспроизведение заблокировано, пробуем при первом клике
           if (e.name === 'NotAllowedError') {
             const handleFirstClickForAutoSound = () => {
               autoSoundRef.current.play().catch(e => console.log("Auto sound play failed:", e));
@@ -80,13 +94,12 @@ const AudioManager = () => {
         });
       }
     };
- 
-    // Функция для отключения/включения всех звуков
+
     const toggleAudio = () => {
       setIsAudioEnabled(prev => {
         const newState = !prev;
         if (!newState) {
-          // Если звук отключается - останавливаем все звуки
+          // Если звук отключается – останавливаем все звуки
           stopAmbient();
           if (autoSoundRef.current) {
             autoSoundRef.current.pause();
@@ -105,10 +118,10 @@ const AudioManager = () => {
       stopAmbient,
       playAutoSound,
       toggleAudio,
-      isAudioEnabled: () => isAudioEnabled
+      isAudioEnabled: () => isAudioEnabled,
     };
 
-    // Пытаемся воспроизвести автоматический звук при загрузке
+    // Воспроизводим случайную песню при загрузке
     playAutoSound();
 
     // Запускаем ambient звук при первом клике
@@ -118,7 +131,6 @@ const AudioManager = () => {
       }
       document.removeEventListener('click', handleFirstClick);
     };
-
     document.addEventListener('click', handleFirstClick);
 
     return () => {

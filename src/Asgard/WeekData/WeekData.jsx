@@ -24,6 +24,9 @@ const damageOptions = [
 
 const PATRONS = ['Акс','Аль','Век','Каи','Мар','Мер','Оли','Хор','Фен','Бис'];
 
+// Определяем тип недели по номеру: нечётные – Маэстро, чётные – Ош
+const getWeekType = (weekNumber) => (weekNumber % 2 === 0 ? 'osh' : 'maestro');
+
 const WeekData = ({ weekNumber }) => {
   const [allBattles, setAllBattles] = useState([]);
   const [weekData, setWeekData] = useState([]);
@@ -31,13 +34,19 @@ const WeekData = ({ weekNumber }) => {
   const [isWeekLoading, setIsWeekLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: 'damage', direction: 'desc' });
 
+  // Фильтры для глобального поиска (используются и кнопкой "Найти", и поиском пака)
+  const [searchLevel, setSearchLevel] = useState('all');
+  const [searchDamageFrom, setSearchDamageFrom] = useState(0);
+  const [searchDamageTo, setSearchDamageTo] = useState(500000000);
+  const [globalWeekType, setGlobalWeekType] = useState('all'); // 'all', 'osh', 'maestro'
+
+  // Временные значения для формы фильтров (пока не нажали "Найти")
   const [tempLevel, setTempLevel] = useState('all');
   const [tempDamageFrom, setTempDamageFrom] = useState(0);
   const [tempDamageTo, setTempDamageTo] = useState(500000000);
-  const [filterLevel, setFilterLevel] = useState('all');
-  const [filterDamageFrom, setFilterDamageFrom] = useState(0);
-  const [filterDamageTo, setFilterDamageTo] = useState(500000000);
+  const [tempWeekType, setTempWeekType] = useState('all');
 
+  // Состояния для поиска по команде (пак)
   const [selectedCreatures, setSelectedCreatures] = useState(Array(6).fill(null));
   const [searchResults, setSearchResults] = useState([]);
   const [searchMode, setSearchMode] = useState(false);
@@ -72,7 +81,7 @@ const WeekData = ({ weekNumber }) => {
             continue;
           }
           const text = await response.text();
-          const parsed = processTextData(text, week.number); // передаём номер недели
+          const parsed = processTextData(text, week.number);
           console.log(`Неделя ${week.number}: загружено ${parsed.length} записей`);
           allData.push(...parsed);
         }
@@ -115,7 +124,7 @@ const WeekData = ({ weekNumber }) => {
         damage: parseInt(columns[7], 10),
         attackerPatronage: columns[8],
         replay: columns[9],
-        sourceWeek: sourceWeek, // добавляем источник
+        sourceWeek: sourceWeek,
       };
     }).filter(item => {
       return item.attackerName !== "att name" &&
@@ -125,7 +134,7 @@ const WeekData = ({ weekNumber }) => {
     });
   };
 
-  // Обновление данных при смене недели или загрузке всех данных
+  // Обновление данных при смене недели
   useEffect(() => {
     if (allBattles.length === 0) return;
     setIsWeekLoading(true);
@@ -138,22 +147,37 @@ const WeekData = ({ weekNumber }) => {
     setSearchResults([]);
   }, [weekNumber, allBattles]);
 
-  const applyFilters = () => {
-    setFilterLevel(tempLevel);
-    setFilterDamageFrom(tempDamageFrom);
-    setFilterDamageTo(tempDamageTo);
-  };
+  // Глобальный поиск по всем неделям (кнопка "Найти")
+  const performGlobalSearch = useCallback(() => {
+    setIsSearching(true);
+    setSearchResults([]);
 
-  const resetFilters = () => {
-    setTempLevel('all');
-    setTempDamageFrom(0);
-    setTempDamageTo(500000000);
-    setFilterLevel('all');
-    setFilterDamageFrom(0);
-    setFilterDamageTo(500000000);
-  };
+    // Фильтруем все бои по выбранным критериям
+    let filtered = allBattles;
 
-  const performSearch = useCallback(() => {
+    // Фильтр по типу недели
+    if (globalWeekType !== 'all') {
+      filtered = filtered.filter(battle => getWeekType(battle.sourceWeek) === globalWeekType);
+    }
+
+    // Фильтр по уровню босса
+    if (searchLevel !== 'all') {
+      filtered = filtered.filter(battle => battle.level === searchLevel);
+    }
+
+    // Фильтр по урону
+    filtered = filtered.filter(battle => battle.damage >= searchDamageFrom);
+    if (isFinite(searchDamageTo)) {
+      filtered = filtered.filter(battle => battle.damage <= searchDamageTo);
+    }
+
+    setSearchResults(filtered);
+    setSearchMode(true);
+    setIsSearching(false);
+  }, [allBattles, globalWeekType, searchLevel, searchDamageFrom, searchDamageTo]);
+
+  // Поиск по составу команды (пак)
+  const performTeamSearch = useCallback(() => {
     const selectedPet = selectedCreatures[0];
     const selectedHeroes = selectedCreatures.slice(1).filter(h => h !== null);
 
@@ -165,8 +189,14 @@ const WeekData = ({ weekNumber }) => {
     setIsSearching(true);
     setSearchResults([]);
 
+    // Фильтруем все бои по типу недели (если выбран)
+    let filteredBattles = allBattles;
+    if (globalWeekType !== 'all') {
+      filteredBattles = filteredBattles.filter(battle => getWeekType(battle.sourceWeek) === globalWeekType);
+    }
+
     const results = [];
-    for (const battle of allBattles) {
+    for (const battle of filteredBattles) {
       const teamString = battle.attackerTeam;
       if (!teamString) continue;
 
@@ -186,9 +216,57 @@ const WeekData = ({ weekNumber }) => {
     setSearchResults(results);
     setSearchMode(true);
     setIsSearching(false);
-  }, [allBattles, selectedCreatures]);
+  }, [allBattles, selectedCreatures, globalWeekType]);
 
-  const resetSearch = () => {
+  // Применение фильтров из формы (копируем временные значения в реальные и запускаем поиск)
+  const applyFilters = () => {
+    setSearchLevel(tempLevel);
+    setSearchDamageFrom(tempDamageFrom);
+    setSearchDamageTo(tempDamageTo);
+    setGlobalWeekType(tempWeekType);
+    // После установки новых значений запускаем поиск (useEffect? нет, запустим вручную после обновления стейта)
+    // Но setState асинхронный, поэтому выполним поиск после обновления. Проще вызвать performGlobalSearch в setTimeout или использовать useEffect.
+    // Для простоты вызовем после обновления через useEffect на эти стейты, но сейчас сделаем так:
+    // Сразу вызываем поиск, но нужно дождаться обновления стейтов. Используем функцию, которая будет работать с новыми значениями.
+    // Можно передать новые значения напрямую, без обновления стейтов.
+    const newLevel = tempLevel;
+    const newDamageFrom = tempDamageFrom;
+    const newDamageTo = tempDamageTo;
+    const newWeekType = tempWeekType;
+
+    setIsSearching(true);
+    let filtered = allBattles;
+
+    if (newWeekType !== 'all') {
+      filtered = filtered.filter(battle => getWeekType(battle.sourceWeek) === newWeekType);
+    }
+    if (newLevel !== 'all') {
+      filtered = filtered.filter(battle => battle.level === newLevel);
+    }
+    filtered = filtered.filter(battle => battle.damage >= newDamageFrom);
+    if (isFinite(newDamageTo)) {
+      filtered = filtered.filter(battle => battle.damage <= newDamageTo);
+    }
+
+    setSearchResults(filtered);
+    setSearchMode(true);
+    setIsSearching(false);
+  };
+
+  const resetFilters = () => {
+    setTempLevel('all');
+    setTempDamageFrom(0);
+    setTempDamageTo(500000000);
+    setTempWeekType('all');
+    setSearchLevel('all');
+    setSearchDamageFrom(0);
+    setSearchDamageTo(500000000);
+    setGlobalWeekType('all');
+    setSearchMode(false);
+    setSearchResults([]);
+  };
+
+  const resetTeamSearch = () => {
     setSelectedCreatures(Array(6).fill(null));
     setSearchMode(false);
     setSearchResults([]);
@@ -212,7 +290,7 @@ const WeekData = ({ weekNumber }) => {
     newSelected[index] = null;
     setSelectedCreatures(newSelected);
     if (searchMode) {
-      performSearch();
+      performTeamSearch();
     }
   };
 
@@ -229,18 +307,12 @@ const WeekData = ({ weekNumber }) => {
     return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
   };
 
+  // Данные для отображения: либо результаты поиска, либо данные текущей недели
   const displayData = useMemo(() => {
     const source = searchMode ? searchResults : weekData;
     let filtered = source;
-    if (filterLevel !== 'all') {
-      filtered = filtered.filter(b => b.level === filterLevel);
-    }
-    if (filterDamageFrom !== null) {
-      filtered = filtered.filter(b => b.damage >= filterDamageFrom);
-    }
-    if (filterDamageTo !== null && isFinite(filterDamageTo)) {
-      filtered = filtered.filter(b => b.damage <= filterDamageTo);
-    }
+
+    // Применяем сортировку
     if (sortConfig.key) {
       filtered = [...filtered].sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -249,7 +321,7 @@ const WeekData = ({ weekNumber }) => {
       });
     }
     return filtered;
-  }, [searchMode, searchResults, weekData, filterLevel, filterDamageFrom, filterDamageTo, sortConfig]);
+  }, [searchMode, searchResults, weekData, sortConfig]);
 
   const extractPatronagePairs = (patronageString) => {
     if (!patronageString) return [];
@@ -321,7 +393,6 @@ const WeekData = ({ weekNumber }) => {
     );
   };
 
-  // Показываем загрузку, пока не загружены все данные или не загружена неделя
   if (loading || isWeekLoading) {
     return <div className="loading">ЗАГРУЗКА ДАННЫХ...</div>;
   }
@@ -365,24 +436,35 @@ const WeekData = ({ weekNumber }) => {
                   </>
                 ) : (
                   <div className="empty-cell">
-                    {idx === 0 ? 'Питомец' : `Герой ${idx}`}
+                    {idx === 0 ? 'Выпердыш' : `Калека ${idx}`}
                   </div>
                 )}
                 <div className="cell-label">
-                  {idx === 0 ? 'Питомец' : 'Герой'}
+                  {idx === 0 ? '' : ''}
                 </div>
               </div>
             ))}
           </div>
           <div className="search-pack-buttons">
+            {/* Общий фильтр по типу недели для поиска */}
+            <div className="search-week-filter">
+              <select
+                value={globalWeekType}
+                onChange={(e) => setGlobalWeekType(e.target.value)}
+              >
+                <option value="all">Все недели</option>
+                <option value="osh">Искать по Ошу</option>
+                <option value="maestro">Искать по Маэстро</option>
+              </select>
+            </div>
             <button
-              onClick={performSearch}
+              onClick={performTeamSearch}
               className="search-pack-button"
               disabled={isSearching}
             >
               {isSearching ? 'Поиск...' : 'Собрать пак из навоза'}
             </button> 
-            <button onClick={resetSearch} className="reset-pack-button">
+            <button onClick={resetTeamSearch} className="reset-pack-button">
               Сбросить
             </button>
           </div>
@@ -430,6 +512,18 @@ const WeekData = ({ weekNumber }) => {
             ))}
           </select>
         </div>
+        {/* Фильтр по типу недели (синхронизирован с общим) */}
+        <div className="filter-group">
+          <label>Тип недели:</label>
+          <select
+            value={tempWeekType}
+            onChange={(e) => setTempWeekType(e.target.value)}
+          >
+            <option value="all">Все недели</option>
+            <option value="osh">Ош</option>
+            <option value="maestro">Маэстро</option>
+          </select>
+        </div>
         <div className="filter-buttons">
           <button onClick={applyFilters} className="find-button">Найти</button>
           <button onClick={resetFilters} className="reset-button">Сбросить</button>
@@ -449,7 +543,7 @@ const WeekData = ({ weekNumber }) => {
         </div>
 
         {displayData.length === 0 ? (
-          <div className="no-results-message">Такой скудной ебатой еще никто не осмелился так бить</div>
+          <div className="no-results-message">Такой скудной ебаты нет в наличии</div>
         ) : ( 
           displayData.map((battle, index) => {
             const damageClass = battle.damage < 10000000 ? 'low-damage' : 'high-damage';
