@@ -13,7 +13,7 @@ const SONG_LIST = [
   '/sounds/song9.mp3',
   '/sounds/song10.mp3',
 ];
-
+ 
 const AudioManager = () => {
   const clickRef = useRef(null);
   const openRef = useRef(null);
