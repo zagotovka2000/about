@@ -35,9 +35,6 @@ const WeekData = ({ weekNumber }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'damage', direction: 'desc' });
 
   // Фильтры для глобального поиска (используются и кнопкой "Найти", и поиском пака)
-  const [searchLevel, setSearchLevel] = useState('all');
-  const [searchDamageFrom, setSearchDamageFrom] = useState(0);
-  const [searchDamageTo, setSearchDamageTo] = useState(500000000);
   const [globalWeekType, setGlobalWeekType] = useState('all'); // 'all', 'osh', 'maestro'
 
   // Временные значения для формы фильтров (пока не нажали "Найти")
@@ -147,35 +144,6 @@ const WeekData = ({ weekNumber }) => {
     setSearchResults([]);
   }, [weekNumber, allBattles]);
 
-  // Глобальный поиск по всем неделям (кнопка "Найти")
-  const performGlobalSearch = useCallback(() => {
-    setIsSearching(true);
-    setSearchResults([]);
-
-    // Фильтруем все бои по выбранным критериям
-    let filtered = allBattles;
-
-    // Фильтр по типу недели
-    if (globalWeekType !== 'all') {
-      filtered = filtered.filter(battle => getWeekType(battle.sourceWeek) === globalWeekType);
-    }
-
-    // Фильтр по уровню босса
-    if (searchLevel !== 'all') {
-      filtered = filtered.filter(battle => battle.level === searchLevel);
-    }
-
-    // Фильтр по урону
-    filtered = filtered.filter(battle => battle.damage >= searchDamageFrom);
-    if (isFinite(searchDamageTo)) {
-      filtered = filtered.filter(battle => battle.damage <= searchDamageTo);
-    }
-
-    setSearchResults(filtered);
-    setSearchMode(true);
-    setIsSearching(false);
-  }, [allBattles, globalWeekType, searchLevel, searchDamageFrom, searchDamageTo]);
-
   // Поиск по составу команды (пак)
   const performTeamSearch = useCallback(() => {
     const selectedPet = selectedCreatures[0];
@@ -220,15 +188,6 @@ const WeekData = ({ weekNumber }) => {
 
   // Применение фильтров из формы (копируем временные значения в реальные и запускаем поиск)
   const applyFilters = () => {
-    setSearchLevel(tempLevel);
-    setSearchDamageFrom(tempDamageFrom);
-    setSearchDamageTo(tempDamageTo);
-    setGlobalWeekType(tempWeekType);
-    // После установки новых значений запускаем поиск (useEffect? нет, запустим вручную после обновления стейта)
-    // Но setState асинхронный, поэтому выполним поиск после обновления. Проще вызвать performGlobalSearch в setTimeout или использовать useEffect.
-    // Для простоты вызовем после обновления через useEffect на эти стейты, но сейчас сделаем так:
-    // Сразу вызываем поиск, но нужно дождаться обновления стейтов. Используем функцию, которая будет работать с новыми значениями.
-    // Можно передать новые значения напрямую, без обновления стейтов.
     const newLevel = tempLevel;
     const newDamageFrom = tempDamageFrom;
     const newDamageTo = tempDamageTo;
@@ -251,6 +210,7 @@ const WeekData = ({ weekNumber }) => {
     setSearchResults(filtered);
     setSearchMode(true);
     setIsSearching(false);
+    setGlobalWeekType(newWeekType);
   };
 
   const resetFilters = () => {
@@ -258,9 +218,6 @@ const WeekData = ({ weekNumber }) => {
     setTempDamageFrom(0);
     setTempDamageTo(500000000);
     setTempWeekType('all');
-    setSearchLevel('all');
-    setSearchDamageFrom(0);
-    setSearchDamageTo(500000000);
     setGlobalWeekType('all');
     setSearchMode(false);
     setSearchResults([]);
