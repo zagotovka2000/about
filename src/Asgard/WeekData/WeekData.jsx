@@ -65,6 +65,7 @@ const WeekData = ({ weekNumber }) => {
       { number: 31, label: 'Маэстро 02.03.2026' },
       { number: 32, label: 'Ош 09.03.2026' },
       { number: 33, label: 'Маэстро 15.03.2026' },
+      { number: 34, label: 'Ош 22.03.2026' },
     ];
 
     const fetchAllData = async () => {
