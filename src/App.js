@@ -12,7 +12,7 @@ import Asgard from './Asgard/Asgard';
 import Territory from './Territory/Territory';
 import Activ from './Activ/Activ';
 import Nakazanie from './Nakazanie/Nakazanie';
-import AudioButton from './components/Audio/AudioButton';
+import AudioPlayer from './components/Audio/AudioPlayer';
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,12 +42,7 @@ function App() {
       <AudioManager />
     <Particles /> 
 
-    <AudioButton 
-  position="fixed" 
-  top="20px" 
-  right="20px" 
-  showWelcomeButton={true} 
-/>
+
 
   <Monolith           // ← НОВАЯ СТРОКА
     sections={sections}
@@ -62,6 +57,7 @@ function App() {
       >
         {modalContent}
       </Modal>
+      <AudioPlayer /> 
 
     </div>
   );

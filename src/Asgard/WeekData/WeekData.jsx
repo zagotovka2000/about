@@ -66,6 +66,7 @@ const WeekData = ({ weekNumber }) => {
       { number: 32, label: 'Ош 09.03.2026' },
       { number: 33, label: 'Маэстро 15.03.2026' },
       { number: 34, label: 'Ош 22.03.2026' },
+      { number: 35, label: 'Маэстро 29.03.2026' },
     ];
 
     const fetchAllData = async () => {
@@ -73,15 +74,19 @@ const WeekData = ({ weekNumber }) => {
       try {
         const allData = [];
         for (const week of weeksConfig) {
-          const response = await fetch(`/weeks/week${week.number}.txt`);
-          if (!response.ok) {
-            console.error(`Не удалось загрузить неделю ${week.number}`);
-            continue;
+          try {
+            const response = await fetch(`/weeks/week${week.number}.txt`);
+            if (!response.ok) {
+              console.error(`Не удалось загрузить неделю ${week.number}`);
+              continue;
+            }
+            const text = await response.text();
+            const parsed = processTextData(text, week.number);
+            console.log(`Неделя ${week.number}: загружено ${parsed.length} записей`);
+            allData.push(...parsed);
+          } catch (err) {
+            console.error(`Ошибка при обработке недели ${week.number}:`, err);
           }
-          const text = await response.text();
-          const parsed = processTextData(text, week.number);
-          console.log(`Неделя ${week.number}: загружено ${parsed.length} записей`);
-          allData.push(...parsed);
         }
         console.log(`Всего загружено записей: ${allData.length}`);
         setAllBattles(allData);
@@ -108,28 +113,39 @@ const WeekData = ({ weekNumber }) => {
   }, []);
 
   const processTextData = (text, sourceWeek) => {
-    const lines = text.split('\n').filter(line => line.trim() !== '');
-    return lines.map((line) => {
-      const columns = line.split('\t');
-      return {
-        dateTime: columns[0],
-        level: columns[1],
-        week: columns[2],
-        attackerId: columns[3],
-        attackerName: columns[4],
-        attackerPower: columns[5],
-        attackerTeam: columns[6],
-        damage: parseInt(columns[7], 10),
-        attackerPatronage: columns[8],
-        replay: columns[9],
-        sourceWeek: sourceWeek,
-      };
-    }).filter(item => {
-      return item.attackerName !== "att name" &&
-             item.attackerName.trim() !== "" &&
-             !isNaN(item.damage) &&
-             item.replay !== "бой";
-    });
+    // Разбиваем на строки и удаляем пустые/undefined строки
+    const lines = text.split('\n').filter(line => line && typeof line === 'string' && line.trim() !== '');
+    return lines
+      .map((line) => {
+        const columns = line.split('\t');
+        // Проверяем, что колонок достаточно (минимум 10)
+        if (columns.length < 10) {
+          console.warn(`Недостаточно колонок в строке для недели ${sourceWeek}: ${line.substring(0, 100)}`);
+          return null;
+        }
+        const attackerName = columns[4];
+        if (!attackerName || attackerName.trim() === '') return null;
+        return {
+          dateTime: columns[0],
+          level: columns[1],
+          week: columns[2],
+          attackerId: columns[3],
+          attackerName: attackerName,
+          attackerPower: columns[5],
+          attackerTeam: columns[6],
+          damage: parseInt(columns[7], 10),
+          attackerPatronage: columns[8],
+          replay: columns[9],
+          sourceWeek: sourceWeek,
+        };
+      })
+      .filter(item => {
+        return item !== null &&
+               item.attackerName !== "att name" &&
+               item.attackerName.trim() !== "" &&
+               !isNaN(item.damage) &&
+               item.replay !== "бой";
+      });
   };
 
   // Обновление данных при смене недели
