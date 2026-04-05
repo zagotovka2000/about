@@ -1,60 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import FileSelector from '../FileSelector/FileSelector';
-import UnloadingWars from './UnloadingWars/UnloadingWars';
-import './sm.css';
-import UnloadingTitans from './UnloadingTitans/UnloadingTitans';
+import React from 'react';
 
-const AVAILABLE_FILES = [
-  'поляки 12.02 герои.txt',
-  'поляки 20.02 герои.txt',
-  'поляки 25.02 герои.txt',
-  'поляки 04.03 герои.txt',
-  'поляки 09.03 герои.txt',
-];
-const AVAILABLE_FILES_2 = [
-  'поляки 12.02 титаны.txt',
-  'поляки 20.02 титаны.txt',
-  'поляки 25.02 титаны.txt',
-  'поляки 04.03 титаны.txt',
-  'поляки 09.03 титаны.txt',
-];
-const ALL_FILES = [...AVAILABLE_FILES, ...AVAILABLE_FILES_2];
+import './sm.css';
 
 const Sm = () => {
-  const [activeFile, setActiveFile] = useState(null);
-
-  // Сортируем файлы: группируем по типу (поляки / зомби) и внутри каждой группы по дате
-  const sortedFiles = useMemo(() => {
-    // Вспомогательная функция для извлечения даты из имени файла
-    const parseDate = (fileName) => {
-      const parts = fileName.split(' ');
-      if (parts.length < 2) return { day: 0, month: 0 };
-      const datePart = parts[1]; // например "12.02"
-      const [day, month] = datePart.split('.').map(Number);
-      return { day, month };
-    };
-
-    // Компаратор для сравнения двух файлов по дате
-    const compareByDate = (a, b) => {
-      const dateA = parseDate(a);
-      const dateB = parseDate(b);
-      if (dateA.month !== dateB.month) return dateA.month - dateB.month;
-      return dateA.day - dateB.day;
-    };
-
-    // Фильтруем и сортируем каждую группу
-    const polishFiles = ALL_FILES.filter(f => f.includes('поляки')).sort(compareByDate);
-    const zombieFiles = ALL_FILES.filter(f => f.includes('зомби')).sort(compareByDate);
-
-    // Объединяем группы в нужном порядке (сначала поляки, потом зомби)
-    return [...polishFiles, ...zombieFiles];
-  }, []); // Зависимость пустая, так как ALL_FILES статичен
-
-  const handleFileSelect = (file) => {
-    setActiveFile(prev => (prev === file ? null : file));
-  };
-
-  const isTitansFile = activeFile && activeFile.includes('титаны');
 
   return (
     <div className="conteiner">
@@ -78,20 +26,12 @@ const Sm = () => {
         </p>
       </header>
 
-      <FileSelector
-        files={sortedFiles}          // ← используем отсортированный массив
-        activeFile={activeFile}
-        onFileSelect={handleFileSelect}
-      />
+      
 
-      {activeFile &&
-        (isTitansFile ? (
-          <UnloadingTitans fileName={activeFile} />
-        ) : (
-          <UnloadingWars fileName={activeFile} />
-        ))}
+     
     </div>
-  );
-};
+  )
+
+}
 
 export default Sm;

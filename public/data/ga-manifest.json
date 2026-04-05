@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Arasar",
+    "images": [
+      "/images/GA/Arasar/1.png"
+    ]
+  },
+  {
+    "name": "BLACK DEATH",
+    "images": [
+      "/images/GA/BLACK DEATH/1.png",
+      "/images/GA/BLACK DEATH/2.png"
+    ]
+  },
+  {
+    "name": "Bell",
+    "images": [
+      "/images/GA/Bell/1.png"
+    ]
+  },
+  {
+    "name": "CASPER",
+    "images": [
+      "/images/GA/CASPER/CASPER.png"
+    ]
+  },
+  {
+    "name": "DAMI",
+    "images": [
+      "/images/GA/DAMI/DAMI.png",
+      "/images/GA/DAMI/DAMI — копия.png"
+    ]
+  },
+  {
+    "name": "HIHIHI",
+    "images": [
+      "/images/GA/HIHIHI/HIHIHI.png"
+    ]
+  },
+  {
+    "name": "ICEDANCER",
+    "images": [
+      "/images/GA/ICEDANCER/ICEDANCER.png",
+      "/images/GA/ICEDANCER/ICEDANDER.png"
+    ]
+  },
+  {
+    "name": "JEY MAGICIAN",
+    "images": [
+      "/images/GA/JEY MAGICIAN/магикян 1-04.png"
+    ]
+  },
+  {
+    "name": "Kroha",
+    "images": [
+      "/images/GA/Kroha/1.png"
+    ]
+  },
+  {
+    "name": "LEEBOY",
+    "images": [
+      "/images/GA/LEEBOY/LEEBOY.png",
+      "/images/GA/LEEBOY/LEEBOY — копия.png"
+    ]
+  },
+  {
+    "name": "MAK",
+    "images": [
+      "/images/GA/MAK/MAK.png"
+    ]
+  },
+  {
+    "name": "MUT TIGER",
+    "images": [
+      "/images/GA/MUT TIGER/MUT TIGER.png",
+      "/images/GA/MUT TIGER/MUT_Tiger.png"
+    ]
+  },
+  {
+    "name": "Orion",
+    "images": [
+      "/images/GA/Orion/1.png"
+    ]
+  },
+  {
+    "name": "PUSH",
+    "images": [
+      "/images/GA/PUSH/PUSH.png",
+      "/images/GA/PUSH/PUSH — копия.png"
+    ]
+  },
+  {
+    "name": "ZOMBI_MASTER",
+    "images": [
+      "/images/GA/ZOMBI_MASTER/ZOMBI_MASTER.png"
+    ]
+  }
+]
