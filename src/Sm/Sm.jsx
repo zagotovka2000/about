@@ -1,11 +1,12 @@
 import React from 'react';
-
+import StrongholdDefense from '../StrongholdDefense/StrongholdDefense';
 import './sm.css';
 
 const Sm = () => {
 
   return (
-    <div className="conteiner">
+    <div className="container">
+           <StrongholdDefense />
       <header className="header">
         <p className="abzac">
           <p>
@@ -27,7 +28,7 @@ const Sm = () => {
       </header>
 
       
-
+ 
      
     </div>
   )
