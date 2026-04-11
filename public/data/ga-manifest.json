@@ -2,20 +2,29 @@
   {
     "name": "Arasar",
     "images": [
-      "/images/GA/Arasar/1.png"
+      "/images/GA/Arasar/1.png",
+      "/images/GA/Arasar/ARASAR6.png",
+      "/images/GA/Arasar/арасарр.png"
     ]
   },
   {
     "name": "BLACK DEATH",
     "images": [
       "/images/GA/BLACK DEATH/1.png",
-      "/images/GA/BLACK DEATH/2.png"
+      "/images/GA/BLACK DEATH/2.png",
+      "/images/GA/BLACK DEATH/3.png"
     ]
   },
   {
     "name": "Bell",
     "images": [
       "/images/GA/Bell/1.png"
+    ]
+  },
+  {
+    "name": "Bespi",
+    "images": [
+      "/images/GA/Bespi/BESPI.png"
     ]
   },
   {
@@ -32,6 +41,12 @@
     ]
   },
   {
+    "name": "Goll",
+    "images": [
+      "/images/GA/Goll/Golll.png"
+    ]
+  },
+  {
     "name": "HIHIHI",
     "images": [
       "/images/GA/HIHIHI/HIHIHI.png"
@@ -40,6 +55,7 @@
   {
     "name": "ICEDANCER",
     "images": [
+      "/images/GA/ICEDANCER/1.png",
       "/images/GA/ICEDANCER/ICEDANCER.png",
       "/images/GA/ICEDANCER/ICEDANDER.png"
     ]
@@ -53,12 +69,14 @@
   {
     "name": "Kroha",
     "images": [
-      "/images/GA/Kroha/1.png"
+      "/images/GA/Kroha/1.png",
+      "/images/GA/Kroha/KROHA2.png"
     ]
   },
   {
     "name": "LEEBOY",
     "images": [
+      "/images/GA/LEEBOY/LE1EBOY.png",
       "/images/GA/LEEBOY/LEEBOY.png",
       "/images/GA/LEEBOY/LEEBOY — копия.png"
     ]
@@ -79,14 +97,23 @@
   {
     "name": "Orion",
     "images": [
-      "/images/GA/Orion/1.png"
+      "/images/GA/Orion/1.png",
+      "/images/GA/Orion/ORION 18.11.34.png",
+      "/images/GA/Orion/ORION.png"
     ]
   },
   {
     "name": "PUSH",
     "images": [
       "/images/GA/PUSH/PUSH.png",
-      "/images/GA/PUSH/PUSH — копия.png"
+      "/images/GA/PUSH/PUSH — копия.png",
+      "/images/GA/PUSH/push1.png"
+    ]
+  },
+  {
+    "name": "Stackitback",
+    "images": [
+      "/images/GA/Stackitback/Stackitback.png"
     ]
   },
   {

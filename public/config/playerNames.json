@@ -1,31 +1,31 @@
 [
    {
      "name": "Оди",
-     "avatarUrl": "/images/avatars/alexey.jpg"
+     "avatarUrl": "/images/analitics/Оди.jpg"
    },
    {
      "name": "ZOV",
-     "avatarUrl": "/images/avatars/maria.png"
+     "avatarUrl": ""
    },
    {
      "name": "Винни",
-     "avatarUrl": "/images/avatars/dmitry.jpg"
+     "avatarUrl": "/images/analitics/Винни.jpg"
    },
    {
      "name": "Тема",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Тема.jpg"
    },
    {
      "name": "Бальдр",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Бальдр.jpg"
    },
    {
      "name": "VICTOR",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/VICTOR.jpg"
    },
    {
      "name": "ГошаПукаетВкозу",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/ГошаПукаетВкозу.png"
    },
    {
      "name": "2718",
@@ -45,19 +45,19 @@
    },
    {
      "name": "3.14_ZDETS",
-     "avatarUrl": "/images/analitics/3.14.jpg"
+     "avatarUrl": "/images/analitics/3.14_ZDETS.jpg"
    },
    {
      "name": "Тихая",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Тихая.jpg"
    },
    {
      "name": "Nergal",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Nergal.jpg"
    },
    {
      "name": "Виларт",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Виларт.jpg"
    },
    {
      "name": "Пух",
@@ -65,19 +65,19 @@
    },
    {
      "name": "G_G",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/G_G.jpg"
    },
    {
      "name": "Орел",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Орел.jpg"
    },
    {
      "name": "Лапочка",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Лапочка.jpg"
    },
    {
      "name": "MEDVED",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/MEDVED.jpg"
    },
    {
      "name": "Kamul27rus",
@@ -85,7 +85,7 @@
    },
    {
      "name": "Фартовый",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Фартовый.jpg"
    },
    {
      "name": "iCool",
@@ -93,15 +93,15 @@
    },
    {
      "name": "SVAROG",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/SVAROG.jpg"
    },
    {
      "name": "Wren",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Wren.jpg"
    },
    {
      "name": "victori",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/victori.jpg"
    },
    {
      "name": "FEDOR",
@@ -109,14 +109,14 @@
    },
    {
      "name": "Пунь Пунь",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Пунь Пунь.jpg"
    },
    {
      "name": "bLanx",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/bLanx.jpg"
    },
    {
      "name": "3ve",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/3ve.jpg"
    }
  ]

@@ -59,6 +59,7 @@ const FORTS = [
 
 const emptySlot = (fortType) => ({
   playerName: '',
+
   type: fortType,
   status: null,
   lineup: fortType === 'heroes'
@@ -1107,7 +1108,7 @@ const StrongholdDefense = () => {
               {renderLineupEditor()}
               <div className="modal-buttons">
                 <button onClick={saveSlot} className="save-btn">Сохранить ебалу</button>
-                <button onClick={clearSlot} className="clear-btn">Очистить слот</button>
+                <button onClick={clearSlot} className="clear-btn">Удалить уебка</button>
               </div>
             </div>
           </div>
