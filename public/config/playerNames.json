@@ -29,15 +29,15 @@
    },
     {
      "name": "BIG",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/BIG.jpg"
    },
    {
      "name": "Souffle",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Souffle.jpg"
    },
    {
      "name": "Rom",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Rom.jpg"
    },
    {
      "name": "3.14_ZDETS",
@@ -77,15 +77,11 @@
    },
    {
      "name": "Kamul27rus",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/Kamul27rus.jpg"
    },
    {
      "name": "Фартовый",
      "avatarUrl": "/images/analitics/Фартовый.jpg"
-   },
-   {
-     "name": "iCool",
-     "avatarUrl": ""
    },
    {
      "name": "SVAROG",
@@ -101,7 +97,7 @@
    },
    {
      "name": "FEDOR",
-     "avatarUrl": ""
+     "avatarUrl": "/images/analitics/FEDOR.jpg"
    },
    {
      "name": "Пунь Пунь",
