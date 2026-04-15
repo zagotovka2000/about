@@ -103,7 +103,7 @@ const normalizeFortsData = (rawData) => {
 };
 
 // ---------- API: JsonBox (облачное хранилище) ----------
-const JSONBOX_API_KEY = 'ca1e94f1275abe2cb4c6f605b2079e86';
+const JSONBOX_API_KEY = '2193e01ad5b9bf528a0dc93d87ece0db';
 const JSONBOX_API_URL = 'https://jsonbox.ru/api.php';
 
 // Загрузка данных
