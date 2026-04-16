@@ -45,7 +45,7 @@ const FORTS = [
   { name: 'Алтарь Жизни', type: 'titans', bonus: 'без усилка', slots: 5 },
   { name: 'Призма Эфира', type: 'titans', bonus: 'без усилка', slots: 5 },
   { name: 'Казармы', type: 'heroes', bonus: 'без усилка', slots: 3 },
-  { name: 'Академия Магов', type: 'heroes', bonus: '', slots: 3 },
+  { name: 'Академия Магов', type: 'heroes', bonus: 'без усилка', slots: 3 },
   { name: 'Маяк', type: 'heroes', bonus: 'увеличена скорость перезарядки умений на ', slots: 5 },
   { name: 'Литейная', type: 'heroes', bonus: 'увеличивает здоровье на ', slots: 5 },
   { name: 'Инженериум', type: 'heroes', bonus: 'накопление энергии быстрее на ', slots: 5 },
