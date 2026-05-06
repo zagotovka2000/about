@@ -95,3 +95,12 @@
  
  /* Импорт шрифтов */
  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
+/* Добавьте в начало App.css или в глобальный файл */
+:root {
+   --color-0: #FF3366;
+   --color-1: #00E0FF;
+   --color-2: #FFD700;
+   --color-3: #00FF88;
+   --color-4: #7B68EE;
+   --color-5: #FF6BCB;
+ }
