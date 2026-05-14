@@ -48,13 +48,26 @@ const Table = () => {
     setSortConfig({ key, direction });
   };
 
+  const getSortIndicator = (key) => {
+    if (sortConfig?.key !== key) return ' ↕️';
+    return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
+  };
+
   return (
     <div className="table-double-container">
       <div className="table-section">
-
         <div className="table-wrapper">
           <table className="timezone-table">
- 
+            <thead>
+              <tr>
+                <th onClick={() => requestSort('name')} style={{ cursor: 'pointer' }}>
+                  Ник
+                </th>
+                <th onClick={() => requestSort('offset')} style={{ cursor: 'pointer' }}>
+                  Время{getSortIndicator('offset')}
+                </th>
+              </tr>
+            </thead>
             <tbody>
               {sortedPlayers.map((player, idx) => (
                 <tr key={idx}>
@@ -67,41 +80,41 @@ const Table = () => {
         </div>
       </div>
       <div className="info-section">
-  <div className="info-card">
-    <h3>📜 Часовые пояса игроков, которым интересны награды за арену и ГА</h3>
-    <div className="info-text">
-      <p className="info-paragraph">
-        Своих на арене и гранд-арене не бьем кроме случаев:
-      </p>
-      <p className="info-paragraph">
-        — вы точно уверены, что коллеге до пизды на происходящее;
-      </p>
-      <p className="info-paragraph">
-        — игрок находится на первом/втором/максимум третьем месте и у этого игрока 
-        в момент получения Вами наград с арены часовой пояс отличается от вашего, 
-        т.е. вы не засрете ему арену своей многострадальной атакой;
-      </p>
-      <p className="info-paragraph">
-        — вы уточнили у игрока и он не против;
-      </p>
-      <p className="info-paragraph">
-        Остальные места не трогаем, чтобы пройти дальше.
-      </p>
-      <p className="info-paragraph">
-        Реплика "ну там только наши были" означает, что вам нужно прислать в телеграмм 
-        скрин ответного сообщения от этого игрока с текстом "я прощаю тебя, засратый".
-      </p>
-      <p className="info-paragraph">
-        Убогая отмазка "я флаг не заметил и в глаза ебусь" означает, что Вам необходимо 
-        срочно получить направление к окулисту, чтобы он выписал Вам тройной стеклопакет, 
-        чтобы вы прозрели между делом.
-      </p>
-      <p className="info-paragraph">
-        Фото в телегу полученного нашлемного телескопа или иного прибора приветствуется.
-      </p>
-    </div>
-  </div>
-</div>
+        <div className="info-card">
+          <h3>📜 Часовые пояса игроков, которым интересны награды за арену и ГА</h3>
+          <div className="info-text">
+            <p className="info-paragraph">
+              Своих на арене и гранд-арене не бьем кроме случаев:
+            </p>
+            <p className="info-paragraph">
+              — вы точно уверены, что коллеге до пизды на происходящее;
+            </p>
+            <p className="info-paragraph">
+              — игрок находится на первом/втором/максимум третьем месте и у этого игрока 
+              в момент получения Вами наград с арены часовой пояс отличается от вашего, 
+              т.е. вы не засрете ему арену своей многострадальной атакой;
+            </p>
+            <p className="info-paragraph">
+              — вы уточнили у игрока и он не против;
+            </p>
+            <p className="info-paragraph">
+              Остальные места не трогаем, чтобы пройти дальше.
+            </p>
+            <p className="info-paragraph">
+              Реплика "ну там только наши были" означает, что вам нужно прислать в телеграмм 
+              скрин ответного сообщения от этого игрока с текстом "я прощаю тебя, засратый".
+            </p>
+            <p className="info-paragraph">
+              Убогая отмазка "я флаг не заметил и в глаза ебусь" означает, что Вам необходимо 
+              срочно получить направление к окулисту, чтобы он выписал Вам тройной стеклопакет, 
+              чтобы вы прозрели между делом.
+            </p>
+            <p className="info-paragraph">
+              Фото в телегу полученного нашлемного телескопа или иного прибора приветствуется.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
