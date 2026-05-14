@@ -1,76 +1,107 @@
-import React, { useState } from 'react';
-import './table.css'
+// Table/Table.js
+import React, { useState, useMemo } from 'react';
+import './table.css';
+
+const rawData = [
+  "G_G -9", "Big -8", "ZOV+1", "Пунь+3", "Федор+3", "VICTOR+3",
+  "3.14+4", "ГошаПукаетВкозу+4", "Victori+5", "Souffle+5", "Diablo+6", "3ve+7",
+  "Rom+7", "Лапочка+7", "Сварог+7", "Виларт+10", "Nergal+10",
+  "Kamul+10", "Оди+11"
+];
+
+const parsePlayers = (data) => {
+  return data.map(item => {
+    const match = item.match(/^(.+?)([+-]\d+)$/);
+    if (match) {
+      return { name: match[1], offset: match[2] };
+    }
+    return { name: item, offset: '0' };
+  }).sort((a, b) => {
+    const offsetA = parseInt(a.offset, 10);
+    const offsetB = parseInt(b.offset, 10);
+    return offsetA - offsetB;
+  });
+};
+
 const Table = () => {
-  // Исходные данные игроков
-  const initialPlayers = [
-    // { name: 'Русский', active: 0, prestige: 1, titanite: 0, asgard: 0 },
-    // { name: 'Русская', active: 0, prestige: 2, titanite: 0, asgard: 0 },
-    // { name: 'Хам', active: 1, prestige: 2, titanite: 1, asgard: 0 },
-    { name: 'Aleks', active: 0, prestige: 1, titanite: 0, asgard: 0 },
-    { name: 'Солнце', active: 1, prestige: 1, titanite: 1, asgard: 1 },
-  ];
+  const [sortConfig, setSortConfig] = useState(null);
+  const players = useMemo(() => parsePlayers(rawData), []);
 
-  const [players, setPlayers] = useState(initialPlayers);
+  const sortedPlayers = useMemo(() => {
+    if (!sortConfig) return players;
+    const sorted = [...players];
+    if (sortConfig.key === 'name') {
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
+      if (sortConfig.direction === 'desc') sorted.reverse();
+    } else if (sortConfig.key === 'offset') {
+      sorted.sort((a, b) => parseInt(a.offset, 10) - parseInt(b.offset, 10));
+      if (sortConfig.direction === 'desc') sorted.reverse();
+    }
+    return sorted;
+  }, [players, sortConfig]);
 
-  // Обновление значения в ячейке
-  const handleChange = (playerIndex, field, value) => {
-    const newPlayers = [...players];
-    newPlayers[playerIndex][field] = Number(value) || 0;
-    setPlayers(newPlayers);
-  };
-
-  // Подсчёт total для игрока
-  const calculateTotal = (player) => {
-    return player.active + player.prestige + player.titanite + player.asgard;
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig?.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
   };
 
   return (
-    <div className="table">
-      {/* Заголовки колонок */}
-      <div className="table-row header">
-        <div className="table-cell">Игрок</div>
-        <div className="table-cell">Актив</div>
-        <div className="table-cell">Престиж</div>
-        <div className="table-cell">Титанит</div>
-        <div className="table-cell">Асгард</div>
-        <div className="table-cell">Total</div>
-      </div>
+    <div className="table-double-container">
+      <div className="table-section">
 
-      {/* Строки с данными игроков */}
-      {players.map((player, index) => (
-        <div key={index} className="table-row">
-          <div className="table-cell">{player.name}</div>
-          <div className="table-cell">
-            <input
-              type="number"
-              value={player.active}
-              onChange={(e) => handleChange(index, 'active', e.target.value)}
-            />
-          </div>
-          <div className="table-cell">
-            <input
-              type="number"
-              value={player.prestige}
-              onChange={(e) => handleChange(index, 'prestige', e.target.value)}
-            />
-          </div>
-          <div className="table-cell">
-            <input
-              type="number"
-              value={player.titanite}
-              onChange={(e) => handleChange(index, 'titanite', e.target.value)}
-            />
-          </div>
-          <div className="table-cell">
-            <input
-              type="number"
-              value={player.asgard}
-              onChange={(e) => handleChange(index, 'asgard', e.target.value)}
-            />
-          </div>
-          <div className="table-cell">{calculateTotal(player)}</div>
+        <div className="table-wrapper">
+          <table className="timezone-table">
+ 
+            <tbody>
+              {sortedPlayers.map((player, idx) => (
+                <tr key={idx}>
+                  <td>{player.name}</td>
+                  <td>{player.offset}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      ))}
+      </div>
+      <div className="info-section">
+  <div className="info-card">
+    <h3>📜 Часовые пояса игроков, которым интересны награды за арену и ГА</h3>
+    <div className="info-text">
+      <p className="info-paragraph">
+        Своих на арене и гранд-арене не бьем кроме случаев:
+      </p>
+      <p className="info-paragraph">
+        — вы точно уверены, что коллеге до пизды на происходящее;
+      </p>
+      <p className="info-paragraph">
+        — игрок находится на первом/втором/максимум третьем месте и у этого игрока 
+        в момент получения Вами наград с арены часовой пояс отличается от вашего, 
+        т.е. вы не засрете ему арену своей многострадальной атакой;
+      </p>
+      <p className="info-paragraph">
+        — вы уточнили у игрока и он не против;
+      </p>
+      <p className="info-paragraph">
+        Остальные места не трогаем, чтобы пройти дальше.
+      </p>
+      <p className="info-paragraph">
+        Реплика "ну там только наши были" означает, что вам нужно прислать в телеграмм 
+        скрин ответного сообщения от этого игрока с текстом "я прощаю тебя, засратый".
+      </p>
+      <p className="info-paragraph">
+        Убогая отмазка "я флаг не заметил и в глаза ебусь" означает, что Вам необходимо 
+        срочно получить направление к окулисту, чтобы он выписал Вам тройной стеклопакет, 
+        чтобы вы прозрели между делом.
+      </p>
+      <p className="info-paragraph">
+        Фото в телегу полученного нашлемного телескопа или иного прибора приветствуется.
+      </p>
+    </div>
+  </div>
+</div>
     </div>
   );
 };

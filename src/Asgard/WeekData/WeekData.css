@@ -844,3 +844,23 @@
     margin-bottom: 10px;
   }
 }
+/* Исправление цвета шапки таблицы – серый вместо жёлтого */
+.table-header {
+   background: #4a5568 !important;          /* тёмно-серый базовый цвет */
+   background: linear-gradient(135deg, #4a5568, #2d3748) !important; /* градиент из серых тонов */
+   color: white;
+   border-bottom: 2px solid #1a202c;
+ }
+ 
+ /* Дополнительно – чтобы текст при наведении не становился жёлтым, если мешает */
+ .header-cell:hover {
+   background-color: #5a6578;  /* более светлый серый при наведении */
+   color: #f0f0f0;            /* светлый текст, но не жёлтый */
+ }
+ 
+ /* Остальные стили для заголовков оставляем без изменений */
+ .header-cell {
+   /* ваши существующие свойства */
+   cursor: pointer;
+   user-select: none;
+ }

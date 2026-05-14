@@ -1,5 +1,4 @@
-/* App.css - Упрощенный вариант */
-
+/* App.css */
 * {
    margin: 0;
    padding: 0;
@@ -25,34 +24,36 @@
    overflow: hidden;
  }
  
- /* Скрываем scrollbar */
  ::-webkit-scrollbar {
    width: 0;
    background: transparent;
  }
  
- /* Улучшение для модальных окон */
  .modal-overlay {
    z-index: 1000;
  }
  
- /* Анимация fade-in */
  @keyframes fadeIn {
-   from {
-     opacity: 0;
-   }
-   to {
-     opacity: 1;
-   }
+   from { opacity: 0; }
+   to { opacity: 1; }
  }
  
  .App {
    animation: fadeIn 1s ease-out;
  }
-/* Добавьте в конец App.css */
-
-/* Заголовок в шапке */
-.App-header {
+ 
+ /* Цвета для секций */
+ :root {
+   --color-0: #FF3366;
+   --color-1: #00E0FF;
+   --color-2: #FFD700;
+   --color-3: #00FF88;
+   --color-4: #7B68EE;
+   --color-5: #FF6BCB;
+ }
+ 
+ /* Дополнительные стили (если нужны) */
+ .App-header {
    position: absolute;
    top: 20px;
    left: 0;
@@ -67,10 +68,7 @@
    font-size: 3rem;
    font-weight: 900;
    color: #4ECDC4;
-   text-shadow: 
-     0 0 10px rgba(78, 205, 196, 0.5),
-     0 0 20px rgba(78, 205, 196, 0.3),
-     0 0 30px rgba(78, 205, 196, 0.2);
+   text-shadow: 0 0 10px rgba(78, 205, 196, 0.5), 0 0 20px rgba(78, 205, 196, 0.3), 0 0 30px rgba(78, 205, 196, 0.2);
    margin-bottom: 10px;
    letter-spacing: 4px;
  }
@@ -82,7 +80,6 @@
    letter-spacing: 2px;
  }
  
- /* Эффект пульсации */
  .pulse-effect {
    animation: containerPulse 0.5s ease;
  }
@@ -93,14 +90,4 @@
    100% { transform: scale(1); }
  }
  
- /* Импорт шрифтов */
  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
-/* Добавьте в начало App.css или в глобальный файл */
-:root {
-   --color-0: #FF3366;
-   --color-1: #00E0FF;
-   --color-2: #FFD700;
-   --color-3: #00FF88;
-   --color-4: #7B68EE;
-   --color-5: #FF6BCB;
- }

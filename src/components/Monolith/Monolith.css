@@ -163,19 +163,8 @@
 .ring-1 { width: 120%; height: 120%; animation: ringRotate 15s infinite linear; border-color: rgba(255, 100, 0, 0.8); border-style: dashed; }
 .ring-2 { width: 140%; height: 140%; animation: ringRotate 40s infinite linear reverse; border-color: rgba(3, 220, 32, 0.7); border-width: 4px; border-style: dashed; }
 .ring-3 { width: 160%; height: 160%; animation: ringRotate 50s infinite linear; border-color: rgba(255, 0, 0, 0.6); border-width: 4px; border-style: dashed; }
-.ring-4 { width: 270%; height: 270%; animation: ringRotate 5s infinite linear reverse; border-color: rgba(0, 0, 0, 0.6); border-width: 4px; border-style: dashed; }
-
-
-.ring-4 {
-   width: 270%;
-   height: 270%;
-   animation: ringRotate 5s infinite linear reverse;
-   border-color: rgba(177, 162, 162, 0.6);
-   border-width: 4px;
-   border-style: dashed;
-   box-shadow: 0 0 30px rgba(200, 200, 200, 0.6); /* тень светло-серого цвета */
- }
-
+.ring-4 { width: 270%; height: 270%; animation: ringRotate 5s infinite linear reverse; border-color: rgba(177, 162, 162, 0.6); border-width: 4px; border-style: dashed; box-shadow: 0 0 30px rgba(200, 200, 200, 0.6); }
+.ring-5, .ring-6, .ring-7, .ring-8 { display: none; }
 
 /* Секции */
 .sections-container {
@@ -199,11 +188,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Важно: relative для позиционирования рамки */
-  position: absolute;
 }
 
-/* Подсветка всей секции при наведении */
 .section-item:hover {
   background: rgba(255, 100, 0, 0.25);
   box-shadow: 0 0 30px rgba(255, 100, 0, 0.5);
@@ -256,41 +242,15 @@
   box-shadow: 0 0 40px var(--section-color), inset 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
-/* ===== АНИМАЦИЯ РАМКИ (абсолютно позиционирована, не влияет на размеры секции) ===== */
-.section-item {
-  position: absolute; /* уже есть, но подчеркнём */
-}
-
-.frame-vertical {
-  position: absolute;
-  width: 2px;
-  height: 0;
-  background: var(--section-color);
-  box-shadow: 0 0 8px var(--section-color);
-  transition: height 1.4s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 15;
-}
-
-.frame-vertical.left {
-  left: -4px;
-  top: 10%;
-}
-
-.frame-vertical.right {
-  right: -4px;
-  bottom: 10%;
-}
-
-/* Горизонтальные линии через псевдоэлементы */
+/* ========= ИСПРАВЛЕННАЯ РАМКА (квадрат с отступом 12px) ========= */
+/* Горизонтальные линии (верх и низ) */
 .section-item::before,
 .section-item::after {
   content: '';
   position: absolute;
   background: var(--section-color);
   box-shadow: 0 0 8px var(--section-color);
-  transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
   pointer-events: none;
   z-index: 15;
@@ -299,28 +259,52 @@
 }
 
 .section-item::before {
-  top: -14px;
-  left: 14%;
+  top: -12px;
+  left: 0;
 }
 
 .section-item::after {
-  bottom: -14px;
-  right: 14%;
+  bottom: -12px;
+  left: 0;
 }
 
-/* Активация при наведении */
 .section-item:hover::before,
 .section-item:hover::after {
   opacity: 1;
-  width: 80%;
+  width: 100%;
+}
+
+/* Вертикальные линии (лево и право) */
+.frame-vertical {
+  position: absolute;
+  width: 2px;
+  height: 0;
+  background: var(--section-color);
+  box-shadow: 0 0 8px var(--section-color);
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.frame-vertical.left {
+  left: -12px;
+  top: 0;
+}
+
+.frame-vertical.right {
+  right: -12px;
+  top: 0;
 }
 
 .section-item:hover .frame-vertical {
   opacity: 1;
-  height: 80%;
+  height: 100%;
 }
 
-/* ===== АНИМАЦИИ ===== */
+/* ========= КОНЕЦ ИСПРАВЛЕНИЙ ========= */
+
+/* Анимации */
 @keyframes corePulse {
   0% { opacity: 0.3; transform: scale(0.95); }
   100% { opacity: 0.6; transform: scale(1.05); }

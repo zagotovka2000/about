@@ -1,3 +1,4 @@
+// components/Monolith/Monolith.js
 import React, { useEffect, useRef, useState } from 'react';
 import './Monolith.css';
 
@@ -7,8 +8,9 @@ const Monolith = ({ sections, onSectionClick }) => {
   const [activeSection, setActiveSection] = useState(null);
   const [crystalRotation, setCrystalRotation] = useState({ x: 0, y: 0 });
   const [letterAnimation, setLetterAnimation] = useState(0);
+  const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
 
-  // Параллакс
+  // Параллакс кристалла
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!crystalRef.current) return;
@@ -38,6 +40,15 @@ const Monolith = ({ sections, onSectionClick }) => {
     return () => cancelAnimationFrame(frame);
   }, []);
 
+  // Отслеживание изменения размеров окна
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const letters = ['М', 'О', 'Н', 'О', 'Л', 'И', 'Т'];
 
   const handleSectionClick = (section, index) => {
@@ -49,23 +60,12 @@ const Monolith = ({ sections, onSectionClick }) => {
     }, 500);
   };
 
+  // Радиус расположения кнопок (35% от меньшей стороны экрана)
+  const radius = Math.min(dimensions.width, dimensions.height) * 0.35;
+
   return (
     <div className="monolith-container" ref={containerRef}>
       <div className="monolith-bg"></div>
-
-      {/* SVG кривые линии (оставлены для красоты, но не влияют на позиции) */}
-      <svg className="curves-svg" width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none', zIndex: 3 }}>
-        <defs>
-          <filter id="glow"><feGaussianBlur stdDeviation="3"/></filter>
-        </defs>
-        {sections.map((_, idx) => {
-          const angle = (idx * Math.PI * 2) / sections.length - Math.PI / 2;
-          const radius = Math.min(window.innerWidth, window.innerHeight) * 0.35;
-          const x = window.innerWidth / 2 + Math.cos(angle) * radius;
-          const y = window.innerHeight / 2 + Math.sin(angle) * radius;
-          return <line key={idx} x1={window.innerWidth/2} y1={window.innerHeight/2} x2={x} y2={y} stroke="rgba(255,100,0,0.4)" strokeWidth="2" strokeDasharray="4 4" />;
-        })}
-      </svg>
 
       {/* Центральный кристалл */}
       <div 
@@ -82,7 +82,11 @@ const Monolith = ({ sections, onSectionClick }) => {
             <div className="fire-glow" style={{ opacity: 0.3 + Math.sin(letterAnimation * 2) * 0.3 }}></div>
             <div className="crystal-text">
               {letters.map((letter, i) => (
-                <span key={i} className="fire-letter" style={{ '--fire-intensity': 0.5 + Math.sin((letterAnimation + i * 0.1) * Math.PI * 2) * 0.5 }}>
+                <span 
+                  key={i} 
+                  className="fire-letter" 
+                  style={{ '--fire-intensity': 0.5 + Math.sin((letterAnimation + i * 0.1) * Math.PI * 2) * 0.5 }}
+                >
                   {letter}
                 </span>
               ))}
@@ -90,20 +94,29 @@ const Monolith = ({ sections, onSectionClick }) => {
             <div className="crystal-flag"><div className="flag-icon"></div></div>
           </div>
         </div>
-        {[...Array(12)].map((_, i) => <div key={i} className="crystal-ray" style={{ transform: `rotate(${i * 30}deg)`, animationDelay: `${i * 0.1}s` }} />)}
-        <div className="crystal-ring ring-1"></div><div className="crystal-ring ring-2"></div><div className="crystal-ring ring-3"></div>
-        <div className="crystal-ring ring-4"></div><div className="crystal-ring ring-5"></div><div className="crystal-ring ring-6"></div>
-        <div className="crystal-ring ring-7"></div><div className="crystal-ring ring-8"></div>
+        {/* Лучи */}
+        {[...Array(12)].map((_, i) => (
+          <div key={i} className="crystal-ray" style={{ transform: `rotate(${i * 30}deg)`, animationDelay: `${i * 0.1}s` }} />
+        ))}
+        {/* Кольца */}
+        <div className="crystal-ring ring-1"></div>
+        <div className="crystal-ring ring-2"></div>
+        <div className="crystal-ring ring-3"></div>
+        <div className="crystal-ring ring-4"></div>
+        <div className="crystal-ring ring-5"></div>
+        <div className="crystal-ring ring-6"></div>
+        <div className="crystal-ring ring-7"></div>
+        <div className="crystal-ring ring-8"></div>
       </div>
 
-      {/* Секции – исходная рабочая логика позиционирования */}
+      {/* Секции – равномерно по кругу */}
       <div className="sections-container">
         {sections.map((section, index) => {
           const isActive = activeSection === index;
+          // Угол: первая кнопка сверху ( -PI/2 ), далее равномерно
           const angle = (index * Math.PI * 2) / sections.length - Math.PI / 2;
-          const radius = Math.min(window.innerWidth, window.innerHeight) * 0.35;
-          const left = 50 + Math.cos(angle) * (radius / window.innerWidth * 100);
-          const top = 50 + Math.sin(angle) * (radius / window.innerHeight * 100);
+          const left = 50 + Math.cos(angle) * (radius / dimensions.width * 100);
+          const top = 50 + Math.sin(angle) * (radius / dimensions.height * 100);
           
           return (
             <div
@@ -120,7 +133,7 @@ const Monolith = ({ sections, onSectionClick }) => {
                 <div className="icon-glow"></div>
                 <div className="section-title-full">{section.title}</div>
               </div>
-              {/* Рамка – абсолютно позиционирована, не влияет на положение */}
+              {/* Рамка */}
               <div className="frame-vertical left"></div>
               <div className="frame-vertical right"></div>
             </div>

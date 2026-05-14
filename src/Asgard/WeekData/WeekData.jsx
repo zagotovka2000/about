@@ -58,17 +58,14 @@ const WeekData = ({ weekNumber }) => {
   // Загрузка всех файлов недель
   useEffect(() => {
     const weeksConfig = [
-      { number: 27, label: 'Маэстро 01.02.2026' },
-      { number: 28, label: 'Ош 07.02.2026' },
-      { number: 29, label: 'Маэстро 15.02.2026' },
-      { number: 30, label: 'Ош 22.02.2026' },
-      { number: 31, label: 'Маэстро 02.03.2026' },
-      { number: 32, label: 'Ош 09.03.2026' },
-      { number: 33, label: 'Маэстро 15.03.2026' },
-      { number: 34, label: 'Ош 22.03.2026' },
-      { number: 35, label: 'Маэстро 29.03.2026' },
-      { number: 36, label: 'Ош 05.04.2026' },
+      { number: 41, label: 'Маэстро 10.05.2026' },
+      { number: 40, label: 'Ош 03.05.2026' },
+      { number: 38, label: 'Ош 19.04.2026' },
+      { number: 39, label: 'Маэстро 26.04.2026' },
       { number: 37, label: 'Маэстро 12.04.2026' },
+      { number: 36, label: 'Ош 05.04.2026' },
+      { number: 35, label: 'Маэстро 29.03.2026' }, 
+      { number: 34, label: 'Ош 22.03.2026' }, 
     ];
 
     const fetchAllData = async () => {

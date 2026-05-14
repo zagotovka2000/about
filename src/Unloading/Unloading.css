@@ -1,0 +1,96 @@
+.unloading-container {
+   max-width: 800px;
+   margin: 0 auto;
+   padding: 20px;
+   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+   background: #1e1e2f;
+   border-radius: 20px;
+   color: #f0f0f0;
+   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+ }
+ 
+ .unloading-title {
+   text-align: center;
+   font-size: 1.8rem;
+   font-weight: 600;
+   margin-bottom: 24px;
+   letter-spacing: 1px;
+   background: linear-gradient(135deg, #fff, #aaa);
+   background-clip: text;
+   -webkit-background-clip: text;
+   color: transparent;
+ }
+ 
+ .unloading-list {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+ }
+ 
+ .unloading-item {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   background: rgba(255, 255, 255, 0.05);
+   backdrop-filter: blur(4px);
+   padding: 12px 20px;
+   border-radius: 14px;
+   transition: all 0.2s ease;
+   border: 1px solid rgba(255, 255, 255, 0.1);
+ }
+ 
+ .unloading-item:hover {
+   background: rgba(255, 255, 255, 0.1);
+   transform: translateX(4px);
+   border-color: rgba(255, 180, 60, 0.5);
+ }
+ 
+ .file-name {
+   font-size: 1rem;
+   font-weight: 500;
+   word-break: break-all;
+   padding-right: 15px;
+   color: #ddd;
+ }
+ 
+ .download-button {
+   background: linear-gradient(135deg, #3a86ff, #8338ec);
+   border: none;
+   color: white;
+   font-weight: bold;
+   padding: 8px 20px;
+   border-radius: 40px;
+   cursor: pointer;
+   font-size: 0.9rem;
+   transition: all 0.2s ease;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+   letter-spacing: 0.5px;
+ }
+ 
+ .download-button:hover {
+   transform: scale(1.02);
+   background: linear-gradient(135deg, #2666e6, #6a1bb8);
+   box-shadow: 0 4px 12px rgba(58, 134, 255, 0.4);
+ }
+ 
+ .download-button:active {
+   transform: scale(0.98);
+ }
+ 
+ .unloading-loading,
+ .unloading-error,
+ .unloading-empty {
+   text-align: center;
+   padding: 40px;
+   font-size: 1.2rem;
+   background: #1e1e2f;
+   border-radius: 20px;
+   color: #ffb347;
+ }
+ 
+ .unloading-error {
+   color: #ff6b6b;
+ }
