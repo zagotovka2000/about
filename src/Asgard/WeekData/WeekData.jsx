@@ -42,6 +42,7 @@ const WeekData = ({ weekNumber }) => {
   const [tempDamageFrom, setTempDamageFrom] = useState(0);
   const [tempDamageTo, setTempDamageTo] = useState(500000000);
   const [tempWeekType, setTempWeekType] = useState('all');
+  const [tempPlayerName, setTempPlayerName] = useState('all'); // НОВЫЙ ФИЛЬТР ПО НИКУ
 
   // Состояния для поиска по команде (пак)
   const [selectedCreatures, setSelectedCreatures] = useState(Array(6).fill(null));
@@ -54,6 +55,7 @@ const WeekData = ({ weekNumber }) => {
     creatureType: 'hero',
   });
   const [availableHeroes, setAvailableHeroes] = useState([]);
+  const [playerNamesList, setPlayerNamesList] = useState([]); // СПИСОК ИМЁН ДЛЯ ВЫПАДАЮЩЕГО СПИСКА
 
   // Загрузка всех файлов недель
   useEffect(() => {
@@ -109,6 +111,24 @@ const WeekData = ({ weekNumber }) => {
     };
 
     fetchAllData();
+  }, []);
+
+  // Загрузка списка игроков из JSON
+  useEffect(() => {
+    const fetchPlayerNames = async () => {
+      try {
+        const response = await fetch('/config/playerNames.json');
+        if (!response.ok) throw new Error('Не удалось загрузить playerNames.json');
+        const data = await response.json();
+        // Извлекаем поле name из каждого объекта
+        const names = data.map(item => item.name).filter(Boolean);
+        setPlayerNamesList(names);
+      } catch (error) {
+        console.error('Ошибка загрузки списка игроков:', error);
+        setPlayerNamesList([]);
+      }
+    };
+    fetchPlayerNames();
   }, []);
 
   const processTextData = (text, sourceWeek) => {
@@ -208,16 +228,24 @@ const WeekData = ({ weekNumber }) => {
     const newDamageFrom = tempDamageFrom;
     const newDamageTo = tempDamageTo;
     const newWeekType = tempWeekType;
+    const newPlayerName = tempPlayerName;
 
     setIsSearching(true);
     let filtered = allBattles;
 
+    // Фильтр по типу недели
     if (newWeekType !== 'all') {
       filtered = filtered.filter(battle => getWeekType(battle.sourceWeek) === newWeekType);
     }
+    // Фильтр по уровню босса
     if (newLevel !== 'all') {
       filtered = filtered.filter(battle => battle.level === newLevel);
     }
+    // Фильтр по нику игрока
+    if (newPlayerName !== 'all') {
+      filtered = filtered.filter(battle => battle.attackerName === newPlayerName);
+    }
+    // Фильтр по урону (от и до)
     filtered = filtered.filter(battle => battle.damage >= newDamageFrom);
     if (isFinite(newDamageTo)) {
       filtered = filtered.filter(battle => battle.damage <= newDamageTo);
@@ -234,6 +262,7 @@ const WeekData = ({ weekNumber }) => {
     setTempDamageFrom(0);
     setTempDamageTo(500000000);
     setTempWeekType('all');
+    setTempPlayerName('all');
     setGlobalWeekType('all');
     setSearchMode(false);
     setSearchResults([]);
@@ -453,6 +482,18 @@ const WeekData = ({ weekNumber }) => {
             <option value="160">160</option>
           </select>
         </div>
+
+        {/* НОВЫЙ ФИЛЬТР ПО НИКУ */}
+        <div className="filter-group">
+          <label>Ник:</label>
+          <select value={tempPlayerName} onChange={(e) => setTempPlayerName(e.target.value)}>
+            <option value="all">Все</option>
+            {playerNamesList.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+
         <div className="filter-group">
           <label>Урон от:</label>
           <select
