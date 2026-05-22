@@ -1,5 +1,5 @@
 .unloading-container {
-   max-width: 800px;
+   max-width: 1200px;
    margin: 0 auto;
    padding: 20px;
    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -21,53 +21,125 @@
    color: transparent;
  }
  
- .unloading-list {
-   list-style: none;
-   padding: 0;
-   margin: 0;
+ /* Табличная вёрстка */
+ .unloading-table {
+   width: 100%;
+   border-radius: 16px;
+   overflow: hidden;
+   background: rgba(0, 0, 0, 0.2);
+ }
+ 
+ /* Шапка таблицы */
+ .table-header {
+   display: grid;
+   grid-template-columns: 1.2fr 0.9fr 1.1fr 1.1fr;
+   background: linear-gradient(135deg, #2a2a3e, #232335);
+   border-bottom: 2px solid rgba(255, 180, 60, 0.6);
+   font-weight: 700;
+   font-size: 1rem;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+   color: #ffb347;
+ }
+ 
+ .table-header > div {
+   padding: 16px 12px;
+   text-align: center;
+ }
+ 
+ .table-header .col-guild {
+   text-align: center;
+   border-right: 1px solid rgba(255, 255, 255, 0.15);
+ }
+ 
+ .table-header .col-all {
+   border-right: 1px solid rgba(255, 255, 255, 0.15);
+ }
+ 
+ .table-header .col-heroes {
+   border-right: 1px solid rgba(255, 255, 255, 0.15);
+ }
+ 
+ /* Тело таблицы */
+ .table-body {
    display: flex;
    flex-direction: column;
-   gap: 12px;
  }
  
- .unloading-item {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   background: rgba(255, 255, 255, 0.05);
-   backdrop-filter: blur(4px);
-   padding: 12px 20px;
-   border-radius: 14px;
+ /* Строка таблицы */
+ .table-row {
+   display: grid;
+   grid-template-columns: 1.2fr 0.9fr 1.1fr 1.1fr;
    transition: all 0.2s ease;
-   border: 1px solid rgba(255, 255, 255, 0.1);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+   background: rgba(255, 255, 255, 0.02);
  }
  
- .unloading-item:hover {
-   background: rgba(255, 255, 255, 0.1);
-   transform: translateX(4px);
-   border-color: rgba(255, 180, 60, 0.5);
+ .table-row:hover {
+   background: rgba(255, 255, 255, 0.08);
  }
  
- .file-name {
-   font-size: 1rem;
-   font-weight: 500;
-   word-break: break-all;
-   padding-right: 15px;
-   color: #ddd;
+ .table-row > div {
+   padding: 14px 12px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
  }
  
+ /* Первая колонка (название гильдии) — центрирование */
+ .table-row .col-guild {
+   justify-content: center;
+   border-right: 1px solid rgba(255, 255, 255, 0.08);
+ }
+ 
+ /* Стиль для названия гильдии */
+ .guild-name {
+   font-weight: 700;
+   font-size: 1.05rem;
+   background: linear-gradient(135deg, #ffffff, #d4d4e6);
+   background-clip: text;
+   -webkit-background-clip: text;
+   color: transparent;
+   letter-spacing: 0.3px;
+   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+   font-family: 'Segoe UI', 'SF Pro Text', 'Inter', system-ui, -apple-system, sans-serif;
+   position: relative;
+   padding: 2px 0;
+ }
+ 
+ /* Добавляем тонкое подчёркивание при наведении на название */
+ .table-row:hover .guild-name {
+   background: linear-gradient(135deg, #ffffff, #ffb347);
+   background-clip: text;
+   -webkit-background-clip: text;
+   color: transparent;
+   transition: all 0.2s ease;
+ }
+ 
+ /* Разделители между колонками */
+ .table-row .col-all {
+   border-right: 1px solid rgba(255, 255, 255, 0.08);
+ }
+ 
+ .table-row .col-heroes {
+   border-right: 1px solid rgba(255, 255, 255, 0.08);
+ }
+ 
+ /* Кнопки скачивания */
  .download-button {
    background: linear-gradient(135deg, #3a86ff, #8338ec);
    border: none;
    color: white;
    font-weight: bold;
-   padding: 8px 20px;
+   padding: 8px 24px;
    border-radius: 40px;
    cursor: pointer;
-   font-size: 0.9rem;
+   font-size: 0.85rem;
    transition: all 0.2s ease;
    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
    letter-spacing: 0.5px;
+   white-space: nowrap;
+   font-family: inherit;
  }
  
  .download-button:hover {
@@ -80,6 +152,14 @@
    transform: scale(0.98);
  }
  
+ /* Заглушка для отсутствующего файла */
+ .no-file {
+   color: rgba(255, 255, 255, 0.3);
+   font-weight: 400;
+   font-size: 1.2rem;
+ }
+ 
+ /* Состояния загрузки/ошибки */
  .unloading-loading,
  .unloading-error,
  .unloading-empty {
@@ -94,3 +174,70 @@
  .unloading-error {
    color: #ff6b6b;
  }
+ 
+ /* Адаптивность для мобильных устройств */
+ @media (max-width: 768px) {
+   .unloading-container {
+     padding: 12px;
+   }
+   
+   .unloading-title {
+     font-size: 1.4rem;
+   }
+   
+   .table-header,
+   .table-row {
+     grid-template-columns: 1fr 0.7fr 0.9fr 0.9fr;
+     font-size: 0.8rem;
+   }
+   
+   .table-header > div,
+   .table-row > div {
+     padding: 10px 6px;
+   }
+   
+   .guild-name {
+     font-size: 0.85rem;
+   }
+   
+   .download-button {
+     padding: 6px 12px;
+     font-size: 0.7rem;
+     white-space: normal;
+     word-break: keep-all;
+   }
+   
+   .no-file {
+     font-size: 0.9rem;
+   }
+ }
+ 
+ /* Анимация появления строк */
+ @keyframes fadeInSlideUp {
+   from {
+     opacity: 0;
+     transform: translateY(10px);
+   }
+   to {
+     opacity: 1;
+     transform: translateY(0);
+   }
+ }
+ 
+ .table-row {
+   animation: fadeInSlideUp 0.3s ease-out forwards;
+   animation-delay: calc(var(--row-index, 0) * 0.03s);
+   opacity: 0;
+ }
+ 
+ /* Добавляем задержку для каждой строки через inline-style или через nTH-child */
+ .table-row:nth-child(1) { --row-index: 1; }
+ .table-row:nth-child(2) { --row-index: 2; }
+ .table-row:nth-child(3) { --row-index: 3; }
+ .table-row:nth-child(4) { --row-index: 4; }
+ .table-row:nth-child(5) { --row-index: 5; }
+ .table-row:nth-child(6) { --row-index: 6; }
+ .table-row:nth-child(7) { --row-index: 7; }
+ .table-row:nth-child(8) { --row-index: 8; }
+ .table-row:nth-child(9) { --row-index: 9; }
+ .table-row:nth-child(10) { --row-index: 10; }
