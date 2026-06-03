@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import './table.css';
 
 const rawData = [
-  "G_G -9", "Big -8", "ZOV+1", "Пунь+3", "Федор+3", "VICTOR+3",
+  "G_G -9", "Big -8", "ZOV+1", "Пунь+3", "Федор+2", "VICTOR+3",
   "3.14+4", "Гоша+4", "Victori+5", "Souffle+5", "Diablo+6", "3ve+7",
   "Rom+7", "Лапочка+7","bLanx+7", "Сварог+7","Оди+9","Виларт+10", "Nergal+10",
   "Kamul+10"
