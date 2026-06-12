@@ -1,0 +1,351 @@
+/* Soveti.css */
+
+.soveti-container {
+   max-width: 1400px;
+   margin: 0 auto;
+   padding: 20px;
+   background-color: #1a1a2e;
+   border-radius: 12px;
+   color: #e0e0e0;
+ }
+ 
+ .soveti-abzac {
+   line-height: 1.6;
+   margin-bottom: 1.5em;
+   font-size: 16px;
+   text-align: justify;
+   text-indent: 30px;
+   color: #ccc;
+ }
+ 
+ /* Таблица - без использования table/tr/td */
+ .soveti-table {
+   display: flex;
+   flex-direction: column;
+   border: 1px solid #333;
+   border-radius: 8px;
+   overflow: hidden;
+   background: #0f0f1a;
+ }
+ 
+ /* Заголовок таблицы */
+ .soveti-table-header {
+   display: flex;
+   background: linear-gradient(135deg, #2c3e50, #1a2632);
+   color: #d4af37;
+   font-weight: 600;
+   border-bottom: 2px solid #d4af37;
+ }
+ 
+ /* Ячейки заголовка */
+ .soveti-header-cell {
+   padding: 14px 12px;
+   text-align: center;
+   font-size: 14px;
+   letter-spacing: 0.5px;
+   border-right: 1px solid #3d5166;
+ }
+ 
+ .soveti-header-cell:last-child {
+   border-right: none;
+ }
+ 
+ /* Ширина колонок */
+ .team-cell {
+   flex: 3;
+   min-width: 280px;
+ }
+ 
+ .boss-cell {
+   flex: 0.8;
+   min-width: 90px;
+ }
+ 
+ .equip-cell {
+   flex: 2;
+   min-width: 200px;
+ }
+ 
+ .video-cell {
+   flex: 0.8;
+   min-width: 80px;
+ }
+ 
+ /* Строки таблицы */
+ .soveti-table-row {
+   display: flex;
+   align-items: center;
+   border-bottom: 1px solid #2a2a3a;
+   cursor: pointer;
+   transition: background-color 0.2s ease;
+   position: relative;
+ }
+ 
+ .soveti-table-row:hover {
+   background-color: #1e1e30;
+ }
+ 
+ .soveti-table-row.expanded {
+   background-color: #252540;
+   border-bottom: none;
+ }
+ 
+ /* Ячейки строк */
+ .soveti-table-cell {
+   padding: 12px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 14px;
+   color: #ddd;
+   border-right: 1px solid #2a2a3a;
+ }
+ 
+ .soveti-table-cell:last-child {
+   border-right: none;
+ }
+ 
+ .soveti-table-cell.team-cell {
+   justify-content: flex-start;
+ }
+ 
+ /* Контейнер команды с патронажами */
+ .soveti-team-with-patronage {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   gap: 12px;
+   width: 100%;
+ }
+ 
+ /* Контейнер одного героя */
+ .soveti-hero-container {
+   position: relative;
+   width: 55px;
+   height: 55px;
+   flex-shrink: 0;
+ }
+ 
+ /* Основной питомец - чуть более светлый фон */
+ .soveti-hero-container.main-pet .soveti-hero-image {
+   background-color: #2a2a3e;
+ }
+ 
+ /* Изображение героя */
+ .soveti-hero-image {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   border: 2px solid #d4af37;
+   background-color: #1a1a2e;
+   transition: transform 0.2s, border-color 0.2s;
+ }
+ 
+ .soveti-hero-image:hover {
+   transform: scale(1.1);
+   border-color: #f1c40f;
+ }
+ 
+ /* Обертка для патронажа - белый фон */
+ .soveti-patronage-wrapper {
+   position: absolute;
+   top: -8px;
+   right: -12px;
+   width: 28px;
+   height: 28px;
+   border-radius: 50%;
+   background-color: #ffffff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 10;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+ }
+ 
+ /* Изображение патронажа */
+ .soveti-patronage-image {
+   width: 24px;
+   height: 24px;
+   border-radius: 50%;
+   border: 1px solid #d4af37;
+   background-color: #ffffff;
+   object-fit: contain;
+   transition: transform 0.2s;
+ }
+ 
+ .soveti-patronage-image:hover {
+   transform: scale(2);
+ }
+ 
+ /* Пустой патронаж (###) - белый кружок, без текста */
+ .soveti-empty-patron {
+   position: absolute;
+   top: -8px;
+   right: -12px;
+   width: 28px;
+   height: 28px;
+   border-radius: 50%;
+   background-color: #ffffff;
+   border: 1px solid #d4af37;
+   z-index: 10;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+ }
+ 
+ /* Иконка раскрытия */
+ .soveti-expand-icon {
+   width: 40px;
+   text-align: center;
+   font-size: 16px;
+   color: #d4af37;
+   flex-shrink: 0;
+ }
+ 
+ /* Раскрывающаяся панель */
+ .soveti-expanded-content {
+   background: linear-gradient(135deg, #1e1e30, #161628);
+   border-bottom: 1px solid #2a2a3a;
+   padding: 20px 24px;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 30px;
+ }
+ 
+ .soveti-description {
+   flex: 2;
+   min-width: 250px;
+ }
+ 
+ .soveti-description h4,
+ .soveti-video-preview h4 {
+   color: #d4af37;
+   margin: 0 0 10px 0;
+   font-size: 16px;
+ }
+ 
+ .soveti-description p {
+   margin: 0;
+   line-height: 1.5;
+   font-size: 14px;
+   color: #ccc;
+   text-align: justify;
+ }
+ 
+ .soveti-video-preview {
+   flex: 1;
+   min-width: 150px;
+ }
+ 
+ .soveti-video-link {
+   color: #3498db;
+   text-decoration: none;
+   font-size: 14px;
+   transition: color 0.2s;
+ }
+ 
+ .soveti-video-link:hover {
+   color: #5dade2;
+   text-decoration: underline;
+ }
+ 
+ .soveti-video-button {
+   display: inline-block;
+   background: linear-gradient(135deg, #e74c3c, #c0392b);
+   color: white;
+   padding: 10px 20px;
+   border-radius: 8px;
+   text-decoration: none;
+   font-size: 14px;
+   font-weight: bold;
+   transition: transform 0.2s, box-shadow 0.2s;
+ }
+ 
+ .soveti-video-button:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+ }
+ 
+ /* Адаптивность */
+ @media (max-width: 900px) {
+   .soveti-table {
+     overflow-x: auto;
+   }
+   
+   .soveti-table-header,
+   .soveti-table-row {
+     min-width: 700px;
+   }
+   
+   .soveti-hero-container {
+     width: 45px;
+     height: 45px;
+   }
+   
+   .soveti-patronage-wrapper,
+   .soveti-patronage-image,
+   .soveti-empty-patron {
+     width: 22px;
+     height: 22px;
+     top: -6px;
+     right: -10px;
+   }
+   
+   .soveti-patronage-image {
+     width: 18px;
+     height: 18px;
+   }
+ }
+ 
+ @media (max-width: 600px) {
+   .soveti-container {
+     padding: 12px;
+   }
+   
+   .soveti-expanded-content {
+     flex-direction: column;
+     gap: 15px;
+   }
+ }
+/* Добавьте эту секцию в Soveti.css */
+
+/* Колонка для иконки раскрытия в заголовке */
+.expand-cell {
+   flex: 0 0 40px;
+   min-width: 40px;
+ }
+ 
+ /* Убедитесь, что иконка раскрытия имеет ту же ширину */
+ .soveti-expand-icon {
+   width: 40px;
+   text-align: center;
+   font-size: 16px;
+   color: #d4af37;
+   flex-shrink: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+ 
+ /* Обновите существующие стили для .soveti-table-cell */
+ .soveti-table-cell {
+   padding: 12px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 14px;
+   color: #ddd;
+   border-right: 1px solid #2a2a3a;
+ }
+ 
+ .soveti-table-cell:last-child {
+   border-right: none;
+ }
+ 
+ .soveti-table-cell.team-cell {
+   justify-content: flex-start;
+ }
+ 
+ .soveti-table-cell.equip-cell {
+   justify-content: flex-start;
+   text-align: left;
+ }

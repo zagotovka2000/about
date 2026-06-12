@@ -10,6 +10,7 @@ import './App.css';
 import War from './War/War';
 import Sm from './Sm/Sm';
 import Asgard from './Asgard/Asgard';
+import Soveti from './Soveti/Soveti';
 import Territory from './Territory/Territory';
 import Activ from './Activ/Activ';
 import Nakazanie from './Nakazanie/Nakazanie';
@@ -29,6 +30,7 @@ function App() {
     { id: 'war', title: 'ТИТАНЫ', component: <War /> },
     { id: 'sm', title: 'СТОЛКНОВЕНИЕ', component: <Sm /> },
     { id: 'asgard', title: 'АСГАРД', component: <Asgard /> },
+    { id: 'asgard', title: 'СОВЕТЫ ОТ ДИАБЛО', component: <Soveti /> },
     { id: 'activ', title: 'АКТИВНОСТЬ', component: <Activ /> },
     { id: 'nakazanie', title: 'НАКАЗАНИЯ', component: <Nakazanie /> },
     { id: 'tournament', title: 'Выгрузки реплеев', component: <Unloading /> },
