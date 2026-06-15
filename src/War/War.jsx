@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './War.css';
   // ---------- Константы ----------
   const TITAN_TYPES = {
-   light: ['Сол', 'Ияр', 'Риг', 'Амо'],
+   light: ['Сол', 'Ияр', 'Риг', 'Амо','Люм'],
    dark: ['Тен', 'Бру', 'Мор', 'Кер'],
    water: ['Сиг', 'Тид', 'Нов', 'Маи', 'Гип'],
    fire: ['Ара', 'Мол', 'Аше', 'Игн', 'Вул'],
