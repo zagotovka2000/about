@@ -29,7 +29,7 @@ function App() {
     { id: 'territory', title: 'ГЕРОИ', component: <Territory /> },
     { id: 'war', title: 'ТИТАНЫ', component: <War /> },
     { id: 'sm', title: 'СТОЛКНОВЕНИЕ', component: <Sm /> },
-    { id: 'asgard', title: 'АСГАРД', component: <Asgard /> },
+    { id: 'soveti', title: 'АСГАРД', component: <Asgard /> },
     { id: 'asgard', title: 'СОВЕТЫ ОТ ДИАБЛО', component: <Soveti /> },
     { id: 'activ', title: 'АКТИВНОСТЬ', component: <Activ /> },
     { id: 'nakazanie', title: 'НАКАЗАНИЯ', component: <Nakazanie /> },

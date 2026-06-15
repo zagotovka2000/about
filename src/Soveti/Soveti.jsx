@@ -16,8 +16,21 @@ const Soveti = () => {
       videoUrl: 'https://drive.google.com/file/d/1FRislg3jtU0XF3emNBmy5InnFEGUG2mA/view?usp=sharing',
       description: 'Пет для каждого героя не обязательно как тут'
     },
- 
-
+    {
+      id: 2,
+      team: 'Аль Баб Крн Себ Неб Айз',
+      patronage: '### Акс Аль Каи Оли',
+      bossLevel: '160',
+      bossType: 'Ош',
+      equipment: '9 000 000 - 1 235 000 000',
+      videoUrl: 'https://drive.google.com/file/d/195Z4w1NBWC1PXfMzlb-DgT9Bgq_Smkd4/view?usp=sharing',
+      description: 'Нэт описания по классике',
+      asgradImages: [
+        'ayz_art.jpg',
+        'ayz_obliki.jpg',
+        'krn_art.jpg',
+      ]
+    },
   ];
 
   const toggleRow = (id) => {
@@ -84,6 +97,31 @@ const Soveti = () => {
     );
   };
 
+  // Функция для рендера галереи картинок Asgrad
+  const renderAsgradGallery = (images) => {
+    if (!images || images.length === 0) return null;
+    
+    return (
+      <div className="soveti-asgrad-gallery">
+        <div className="soveti-gallery-grid">
+          {images.map((image, index) => (
+            <div key={index} className="soveti-gallery-item">
+              <img 
+                src={`/asgrad/${image}`}
+                alt={`Асгард ${index + 1}`}
+                className="soveti-gallery-image"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = '<div class="soveti-image-error">❌</div>';
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="soveti-container">
       <div className="soveti-header">
@@ -141,13 +179,17 @@ const Soveti = () => {
               </div>
             </div>
 
-            {/* Раскрывающаяся панель с описанием */}
+            {/* Раскрывающаяся панель с описанием и галереей */}
             {expandedRows[row.id] && (
               <div className="soveti-expanded-content" onClick={(e) => e.stopPropagation()}>
                 <div className="soveti-description">
                   <h4>Нюансы:</h4>
                   <p>{row.description}</p>
                 </div>
+                
+                {/* Галерея картинок для строки с id 2 */}
+                {row.asgradImages && renderAsgradGallery(row.asgradImages)}
+                
                 {row.videoUrl && (
                   <div className="soveti-video-preview">
                     <h4>Видео боя:</h4>
