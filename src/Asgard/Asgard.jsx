@@ -5,6 +5,7 @@ import "./asgard.css";
 const getWeekType = (weekNumber) => (weekNumber % 2 === 0 ? 'osh' : 'maestro');
 // Конфигурация недель
 const weeksConfig = [ 
+   { number: 46, label: 'Ош 14.06.2026' },
    { number: 45, label: 'Маэстро 07.06.2026' },
    { number: 44, label: 'Ош 31.05.2026' },
    { number: 43, label: 'Маэстро 24.05.2026' },
