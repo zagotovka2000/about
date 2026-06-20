@@ -17,20 +17,33 @@ const Territory = () => {
   });
   const [selectionList, setSelectionList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasSearched, setHasSearched] = useState(false); // флаг, был ли выполнен поиск
+  const [hasSearched, setHasSearched] = useState(false);
+  const [loadError, setLoadError] = useState(null);
+  
+  // Состояния для поиска по нику защищающегося
+  const [defenderNameSearch, setDefenderNameSearch] = useState('');
+  const [isNameSearchActive, setIsNameSearchActive] = useState(false);
+
+  // Состояние для модального окна сообщений
+  const [messageModal, setMessageModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+  });
 
   const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
+      setLoadError(null);
       
-      // Теперь загружаем только один файл с обработанными данными
       const filePath = '/smBattle/processed/all_battles.csv';
       console.log('Загрузка файла:', filePath);
       
       const response = await fetch(filePath);
       
       if (!response.ok) {
-        throw new Error(`Не удалось загрузить файл: ${response.status}`);
+        throw new Error(`Не удалось загрузить файл: ${response.status} ${response.statusText}`);
       }
       
       const text = await response.text();
@@ -40,69 +53,86 @@ const Territory = () => {
         throw new Error('Файл пустой');
       }
       
-      // Извлекаем заголовки
+      // Извлекаем заголовки (убираем кавычки)
       const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+      console.log('Заголовки:', headers);
       
-      // Парсим данные
       const battles = [];
-      const dataLines = lines.slice(1);
+      const creaturesSet = new Set();
       
-      dataLines.forEach((line, index) => {
+      // Парсим строки с учетом кавычек
+      for (let i = 1; i < lines.length; i++) {
         try {
-          // Разделяем строку CSV, учитывая кавычки
-          const values = line.split(',').map(v => v.replace(/^"|"$/g, '').trim());
+          const line = lines[i];
+          // Разбиваем CSV с учетом кавычек
+          const values = [];
+          let current = '';
+          let inQuotes = false;
           
-          if (values.length >= headers.length) {
-            const battle = {};
-            headers.forEach((header, i) => {
-              battle[header] = values[i] || '';
-            });
-            
-            // Проверяем, что есть основные данные
-            if (battle.attackerTeam && battle.defenderTeam) {
-              battles.push(battle);
+          for (let j = 0; j < line.length; j++) {
+            const char = line[j];
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              values.push(current.trim());
+              current = '';
+            } else {
+              current += char;
             }
           }
-        } catch (error) {
-          console.error(`Ошибка парсинга строки ${index}:`, error);
+          values.push(current.trim());
+          
+          // Убираем кавычки из значений
+          const cleanValues = values.map(v => v.replace(/^"|"$/g, ''));
+          
+          const battle = {};
+          headers.forEach((header, idx) => {
+            battle[header] = cleanValues[idx] || '';
+          });
+          
+          if (!battle.attackerTeam || !battle.defenderTeam) continue;
+          
+          battles.push(battle);
+          
+          // Извлекаем героев из атакующей команды
+          if (battle.attackerTeam) {
+            const heroMatches = battle.attackerTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
+            if (heroMatches) {
+              const heroes = heroMatches.slice(1);
+              heroes.forEach(match => {
+                const heroName = match.split('(')[0];
+                if (heroName && !patronazhs.includes(heroName)) {
+                  creaturesSet.add(heroName);
+                }
+              });
+            }
+          }
+          
+          // Извлекаем героев из защитной команды
+          if (battle.defenderTeam) {
+            const heroMatches = battle.defenderTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
+            if (heroMatches) {
+              const heroes = heroMatches.slice(0, -1);
+              heroes.forEach(match => {
+                const heroName = match.split('(')[0];
+                if (heroName && !patronazhs.includes(heroName)) {
+                  creaturesSet.add(heroName);
+                }
+              });
+            }
+          }
+          
+        } catch (err) {
+          console.error('Ошибка парсинга строки:', err, lines[i]);
         }
-      });
+      }
+      
+      if (battles.length === 0) {
+        throw new Error('Не удалось загрузить данные из файла');
+      }
       
       console.log(`Загружено боев: ${battles.length}`);
       setBattleData(battles);
-      
-      // Извлекаем уникальных существ
-      const creaturesSet = new Set();
-      
-      battles.forEach(battle => {
-        // Извлекаем героев из атакующей команды
-        if (battle.attackerTeam) {
-          const heroMatches = battle.attackerTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
-          if (heroMatches) {
-            const heroes = heroMatches.slice(1); // Пропускаем первого (питомца)
-            heroes.forEach(match => {
-              const heroName = match.split('(')[0];
-              if (heroName && !patronazhs.includes(heroName)) {
-                creaturesSet.add(heroName);
-              }
-            });
-          }
-        }
-        
-        // Извлекаем героев из защитной команды
-        if (battle.defenderTeam) {
-          const heroMatches = battle.defenderTeam.match(/([А-Яа-яA-Za-zЁё'-]+)\(\d+\)/g);
-          if (heroMatches) {
-            const heroes = heroMatches.slice(0, -1); // Пропускаем последнего (питомца)
-            heroes.forEach(match => {
-              const heroName = match.split('(')[0];
-              if (heroName && !patronazhs.includes(heroName)) {
-                creaturesSet.add(heroName);
-              }
-            });
-          }
-        }
-      });
       
       const sortedCreatures = Array.from(creaturesSet).sort();
       setAvailableCreatures(sortedCreatures);
@@ -110,6 +140,7 @@ const Territory = () => {
       
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
+      setLoadError(`Ошибка загрузки данных: ${error.message}`);
       // Запасной вариант - тестовые данные
       setAvailableCreatures(['Аль','Тея','Дор','Хай','Сел','Крв','Авг','Ори','Неб','Дан','Кей','Гал','ЛаК','Фаф','Исм','Эле','Баб','Ясм','Лир','Акс','Себ','Мор','Кир','Аст','Пеп','Руф','Хор','Эйд','Муш','Йор','Фол','Гус','Пол','Дже','Ара','Мод','Арт','Три','Цин','Айз','Айр','Сат','Авр','Гел','Век','Каи','Мар','Мер','Оли','К\'А','Кри','Ами','Фен','Бис','Лап','Айт','Дант','Ню','Чер','Чу','Шив','Юли','Зен','Астм','Атл','Клео','Изи','Кейн','Лю','Май','Фа','Хел','Эш']);
     } finally {
@@ -120,6 +151,25 @@ const Territory = () => {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  // ---------- Показать модальное сообщение ----------
+  const showMessage = useCallback((title, message, type = 'info') => {
+    setMessageModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+    });
+  }, []);
+
+  const closeMessageModal = useCallback(() => {
+    setMessageModal({
+      isOpen: false,
+      title: '',
+      message: '',
+      type: 'info',
+    });
+  }, []);
 
   // Функция извлечения данных из атакующей пачки
   const extractAttackerData = useCallback((teamString, petsString) => {
@@ -132,23 +182,14 @@ const Territory = () => {
     };
     
     try {
-      // Разбиваем строку команды по пробелам
       const teamParts = teamString.trim().split(/\s+/);
       if (teamParts.length === 0) return result;
       
-      // ПЕРВЫЙ элемент - общий питомец
       result.generalPet = teamParts[0].replace(/\(\d+\)$/, '');
-      
-      // Остальные элементы - герои (максимум 5)
       result.heroes = teamParts.slice(1).map(part => part.replace(/\(\d+\)$/, '')).slice(0, 5);
       
-      // Извлекаем патронажи для героев из строки питомцев
       if (petsString && petsString.trim() !== '') {
-        // Разбиваем строку питомцев по пробелам
         const allPetParts = petsString.trim().split(/\s+/).filter(p => p !== '');
-        
-        // Если есть 10+ значений, берем первые 5 для атаки
-        // Иначе берем все доступные
         const attackerPetParts = allPetParts.length >= 10 ? 
           allPetParts.slice(0, 5) : 
           allPetParts.slice(0, Math.min(5, allPetParts.length));
@@ -167,7 +208,6 @@ const Territory = () => {
           }
         }
       } else {
-        // Если нет строки питомцев, заполняем ###
         result.patronages = Array(result.heroes.length).fill('###');
       }
     } catch (error) {
@@ -189,28 +229,18 @@ const Territory = () => {
     };
     
     try {
-      // Разбиваем строку команды по пробелам
       const teamParts = teamString.trim().split(/\s+/);
       if (teamParts.length === 0) return result;
       
-      // ПОСЛЕДНИЙ элемент - общий питомец
       result.generalPet = teamParts[teamParts.length - 1].replace(/\(\d+\)$/, '');
-      
-      // Все элементы кроме последнего - герои (максимум 5)
       result.heroes = teamParts.slice(0, -1).map(part => part.replace(/\(\d+\)$/, '')).slice(0, 5);
       
-      // Извлекаем патронажи для героев из строки питомцев
       if (petsString && petsString.trim() !== '') {
-        // Разбиваем строку питомцев по пробелам
         const allPetParts = petsString.trim().split(/\s+/).filter(p => p !== '');
-        
-        // Если есть 10+ значений, берем последние 5 для защиты (индексы 5-9)
-        // Иначе предполагаем, что это уже питомцы защиты
         let defenderPetParts = [];
         if (allPetParts.length >= 10) {
           defenderPetParts = allPetParts.slice(5, 10);
         } else {
-          // Если меньше 10 значений, берем все доступные
           defenderPetParts = allPetParts.slice(0, Math.min(5, allPetParts.length));
         }
         
@@ -228,7 +258,6 @@ const Territory = () => {
           }
         }
       } else {
-        // Если нет строки питомцев, заполняем ###
         result.patronages = Array(result.heroes.length).fill('###');
       }
     } catch (error) {
@@ -239,54 +268,115 @@ const Territory = () => {
     return result;
   }, []);
 
+  // ---------- Поиск по нику защищающегося ----------
+  const handleDefenderNameSearch = useCallback(() => {
+    if (isLoading) {
+      showMessage('Загрузка данных', 'Данные ещё загружаются. Пожалуйста, подождите.', 'warning');
+      return;
+    }
+
+    if (!defenderNameSearch.trim()) {
+      showMessage('Введите ник', 'Пожалуйста, введите ник защищающегося для поиска.', 'warning');
+      return;
+    }
+
+    setIsSearching(true);
+    setHasSearched(true);
+    setIsNameSearchActive(true);
+    setSearchResults([]);
+
+    const searchName = defenderNameSearch.trim();
+    const results = [];
+
+    battleData.forEach((battle, index) => {
+      try {
+        const defenderName = battle.defenderName || '';
+        if (defenderName.toLowerCase().includes(searchName.toLowerCase())) {
+          const defenderPetsString = battle.defenderPets && battle.defenderPets.trim() !== '' 
+            ? battle.defenderPets 
+            : battle.attackerPets;
+          const defenderData = extractDefenderData(battle.defenderTeam, defenderPetsString);
+          const attackerData = extractAttackerData(battle.attackerTeam, battle.attackerPets);
+
+          results.push({
+            id: index,
+            attacker: {
+              name: battle.attackerName || '',
+              power: battle.attackerPower || '',
+              generalPet: attackerData.generalPet,
+              heroes: attackerData.heroes,
+              patronages: attackerData.patronages,
+              id: battle.attackerId || ''
+            },
+            defender: {
+              name: defenderName,
+              power: battle.defenderPower || '',
+              generalPet: defenderData.generalPet,
+              heroes: defenderData.heroes,
+              patronages: defenderData.patronages,
+              id: battle.defenderId || '',
+              guild: battle.defenderGuild || ''
+            },
+            points: battle.points || '0',
+            replay: battle.replay || '',
+          });
+        }
+      } catch (err) {
+        console.error(`Ошибка обработки боя ${index}:`, err);
+      }
+    });
+
+    setSearchResults(results);
+    setIsSearching(false);
+    
+    if (results.length === 0) {
+      showMessage(
+        'Не, хуйня 😢',
+        `${searchName} в какой помойке валялся,что его потом не нашли?`,
+        'error'
+      );
+    }
+  }, [battleData, isLoading, defenderNameSearch, extractDefenderData, extractAttackerData, showMessage]);
+
   // Основная функция поиска
   const handleSearch = useCallback(() => {
     if (isLoading) {
-      alert('Данные еще загружаются. Пожалуйста, подождите.');
+      showMessage('Загрузка данных', 'Данные ещё загружаются. Пожалуйста, подождите.', 'warning');
       return;
     }
     
     if (battleData.length === 0) {
-      alert('Нет данных для поиска.');
+      showMessage('Нет данных', 'Нет данных для поиска. Проверьте загрузку файла.', 'error');
       return;
     }
     
-    // Получаем выбранных существ
-    const selectedPet = selectedCreatures[0]; // Первая ячейка - питомец
-    const selectedHeroes = selectedCreatures.slice(1).filter(hero => hero !== null); // Остальные - герои
+    const selectedPet = selectedCreatures[0];
+    const selectedHeroes = selectedCreatures.slice(1).filter(hero => hero !== null);
     
     if (selectedHeroes.length === 0 && !selectedPet) {
-      alert('Выберите хотя бы одного героя или питомца для поиска.');
+      showMessage('Выберите героев', 'Пожалуйста, выберите хотя бы одного героя или питомца для поиска.', 'warning');
       return;
     }
 
-    setHasSearched(true); // запоминаем, что поиск выполнен
+    setHasSearched(true);
+    setIsNameSearchActive(false);
     setIsSearching(true);
     setSearchResults([]);
     
-    console.log('Начинаем поиск...');
-    console.log('Выбранный питомец:', selectedPet);
-    console.log('Выбранные герои:', selectedHeroes);
-    console.log('Всего боев:', battleData.length);
-    
     const results = [];
     
-    // Проходим по всем боям
     battleData.forEach((battle, index) => {
       try {
-        // Для защиты используем ту же строку с питомцами, если defenderPets пустой
         const defenderPetsString = battle.defenderPets && battle.defenderPets.trim() !== '' 
           ? battle.defenderPets 
           : battle.attackerPets;
         
         const defenderData = extractDefenderData(battle.defenderTeam, defenderPetsString);
         
-        // Проверяем совпадение общего питомца (если выбран)
         if (selectedPet && selectedPet !== defenderData.generalPet) {
           return;
         }
         
-        // Проверяем совпадение героев (без учета позиций)
         if (selectedHeroes.length > 0) {
           const allHeroesFound = selectedHeroes.every(hero => 
             defenderData.heroes.includes(hero)
@@ -297,33 +387,33 @@ const Territory = () => {
           }
         }
         
-        // Извлекаем данные атакующей пачки
         const attackerData = extractAttackerData(battle.attackerTeam, battle.attackerPets);
         
-        // Если ничего не выбрано, но есть данные - пропускаем
         if (!selectedPet && selectedHeroes.length === 0) {
           return;
         }
         
-        // Добавляем результат
         results.push({
           id: index,
           attacker: {
-            name: battle.attackerName,
-            power: battle.attackerPower,
+            name: battle.attackerName || '',
+            power: battle.attackerPower || '',
             generalPet: attackerData.generalPet,
             heroes: attackerData.heroes,
-            patronages: attackerData.patronages
+            patronages: attackerData.patronages,
+            id: battle.attackerId || ''
           },
           defender: {
-            name: battle.defenderName,
-            power: battle.defenderPower,
+            name: battle.defenderName || '',
+            power: battle.defenderPower || '',
             generalPet: defenderData.generalPet,
             heroes: defenderData.heroes,
-            patronages: defenderData.patronages
+            patronages: defenderData.patronages,
+            id: battle.defenderId || '',
+            guild: battle.defenderGuild || ''
           },
-          points: battle.points,
-          replay: battle.replay,
+          points: battle.points || '0',
+          replay: battle.replay || '',
           matchedHeroes: selectedHeroes.filter(hero => defenderData.heroes.includes(hero))
         });
       } catch (error) {
@@ -331,15 +421,17 @@ const Territory = () => {
       }
     });
     
-    console.log('Найдено результатов:', results.length);
-    if (results.length > 0) {
-      console.log('Пример результата:', results[0]);
-      console.log('Patronages атаки:', results[0].attacker.patronages);
-      console.log('Patronages защиты:', results[0].defender.patronages);
-    }
     setSearchResults(results);
     setIsSearching(false);
-  }, [battleData, extractAttackerData, extractDefenderData, isLoading, selectedCreatures]);
+    
+    if (results.length === 0) {
+      showMessage(
+        'Ничего не найдено 😢',
+        'Таких пачек пока нет в нашей базе данных. Попробуйте изменить набор героев.',
+        'error'
+      );
+    }
+  }, [battleData, extractAttackerData, extractDefenderData, isLoading, selectedCreatures, showMessage]);
 
   // Функция для отображения команды с патронажами
   const renderTeamWithPatronage = useCallback((teamData, isAttacker = true) => {
@@ -351,7 +443,6 @@ const Territory = () => {
     
     return (
       <div className="team-with-patronage">
-        {/* Общий питомец */}
         <div className="general-pet-section">
           <div className="general-pet-label">
           </div>
@@ -376,12 +467,9 @@ const Territory = () => {
           )}
         </div>
         
-        {/* Герои с патронажами */}
         <div className="heroes-section">
-         
           <div className="heroes-container">
             {heroes.map((hero, index) => {
-              // Для всех команд берем патронаж из массива
               const patron = patronages && index < patronages.length ? patronages[index] : '###';
               
               return (
@@ -405,7 +493,6 @@ const Territory = () => {
                       </div>
                     </div>
                     
-                    {/* Патронаж показываем ВСЕГДА */}
                     <div className="patronage-overlay">
                       <div className="patronage-label">Патронаж:</div>
                       <img 
@@ -426,7 +513,6 @@ const Territory = () => {
                     </div>
                   </div>
                   <div className="hero-name">{hero}</div>
-                  {/* Подпись патронажа показываем ТОЛЬКО если не ### */}
                   {patron !== '###' && (
                     <div className="patron-name">+ {patron}</div>
                   )}
@@ -455,7 +541,7 @@ const Territory = () => {
   // Обработчик клика по ячейке
   const handleCellClick = useCallback((index) => {
     if (isLoading) {
-      alert('Данные еще загружаются. Пожалуйста, подождите.');
+      showMessage('Загрузка данных', 'Данные ещё загружаются. Пожалуйста, подождите.', 'warning');
       return;
     }
     
@@ -476,7 +562,7 @@ const Territory = () => {
       cellIndex: index,
       creatureType
     });
-  }, [isLoading, pets, heroes, selectedCreatures]);
+  }, [isLoading, pets, heroes, selectedCreatures, showMessage]);
 
   // Обработчик выбора существа
   const handleCreatureSelect = useCallback((creatureName) => {
@@ -495,9 +581,11 @@ const Territory = () => {
 
   // Очистка всех ячеек
   const clearAllCells = useCallback(() => {
-    setHasSearched(false); // сбрасываем флаг поиска
+    setHasSearched(false);
     setSelectedCreatures(Array(6).fill(null));
     setSearchResults([]);
+    setIsNameSearchActive(false);
+    setDefenderNameSearch('');
   }, []);
 
   // Показать предупреждение о загрузке
@@ -512,14 +600,65 @@ const Territory = () => {
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="territory-container">
+        <div className="error-message">
+          <h2>Ошибка загрузки данных</h2>
+          <p>{loadError}</p>
+          <button onClick={() => window.location.reload()}>
+            Попробовать снова
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="territory-container">
       <div className="territory-upper-container">
         <h2 className="territory-title">Подбор пачек</h2>
         
-        {/* Информация о данных */}
         <div className="data-info">
           <p>Загружено боев: {battleData.length}</p>
+        </div>
+
+        {/* Поиск по нику защищающегося */}
+        <div className="search-by-name-container">
+          <div className="search-by-name-wrapper">
+            <input
+              type="text"
+              className="search-by-name-input"
+              placeholder="Поиск боя по нику защищающегося..."
+              value={defenderNameSearch}
+              onChange={(e) => setDefenderNameSearch(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleDefenderNameSearch();
+                }
+              }}
+            />
+            <button
+              className="search-by-name-button"
+              onClick={handleDefenderNameSearch}
+              disabled={isSearching || !defenderNameSearch.trim() || battleData.length === 0}
+            >
+              {isSearching ? 'Поиск...' : 'Найти по нику'}
+            </button>
+          </div>
+          {isNameSearchActive && (
+            <button
+              className="clear-name-search-button"
+              onClick={() => {
+                setDefenderNameSearch('');
+                setIsNameSearchActive(false);
+                setSearchResults([]);
+                setHasSearched(false);
+              }}
+            >
+              Очистить поиск по нику
+            </button>
+          )}
         </div>
         
         {/* 6 ячеек для выбора */}
@@ -571,7 +710,6 @@ const Territory = () => {
             ))}
           </div>
           
-          {/* Кнопки управления */}
           <div className="controls-container">
             <button 
               onClick={handleSearch} 
@@ -657,27 +795,62 @@ const Territory = () => {
         </div>
       )}
 
-      {/* Результаты поиска или сообщение об отсутствии */}
+      {/* Модальное окно для сообщений */}
+      {messageModal.isOpen && (
+        <div className="message-modal-overlay" onClick={closeMessageModal}>
+          <div className={`message-modal-content message-${messageModal.type}`} onClick={(e) => e.stopPropagation()}>
+            <div className="message-modal-header">
+              <div className="message-modal-icon">
+                {messageModal.type === 'success' && '✅'}
+                {messageModal.type === 'warning' && '⚠️'}
+                {messageModal.type === 'info' && 'ℹ️'}
+              </div>
+              <h3>{messageModal.title}</h3>
+              <button className="message-modal-close" onClick={closeMessageModal}>×</button>
+            </div>
+            <div className="message-modal-body">
+              <p>{messageModal.message}</p>
+            </div>
+            <div className="message-modal-footer">
+              <button className="message-modal-button" onClick={closeMessageModal}>
+                Да и насрать
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Результаты поиска */}
       {hasSearched && !isSearching && searchResults.length === 0 ? (
         <div className="territory-lower-container no-results">
-          <div className="no-results-message">В СМ такую пачку еще не побеждали</div>
+          <div className="no-results-message">
+            {isNameSearchActive 
+              ? `Боев с "${defenderNameSearch}" в защите не найдено`
+              : 'В СМ такую пачку еще не побеждали'}
+          </div>
         </div>
       ) : searchResults.length > 0 && (
         <div className="territory-lower-container">
           <div className="results-header">
             <h3 className="results-title">
-           кем побеждалось &larr;  Найдено {searchResults.length} боев &rarr; кого побеждалось
+              {isNameSearchActive 
+                ? `Найдено ${searchResults.length} победных боёв с защитником "${defenderNameSearch}"`
+                : `кем побеждалось → Найдено ${searchResults.length} боев → кого побеждалось`
+              }
             </h3>
           </div>
           
           <div className="results-list">
             {searchResults.map((result, index) => (
               <div key={index} className="battle-result-item">
-
-                
                 <div className="battle-teams-container">
                   {/* Атакующая пачка */}
                   <div className="team-container attacking-team">
+                    <div className="team-header">
+                      <span className="player-name">⚔️ {result.attacker.name}</span>
+                      <span className="player-power">{result.attacker.power}</span>
+                    </div>
+         
                     {renderTeamWithPatronage(result.attacker, true)}
                   </div>
                   
@@ -688,14 +861,20 @@ const Territory = () => {
                   
                   {/* Защитная пачка */}
                   <div className="team-container defending-team">
+                    <div className="team-header">
+                      <span className="player-name">🛡️ {result.defender.name}</span>
+                      <span className="player-power">{result.defender.power}</span>
+                    </div>
+ 
+                    {result.defender.guild && (
+                      <div className="guild-info">🏰 Гильдия: {result.defender.guild}</div>
+                    )}
                     {renderTeamWithPatronage(result.defender, false)}
                   </div>
                 </div>
                 <div className="battle-footer">
                   <div className="selected-summary">
-                    <strong>Совпадения в защите:</strong>
                     <div className="selected-creatures-list">
-                     
                       {selectedCreatures[0] && (
                         <span className="selected-creature-tag pet-tag">
                           {selectedCreatures[0]} (питомец)

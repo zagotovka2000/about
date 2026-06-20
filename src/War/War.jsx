@@ -1,41 +1,42 @@
 // War.js
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './War.css';
-  // ---------- Константы ----------
-  const TITAN_TYPES = {
-   light: ['Сол', 'Ияр', 'Риг', 'Амо','Люм'],
-   dark: ['Тен', 'Бру', 'Мор', 'Кер'],
-   water: ['Сиг', 'Тид', 'Нов', 'Маи', 'Гип'],
-   fire: ['Ара', 'Мол', 'Аше', 'Игн', 'Вул'],
-   wood: ['Эде', 'Анг', 'Ава', 'Сил', 'Вер']
- };
 
- const TYPE_TO_TOTEM = {
-   light: 'С',
-   dark: 'Т',
-   water: 'В',
-   fire: 'О',
-   wood: 'Д'
- };
+// ---------- Константы ----------
+const TITAN_TYPES = {
+  light: ['Сол', 'Ияр', 'Риг', 'Амо','Люм'],
+  dark: ['Тен', 'Бру', 'Мор', 'Кер'],
+  water: ['Сиг', 'Тид', 'Нов', 'Маи', 'Гип'],
+  fire: ['Ара', 'Мол', 'Аше', 'Игн', 'Вул'],
+  wood: ['Эде', 'Анг', 'Ава', 'Сил', 'Вер']
+};
 
- const TITAN_WEIGHTS = {
-   'Вер': 2,
-   'Аше': 2,
-   'Тид': 2
- };
+const TYPE_TO_TOTEM = {
+  light: 'С',
+  dark: 'Т',
+  water: 'В',
+  fire: 'О',
+  wood: 'Д'
+};
 
- const TYPE_THRESHOLDS = {
-   light: 2,
-   dark: 2,
-   water: 3,
-   fire: 3,
-   wood: 3
- };
+const TITAN_WEIGHTS = {
+  'Вер': 2,
+  'Аше': 2,
+  'Тид': 2
+};
 
- const SKILL_GROUPS = {
-   group1: ['ПВ', 'ЛП', 'ГН', 'ТП', 'ШГ', 'ГС'],
-   group2: ['ПД', 'ПР', 'ЭЭ', 'ТК', 'ЗС']
- };
+const TYPE_THRESHOLDS = {
+  light: 2,
+  dark: 2,
+  water: 3,
+  fire: 3,
+  wood: 3
+};
+
+const SKILL_GROUPS = {
+  group1: ['ПВ', 'ЛП', 'ГН', 'ТП', 'ШГ', 'ГС'],
+  group2: ['ПД', 'ПР', 'ЭЭ', 'ТК', 'ЗС']
+};
 
 const War = () => {
   const [selectedTitans, setSelectedTitans] = useState(Array(7).fill(null));
@@ -51,6 +52,18 @@ const War = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasSearched, setHasSearched] = useState(false);
   const [loadError, setLoadError] = useState(null);
+  
+  // Состояния для поиска по нику защищающегося
+  const [defenderNameSearch, setDefenderNameSearch] = useState('');
+  const [isNameSearchActive, setIsNameSearchActive] = useState(false);
+
+  // Состояние для модального окна сообщений
+  const [messageModal, setMessageModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info', // 'info', 'warning', 'error', 'success'
+  });
 
   // Состояние для умений тотемов
   const [totemSkills, setTotemSkills] = useState([[null, null], [null, null]]);
@@ -60,7 +73,6 @@ const War = () => {
     slotIndex: null,
     group: null,
   });
-
 
   // ---------- Вспомогательные функции ----------
   const getTitanType = useCallback((titanName) => {
@@ -147,61 +159,74 @@ const War = () => {
     return matches.map(m => m.split('(')[0]);
   }, []);
 
-  // ---------- Загрузка данных ----------
-  const processFileLines = useCallback((lines, allBattles, titanSet, headers) => {
-    lines.forEach((line, idx) => {
-      try {
-        let values = line.split(',');
-        while (values.length < headers.length) {
-          values.push('');
-        }
-        values = values.map(v => v.trim());
-
-        const battle = {};
-        headers.forEach((header, i) => {
-          battle[header] = values[i] || '';
-        });
-
-        if (!battle['att team'] || !battle['team']) return;
-
-        allBattles.push(battle);
-
-        const attTitans = extractTitansFromTeam(battle['att team']);
-        attTitans.forEach(t => titanSet.add(t));
-
-        const defTitans = extractTitansFromTeam(battle['team']);
-        defTitans.forEach(t => titanSet.add(t));
-
-      } catch (err) {
-        console.error('Ошибка парсинга строки:', err, line);
-      }
-    });
-  }, [extractTitansFromTeam]);
-
-  const loadAllFiles = useCallback(async () => {
+  // ---------- Загрузка данных из одного CSV файла ----------
+  const loadData = useCallback(async () => {
     setIsLoading(true);
     setLoadError(null);
 
     const allBattles = [];
     const titanSet = new Set();
-    let headers = [];
 
     const fileName = '/smBattleTitan/processed/all_titan_battles.csv';
+    
     try {
+      console.log('Загрузка файла:', fileName);
       const response = await fetch(fileName);
+      
       if (!response.ok) {
-        throw new Error(`Ошибка загрузки: ${response.status}`);
+        throw new Error(`Ошибка загрузки: ${response.status} - ${response.statusText}`);
       }
+      
       const text = await response.text();
       const lines = text.split('\n').filter(line => line.trim() !== '');
-
-      if (lines.length > 0) {
-        headers = lines[0].split(',').map(h => h.trim());
-        processFileLines(lines.slice(1), allBattles, titanSet, headers);
+      
+      if (lines.length < 2) {
+        throw new Error('Файл пустой или содержит только заголовки');
       }
+      
+      const headers = lines[0].split(',').map(h => h.trim());
+      console.log('Заголовки:', headers);
+      console.log(`Найдено строк данных: ${lines.length - 1}`);
+      
+      // Обрабатываем строки файла
+      for (let i = 1; i < lines.length; i++) {
+        try {
+          let values = lines[i].split(',');
+          while (values.length < headers.length) {
+            values.push('');
+          }
+          values = values.map(v => v.trim());
+
+          const battle = {};
+          headers.forEach((header, idx) => {
+            battle[header] = values[idx] || '';
+          });
+
+          if (!battle['att team'] || !battle['team']) continue;
+
+          allBattles.push(battle);
+
+          // Собираем титанов
+          const attTitans = extractTitansFromTeam(battle['att team']);
+          attTitans.forEach(t => titanSet.add(t));
+
+          const defTitans = extractTitansFromTeam(battle['team']);
+          defTitans.forEach(t => titanSet.add(t));
+
+        } catch (err) {
+          console.error('Ошибка парсинга строки:', err, lines[i]);
+        }
+      }
+
+      if (allBattles.length === 0) {
+        throw new Error('Не удалось загрузить данные из файла');
+      }
+
     } catch (error) {
-      console.error('Ошибка загрузки файла:', error);
-      setLoadError('Не удалось загрузить данные. Проверьте путь к файлу.');
+      console.error('Ошибка загрузки данных:', error);
+      setLoadError(`Не удалось загрузить данные: ${error.message}`);
+      setIsLoading(false);
+      return;
     }
 
     const sortedTitans = Array.from(titanSet).sort((a, b) => a.localeCompare(b, 'ru'));
@@ -209,26 +234,114 @@ const War = () => {
     setBattleData(allBattles);
     setIsLoading(false);
     console.log(`Загружено боёв: ${allBattles.length}, уникальных титанов: ${sortedTitans.length}`);
-  }, [processFileLines]);
+  }, [extractTitansFromTeam]);
 
   useEffect(() => {
-    loadAllFiles();
-  }, [loadAllFiles]);
+    loadData();
+  }, [loadData]);
 
-  // ---------- Поиск (с учётом умений) ----------
+  // ---------- Показать модальное сообщение ----------
+  const showMessage = useCallback((title, message, type = 'info') => {
+    setMessageModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+    });
+  }, []);
+
+  const closeMessageModal = useCallback(() => {
+    setMessageModal({
+      isOpen: false,
+      title: '',
+      message: '',
+      type: 'info',
+    });
+  }, []);
+
+  // ---------- Поиск по нику защищающегося ----------
+  const handleDefenderNameSearch = useCallback(() => {
+    if (isLoading) {
+      showMessage('Загрузка данных', 'Данные ещё загружаются. Пожалуйста, подождите.', 'warning');
+      return;
+    }
+
+    if (!defenderNameSearch.trim()) {
+      showMessage('Введите ник', 'Пожалуйста, введите ник защищающегося для поиска.', 'warning');
+      return;
+    }
+
+    setIsSearching(true);
+    setHasSearched(true);
+    setIsNameSearchActive(true);
+    setSearchResults([]);
+
+    const searchName = defenderNameSearch.trim();
+    const results = [];
+
+    // Ищем во всех загруженных боях
+    battleData.forEach((battle, index) => {
+      try {
+        const defenderName = battle['def name'] || '';
+        // Сравниваем имена (регистронезависимо)
+        if (defenderName.toLowerCase().includes(searchName.toLowerCase())) {
+          const defTeamString = battle['team'];
+          const defTitans = extractTitansFromTeam(defTeamString);
+          const attTeamString = battle['att team'];
+          const attTitans = extractTitansFromTeam(attTeamString);
+
+          results.push({
+            id: index,
+            attacker: {
+              name: battle['att name'] || '',
+              power: battle['att power'] || '',
+              titans: attTitans,
+            },
+            defender: {
+              name: defenderName,
+              power: battle['def power'] || '',
+              titans: defTitans,
+              guild: battle['def guild'] || '',
+            },
+            aTotem: battle['A flag/totem'] || '',
+            dTotem: battle['D flag/totem'] || '',
+            aTotemDesc: battle['A flag desc/Totem skills'] || '',
+            dTotemDesc: battle['D flag desc/Totem skills'] || '',
+            replay: battle['replay'] || '',
+            date: battle['date time'] || '',
+          });
+        }
+      } catch (err) {
+        console.error(`Ошибка обработки боя ${index}:`, err);
+      }
+    });
+
+    setSearchResults(results);
+    setIsSearching(false);
+    
+    if (results.length === 0) {
+      showMessage(
+        'Нэт ничего 😢',
+        `Боев с полуёбком "${searchName}" не найдено в этой ебучей базе.`,
+        'error'
+      );
+    }
+  }, [battleData, isLoading, defenderNameSearch, extractTitansFromTeam, showMessage]);
+
+  // ---------- Поиск по титанам (оригинальная функция) ----------
   const handleSearch = useCallback(() => {
     if (isLoading) {
-      alert('Данные ещё загружаются. Пожалуйста, подождите.');
+      showMessage('Загрузка данных', 'Данные ещё загружаются. Пожалуйста, подождите.', 'warning');
       return;
     }
     if (battleData.length === 0) {
-      alert('Нет данных для поиска.');
+      showMessage('Нет данных', 'Нет данных для поиска. Проверьте загрузку файла.', 'error');
       return;
     }
 
     const selectedTitansList = selectedTitans.slice(2).filter(t => t !== null);
     if (selectedTitansList.length === 0) {
-      alert('Выберите хотя бы одного титана для поиска.');
+      showMessage('Выберите титанов', 'Пожалуйста, выберите хотя бы одного титана для поиска.', 'warning');
       return;
     }
 
@@ -243,6 +356,7 @@ const War = () => {
     }
 
     setHasSearched(true);
+    setIsNameSearchActive(false);
     setIsSearching(true);
     setSearchResults([]);
 
@@ -291,20 +405,22 @@ const War = () => {
         results.push({
           id: index,
           attacker: {
-            name: battle['att name'],
-            power: battle['att power'],
+            name: battle['att name'] || '',
+            power: battle['att power'] || '',
             titans: attTitans,
           },
           defender: {
-            name: battle['def name'],
-            power: battle['def power'],
+            name: battle['def name'] || '',
+            power: battle['def power'] || '',
             titans: defTitans,
+            guild: battle['def guild'] || '',
           },
           aTotem: battle['A flag/totem'] || '',
           dTotem: battle['D flag/totem'] || '',
           aTotemDesc: battle['A flag desc/Totem skills'] || '',
           dTotemDesc: battle['D flag desc/Totem skills'] || '',
           replay: battle['replay'] || '',
+          date: battle['date time'] || '',
         });
       } catch (err) {
         console.error(`Ошибка обработки боя ${index}:`, err);
@@ -313,7 +429,15 @@ const War = () => {
 
     setSearchResults(results);
     setIsSearching(false);
-  }, [battleData, isLoading, selectedTitans, totemSkills, extractTitansFromTeam, parseTotems, parseSkills]);
+    
+    if (results.length === 0) {
+      showMessage(
+        'Ничего не найдено 😢',
+        'Таких пачек пока нет в нашей базе данных. Попробуйте изменить набор титанов.',
+        'error'
+      );
+    }
+  }, [battleData, isLoading, selectedTitans, totemSkills, extractTitansFromTeam, parseTotems, parseSkills, showMessage]);
 
   // ---------- Работа с выбором титанов ----------
   const availableForSelection = useMemo(() => {
@@ -323,13 +447,13 @@ const War = () => {
 
   const handleCellClick = useCallback((index) => {
     if (isLoading) {
-      alert('Данные ещё загружаются.');
+      showMessage('Загрузка данных', 'Данные ещё загружаются. Пожалуйста, подождите.', 'warning');
       return;
     }
     if (index < 2) return;
     setSelectionList(availableForSelection);
     setSelectionModal({ isOpen: true, cellIndex: index });
-  }, [isLoading, availableForSelection]);
+  }, [isLoading, availableForSelection, showMessage]);
 
   const handleTitanSelect = useCallback((titanName) => {
     const newSelected = [...selectedTitans];
@@ -374,6 +498,8 @@ const War = () => {
     resetTotemSkills();
     setHasSearched(false);
     setSearchResults([]);
+    setIsNameSearchActive(false);
+    setDefenderNameSearch('');
   }, [selectedTitans, computeTotemsFromTitans, resetTotemSkills]);
 
   // ---------- Работа с умениями тотемов ----------
@@ -423,7 +549,7 @@ const War = () => {
     );
   }, []);
 
-  // Рендер тотемов в результатах поиска (без изменений, но используем useCallback с зависимостями)
+  // Рендер тотемов в результатах поиска
   const renderTotems = useCallback((totemString, skillString, side) => {
     const totems = parseTotems(totemString);
     const skills = parseSkills(skillString);
@@ -512,7 +638,13 @@ const War = () => {
   if (loadError) {
     return (
       <div className="war-container">
-        <div className="error-message">{loadError}</div>
+        <div className="error-message">
+          <h2>Ошибка загрузки данных</h2>
+          <p>{loadError}</p>
+          <button onClick={() => window.location.reload()}>
+            Попробовать снова
+          </button>
+        </div>
       </div>
     );
   }
@@ -525,6 +657,45 @@ const War = () => {
         <div className="data-info">
           <p>Загружено боёв: {battleData.length}</p>
         </div>
+
+        {/* Поиск по нику защищающегося */}
+        <div className="search-by-name-container">
+          <div className="search-by-name-wrapper">
+            <input
+              type="text"
+              className="search-by-name-input"
+              placeholder="Поиск боя по нику защищающегося..."
+              value={defenderNameSearch}
+              onChange={(e) => setDefenderNameSearch(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleDefenderNameSearch();
+                }
+              }}
+            />
+            <button
+              className="search-by-name-button"
+              onClick={handleDefenderNameSearch}
+              disabled={isSearching || !defenderNameSearch.trim() || battleData.length === 0}
+            >
+              {isSearching ? 'Поиск...' : 'Найти по нику'}
+            </button>
+          </div>
+          {isNameSearchActive && (
+            <button
+              className="clear-name-search-button"
+              onClick={() => {
+                setDefenderNameSearch('');
+                setIsNameSearchActive(false);
+                setSearchResults([]);
+                setHasSearched(false);
+              }}
+            >
+              Очистить поиск по нику
+            </button>
+          )}
+        </div>
+
 
         {/* 7 ячеек */}
         <div className="selected-titans-container">
@@ -600,7 +771,7 @@ const War = () => {
             <button
               onClick={handleSearch}
               className="search-button"
-              disabled={isSearching || selectedTitans.slice(2).every(t => t === null)}
+              disabled={isSearching || selectedTitans.slice(2).every(t => t === null) || battleData.length === 0}
             >
               {isSearching ? 'Поиск...' : 'Найти победные пачки'}
             </button>
@@ -617,9 +788,8 @@ const War = () => {
           <div className="titan-selection-content">
             <div className="selection-modal-header">
               <h3>
-                Выберите титана для ячейки {selectionModal.cellIndex - 1}
+                Выберите уёбка {selectionModal.cellIndex - 1}
                 <br />
-                <small>Доступно: {selectionList.length}</small>
               </h3>
               <button
                 className="close-selection-modal"
@@ -702,26 +872,61 @@ const War = () => {
         </div>
       )}
 
+      {/* Модальное окно для сообщений */}
+      {messageModal.isOpen && (
+        <div className="message-modal-overlay" onClick={closeMessageModal}>
+          <div className={`message-modal-content message-${messageModal.type}`} onClick={(e) => e.stopPropagation()}>
+            <div className="message-modal-header">
+              <div className="message-modal-icon">
+                {messageModal.type === 'success' && '✅'}
+                {messageModal.type === 'warning' && '⚠️'}
+                {messageModal.type === 'info' && 'ℹ️'}
+              </div>
+              <h3>{messageModal.title}</h3>
+              <button className="message-modal-close" onClick={closeMessageModal}>×</button>
+            </div>
+            <div className="message-modal-body">
+              <p>{messageModal.message}</p>
+            </div>
+            <div className="message-modal-footer">
+              <button className="message-modal-button" onClick={closeMessageModal}>
+                МНЕ ПОХУЙ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Результаты поиска */}
       {hasSearched && !isSearching && searchResults.length === 0 ? (
         <div className="war-lower-container no-results">
-          <div className="no-results-message">ТАКОГО ГАВНА ПОКА НЕ ОБНАРУЖЕНО В НАШЕЙ БАЗЕ</div>
+          <div className="no-results-message">
+            {isNameSearchActive 
+              ? `Боев с пачкой защиты "${defenderNameSearch}" не найдено`
+              : 'ТАКОГО ГАВНА ПОКА НЕ ОБНАРУЖЕНО В НАШЕЙ БАЗЕ'}
+          </div>
         </div>
       ) : searchResults.length > 0 && (
         <div className="war-lower-container">
           <div className="results-header">
             <h3 className="results-title">
-              Победивший в атаке ← Найдено {searchResults.length} боёв → Проигравший в обороне
+              {isNameSearchActive 
+                ? `Найдено ${searchResults.length} победных боёв с пачкой защиты "${defenderNameSearch}"`
+                : `Победивший в атаке ← Найдено ${searchResults.length} боёв → Проигравший в обороне`
+              }
             </h3>
           </div>
 
           <div className="results-list">
             {searchResults.map((result, idx) => (
               <div key={idx} className="battle-result-item">
+                {result.date && (
+                  <div className="battle-date">📅 {result.date}</div>
+                )}
                 <div className="battle-teams-container">
                   <div className="team-container attacking-team">
                     <div className="team-header">
-                      <span className="player-name">{result.attacker.name}</span>
+                      <span className="player-name">⚔️ {result.attacker.name}</span>
                       <span className="player-power">{result.attacker.power}</span>
                     </div>
                     {renderTitansTeam(result.attacker.titans)}
@@ -734,15 +939,16 @@ const War = () => {
 
                   <div className="team-container defending-team">
                     <div className="team-header">
-                      <span className="player-name">{result.defender.name}</span>
+                      <span className="player-name">🛡️ {result.defender.name}</span>
                       <span className="player-power">{result.defender.power}</span>
                     </div>
+                    {result.defender.guild && (
+                      <div className="guild-info">🏰 Гильдия: {result.defender.guild}</div>
+                    )}
                     {renderTitansTeam(result.defender.titans)}
                     {renderTotems(result.dTotem, result.dTotemDesc, 'defense')}
                   </div>
                 </div>
-
-
               </div>
             ))}
           </div>

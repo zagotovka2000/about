@@ -1010,3 +1010,799 @@
    overflow: hidden;
    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
  }
+/* Поиск по нику */
+.search-by-name-container {
+   margin: 20px 0;
+   padding: 15px;
+   background: #f8f9fa;
+   border-radius: 10px;
+   border: 2px solid #3498db;
+ }
+ 
+ .search-by-name-wrapper {
+   display: flex;
+   gap: 10px;
+   align-items: center;
+   flex-wrap: wrap;
+ }
+ 
+ .search-by-name-input {
+   flex: 1;
+   min-width: 200px;
+   padding: 12px 16px;
+   border: 2px solid #ddd;
+   border-radius: 8px;
+   font-size: 16px;
+   transition: border-color 0.3s ease;
+ }
+ 
+ .search-by-name-input:focus {
+   outline: none;
+   border-color: #3498db;
+   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+ }
+ 
+ .search-by-name-button {
+   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+   color: white;
+   border: none;
+   padding: 12px 24px;
+   border-radius: 8px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+ }
+ 
+ .search-by-name-button:hover:not(:disabled) {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+ }
+ 
+ .search-by-name-button:disabled {
+   background: #bdc3c7;
+   cursor: not-allowed;
+ }
+ 
+ .clear-name-search-button {
+   background: #e74c3c;
+   color: white;
+   border: none;
+   padding: 8px 16px;
+   border-radius: 6px;
+   font-size: 14px;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   margin-top: 10px;
+ }
+ 
+ .clear-name-search-button:hover {
+   background: #c0392b;
+ }
+ 
+ .search-divider {
+   text-align: center;
+   color: #95a5a6;
+   font-weight: 600;
+   margin: 20px 0;
+   position: relative;
+ }
+ 
+ .search-divider::before,
+ .search-divider::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   width: 40%;
+   height: 1px;
+   background: #ddd;
+ }
+ 
+ .search-divider::before {
+   left: 0;
+ }
+ 
+ .search-divider::after {
+   right: 0;
+ }
+ 
+ /* Информация о результатах */
+ .source-info {
+   text-align: center;
+   color: #7f8c8d;
+   font-size: 14px;
+   margin-top: 5px;
+ }
+ 
+ .battle-date {
+   font-size: 13px;
+   color: #7f8c8d;
+   text-align: center;
+   margin-bottom: 10px;
+   font-weight: 500;
+ }
+ 
+ .battle-source {
+   font-size: 12px;
+   color: #95a5a6;
+   text-align: center;
+   margin-bottom: 15px;
+   background: #f0f0f0;
+   padding: 4px 12px;
+   border-radius: 12px;
+   display: inline-block;
+   margin-left: auto;
+   margin-right: auto;
+   width: fit-content;
+ }
+ 
+ /* Адаптивность */
+ @media (max-width: 768px) {
+   .search-by-name-wrapper {
+     flex-direction: column;
+   }
+   
+   .search-by-name-input {
+     width: 100%;
+   }
+   
+   .search-by-name-button {
+     width: 100%;
+   }
+   
+   .search-divider::before,
+   .search-divider::after {
+     width: 30%;
+   }
+ }
+/* Поиск по нику */
+.search-by-name-container {
+   margin: 20px 0;
+   padding: 15px;
+   background: #f8f9fa;
+   border-radius: 10px;
+   border: 2px solid #3498db;
+ }
+ 
+ .search-by-name-wrapper {
+   display: flex;
+   gap: 10px;
+   align-items: center;
+   flex-wrap: wrap;
+ }
+ 
+ .search-by-name-input {
+   flex: 1;
+   min-width: 200px;
+   padding: 12px 16px;
+   border: 2px solid #ddd;
+   border-radius: 8px;
+   font-size: 16px;
+   transition: border-color 0.3s ease;
+ }
+ 
+ .search-by-name-input:focus {
+   outline: none;
+   border-color: #3498db;
+   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+ }
+ 
+ .search-by-name-button {
+   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+   color: white;
+   border: none;
+   padding: 12px 24px;
+   border-radius: 8px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+ }
+ 
+ .search-by-name-button:hover:not(:disabled) {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+ }
+ 
+ .search-by-name-button:disabled {
+   background: #bdc3c7;
+   cursor: not-allowed;
+ }
+ 
+ .clear-name-search-button {
+   background: #e74c3c;
+   color: white;
+   border: none;
+   padding: 8px 16px;
+   border-radius: 6px;
+   font-size: 14px;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   margin-top: 10px;
+ }
+ 
+ .clear-name-search-button:hover {
+   background: #c0392b;
+ }
+ 
+ .search-divider {
+   text-align: center;
+   color: #95a5a6;
+   font-weight: 600;
+   margin: 20px 0;
+   position: relative;
+ }
+ 
+ .search-divider::before,
+ .search-divider::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   width: 40%;
+   height: 1px;
+   background: #ddd;
+ }
+ 
+ .search-divider::before {
+   left: 0;
+ }
+ 
+ .search-divider::after {
+   right: 0;
+ }
+ 
+ .battle-date {
+   font-size: 13px;
+   color: #7f8c8d;
+   text-align: center;
+   margin-bottom: 10px;
+   font-weight: 500;
+   background: #f0f0f0;
+   padding: 4px 12px;
+   border-radius: 12px;
+   display: inline-block;
+   margin-left: auto;
+   margin-right: auto;
+   width: fit-content;
+ }
+/* Фильтр по очкам */
+.points-filter-container {
+   margin-top: 12px;
+   display: flex;
+   align-items: center;
+   gap: 15px;
+   flex-wrap: wrap;
+ }
+ 
+ .filter-label {
+   font-weight: 600;
+   color: #2c3e50;
+   font-size: 14px;
+ }
+ 
+ .filter-buttons {
+   display: flex;
+   gap: 8px;
+   flex-wrap: wrap;
+ }
+ 
+ .filter-button {
+   padding: 6px 16px;
+   border: 2px solid #ddd;
+   border-radius: 20px;
+   background: white;
+   cursor: pointer;
+   font-size: 13px;
+   font-weight: 600;
+   transition: all 0.3s ease;
+   color: #555;
+ }
+ 
+ .filter-button:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+ }
+ 
+ .filter-button.active {
+   border-color: #3498db;
+   background: #3498db;
+   color: white;
+ }
+ 
+ .filter-button.filter-35.active {
+   border-color: #27ae60;
+   background: #27ae60;
+   color: white;
+ }
+ 
+ .filter-button.filter-less35.active {
+   border-color: #e74c3c;
+   background: #e74c3c;
+   color: white;
+ }
+ 
+ /* Стили для результатов с очками */
+ .battle-points {
+   text-align: center;
+   margin-bottom: 10px;
+ }
+ 
+ .points-badge {
+   display: inline-block;
+   padding: 4px 16px;
+   border-radius: 20px;
+   font-weight: 700;
+   font-size: 14px;
+ }
+ 
+ .points-35-badge {
+   background: #27ae60;
+   color: white;
+   border: 2px solid #1e8449;
+ }
+ 
+ .points-less35-badge {
+   background: #e74c3c;
+   color: white;
+   border: 2px solid #c0392b;
+ }
+ 
+ /* Рамки для результатов в зависимости от очков */
+ .battle-result-item {
+   background: #f8f9fa;
+   border-radius: 12px;
+   padding: 20px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+   border: 4px solid #e0e0e0;
+   transition: all 0.3s ease;
+ }
+ 
+ .battle-result-item.points-35 {
+   border-color: #27ae60;
+   background: linear-gradient(135deg, #f0fff4 0%, #e8f5e9 100%);
+   box-shadow: 0 4px 16px rgba(39, 174, 96, 0.2);
+ }
+ 
+ .battle-result-item.points-35:hover {
+   box-shadow: 0 6px 24px rgba(39, 174, 96, 0.3);
+   transform: translateY(-2px);
+ }
+ 
+ .battle-result-item.points-less35 {
+   border-color: #e74c3c;
+   background: linear-gradient(135deg, #fff5f5 0%, #fde8e8 100%);
+   box-shadow: 0 4px 16px rgba(231, 76, 60, 0.15);
+ }
+ 
+ .battle-result-item.points-less35:hover {
+   box-shadow: 0 6px 24px rgba(231, 76, 60, 0.25);
+   transform: translateY(-2px);
+ }
+ 
+ /* Адаптивность */
+ @media (max-width: 768px) {
+   .points-filter-container {
+     flex-direction: column;
+     align-items: stretch;
+     gap: 10px;
+   }
+   
+   .filter-buttons {
+     justify-content: center;
+   }
+   
+   .filter-button {
+     flex: 1;
+     text-align: center;
+     min-width: 80px;
+   }
+ }
+/* Модальное окно для сообщений */
+.message-modal-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.7);
+   backdrop-filter: blur(8px);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 2000;
+   animation: fadeIn 0.3s ease;
+ }
+ 
+ .message-modal-content {
+   background: white;
+   border-radius: 20px;
+   max-width: 500px;
+   width: 90%;
+   overflow: hidden;
+   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+   animation: slideUp 0.4s ease;
+   border: 3px solid #ddd;
+ }
+ 
+ .message-modal-content.message-success {
+   border-color: #27ae60;
+ }
+ 
+ .message-modal-content.message-error {
+   border-color: #e74c3c;
+ }
+ 
+ .message-modal-content.message-warning {
+   border-color: #f39c12;
+ }
+ 
+ .message-modal-content.message-info {
+   border-color: #3498db;
+ }
+ 
+ .message-modal-header {
+   padding: 20px 25px;
+   display: flex;
+   align-items: center;
+   gap: 15px;
+   border-bottom: 1px solid #eee;
+   background: #f8f9fa;
+ }
+ 
+ .message-modal-icon {
+   font-size: 32px;
+   line-height: 1;
+ }
+ 
+ .message-modal-header h3 {
+   margin: 0;
+   flex: 1;
+   font-size: 20px;
+   color: #2c3e50;
+ }
+ 
+ .message-modal-close {
+   background: none;
+   border: none;
+   font-size: 28px;
+   cursor: pointer;
+   color: #95a5a6;
+   padding: 0;
+   width: 36px;
+   height: 36px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50%;
+   transition: all 0.3s ease;
+ }
+ 
+ .message-modal-close:hover {
+   background: #ecf0f1;
+   color: #2c3e50;
+   transform: rotate(90deg);
+ }
+ 
+ .message-modal-body {
+   padding: 30px 25px;
+   background: white;
+ }
+ 
+ .message-modal-body p {
+   margin: 0;
+   font-size: 16px;
+   line-height: 1.6;
+   color: #34495e;
+ }
+ 
+ .message-modal-footer {
+   padding: 15px 25px 25px;
+   text-align: center;
+   background: white;
+ }
+ 
+ .message-modal-button {
+   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+   color: white;
+   border: none;
+   padding: 12px 40px;
+   border-radius: 30px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+ }
+ 
+ .message-modal-button:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+ }
+ 
+ .message-success .message-modal-button {
+   background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+ }
+ 
+ .message-success .message-modal-button:hover {
+   box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+ }
+ 
+ .message-error .message-modal-button {
+   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+ }
+ 
+ .message-error .message-modal-button:hover {
+   box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+ }
+ 
+ .message-warning .message-modal-button {
+   background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+ }
+ 
+ .message-warning .message-modal-button:hover {
+   box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
+ }
+ 
+ /* Анимации */
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+   to {
+     opacity: 1;
+   }
+ }
+ 
+ @keyframes slideUp {
+   from {
+     opacity: 0;
+     transform: translateY(50px) scale(0.9);
+   }
+   to {
+     opacity: 1;
+     transform: translateY(0) scale(1);
+   }
+ }
+ 
+ /* Адаптивность для модалки */
+ @media (max-width: 768px) {
+   .message-modal-content {
+     max-width: 95%;
+   }
+   
+   .message-modal-header {
+     padding: 15px 20px;
+   }
+   
+   .message-modal-header h3 {
+     font-size: 18px;
+   }
+   
+   .message-modal-body {
+     padding: 20px;
+   }
+   
+   .message-modal-body p {
+     font-size: 15px;
+   }
+   
+   .message-modal-button {
+     padding: 10px 30px;
+     font-size: 15px;
+   }
+ }
+ 
+ .search-divider {
+   text-align: center;
+   color: #95a5a6;
+   font-weight: 600;
+   margin: 20px 0;
+   position: relative;
+   height: 1px;
+   background: linear-gradient(to right, transparent, #ddd, transparent);
+ }
+ 
+ .search-divider::before {
+   content: 'ИЛИ';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background: white;
+   padding: 0 20px;
+   color: #95a5a6;
+ }
+/* Модальное окно для сообщений */
+.message-modal-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.7);
+   backdrop-filter: blur(8px);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 2000;
+   animation: fadeIn 0.3s ease;
+ }
+ 
+ .message-modal-content {
+   background: white;
+   border-radius: 20px;
+   max-width: 500px;
+   width: 90%;
+   overflow: hidden;
+   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+   animation: slideUp 0.4s ease;
+   border: 3px solid #ddd;
+ }
+ 
+ .message-modal-content.message-success {
+   border-color: #27ae60;
+ }
+ 
+ .message-modal-content.message-error {
+   border-color: #e74c3c;
+ }
+ 
+ .message-modal-content.message-warning {
+   border-color: #f39c12;
+ }
+ 
+ .message-modal-content.message-info {
+   border-color: #3498db;
+ }
+ 
+ .message-modal-header {
+   padding: 20px 25px;
+   display: flex;
+   align-items: center;
+   gap: 15px;
+   border-bottom: 1px solid #eee;
+   background: #f8f9fa;
+ }
+ 
+ .message-modal-icon {
+   font-size: 32px;
+   line-height: 1;
+   flex-shrink: 0;
+ }
+ 
+ .message-modal-header h3 {
+   margin: 0;
+   flex: 1;
+   font-size: 20px;
+   color: #2c3e50;
+ }
+ 
+ .message-modal-body {
+   padding: 30px 25px;
+   background: white;
+ }
+ 
+ .message-modal-body p {
+   margin: 0;
+   font-size: 16px;
+   line-height: 1.6;
+   color: #34495e;
+ }
+ 
+ .message-modal-footer {
+   padding: 15px 25px 25px;
+   text-align: center;
+   background: white;
+ }
+ 
+ .message-modal-button {
+   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+   color: white;
+   border: none;
+   padding: 12px 40px;
+   border-radius: 30px;
+   font-size: 16px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   min-width: 140px;
+ }
+ 
+ .message-modal-button:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+ }
+ 
+ .message-success .message-modal-button {
+   background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+ }
+ 
+ .message-success .message-modal-button:hover {
+   box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+ }
+ 
+ .message-error .message-modal-button {
+   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+ }
+ 
+ .message-error .message-modal-button:hover {
+   box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+ }
+ 
+ .message-warning .message-modal-button {
+   background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+ }
+ 
+ .message-warning .message-modal-button:hover {
+   box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
+ }
+ 
+ /* Анимации */
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+   to {
+     opacity: 1;
+   }
+ }
+ 
+ @keyframes slideUp {
+   from {
+     opacity: 0;
+     transform: translateY(50px) scale(0.9);
+   }
+   to {
+     opacity: 1;
+     transform: translateY(0) scale(1);
+   }
+ }
+ 
+ /* Адаптивность для модалки */
+ @media (max-width: 768px) {
+   .message-modal-content {
+     max-width: 95%;
+   }
+   
+   .message-modal-header {
+     padding: 15px 20px;
+   }
+   
+   .message-modal-header h3 {
+     font-size: 18px;
+   }
+   
+   .message-modal-body {
+     padding: 20px;
+   }
+   
+   .message-modal-body p {
+     font-size: 15px;
+   }
+   
+   .message-modal-button {
+     padding: 10px 30px;
+     font-size: 15px;
+     min-width: 120px;
+   }
+ }
+ 
+ .search-divider {
+   text-align: center;
+   color: #95a5a6;
+   font-weight: 600;
+   margin: 20px 0;
+   position: relative;
+   height: 1px;
+   background: linear-gradient(to right, transparent, #ddd, transparent);
+ }
+ 
+ .search-divider::before {
+   content: 'ИЛИ';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background: white;
+   padding: 0 20px;
+   color: #95a5a6;
+ }
