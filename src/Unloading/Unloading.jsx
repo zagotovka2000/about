@@ -108,7 +108,7 @@ const Unloading = () => {
       <div className="unloading-table">
         {/* Шапка таблицы */}
         <div className="table-header">
-          <div className="col-guild">Тип граждан</div>
+          <div className="col-guild">Граждане</div>
           <div className="col-all">Все бои</div>
           <div className="col-heroes">Победные бои герои</div>
           <div className="col-titans">Победные бои титаны</div>
