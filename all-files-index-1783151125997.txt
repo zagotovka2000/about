@@ -1,0 +1,190 @@
+📋 ИНДЕКС ВСЕХ ФАЙЛОВ
+================================================================================
+📁 Папка: /Users/imac/about
+📅 Создано: 7/4/2026, 10:45:26 AM
+📊 Всего файлов обработано: 165
+⚠️ Пропущено: 0
+================================================================================
+
+📦 ЧАСТЬ 1: all-files-part1-1783151125997.txt
+   📄 Файлов: 31
+   📂 Файлы:
+      - public/smBattle/processed/all_battles.json
+      - public/unloading/fREE-WING_06.06.26 все_бои.txt
+      - public/unloading/Wolverine_11.06.26 все_бои.txt
+      - public/unloading/БратьяПоРаз_11.05 все_бои.txt
+      - public/weeks/week35.txt
+      - public/smBattle/BreezeCenter_15.06.26  победные_бои_герои.txt
+      - public/smBattle/HEXOGONE_LEGION_2.0.txt
+      - src/Sm/UnloadingWars/UnloadingWars.css
+      - public/unloading/ВоиныСвета_25.05.txt
+      - public/smBattleTitan/Wolverine_11.06.26 победные_бои_титаны.txt
+      - public/unloading/Vahalla_18.06.26 победные_бои_титаны.txt
+      - public/unloading/Охотники_21.05.26 победные_бои_титаны.txt
+      - public/smBattleTitan/Solaris.txt
+      - public/smBattleTitan/BreezeCenter титаны 2.txt
+      - public/smBattleTitan/Renegaci 14.05.26 победные_бои_титаны.txt
+      - public/smBattleTitan/Братья по разуму 11.05.26 победные_бои_титаны.txt
+      - src/Soveti/Soveti.css
+      - src/Unloading/Unloading.jsx
+      - src/Nakazanie/Nakazanie.jsx
+      - src/Table/Table.jsx
+      - src/Nakazanie/nakazanie.module.css
+      - README.md
+      - src/Activ/Activ.jsx
+      - src/Asgard/asgard.css
+      - src/App.css
+      - public/index.html
+      - src/components/Audio/AudioControls.js
+      - src/Sm/sm.css
+      - vercel.json
+      - src/defensesPacks.json
+      - src/index.css
+
+📦 ЧАСТЬ 2: all-files-part2-1783151125997.txt
+   📄 Файлов: 57
+   📂 Файлы:
+      - public/smBattleTitan/processed/all_titan_battles.json
+      - src/Territory/Territory.jsx
+      - src/Territory/territory.css
+      - public/unloading/Vahalla_18.06.26 победные_бои_герои.txt
+      - public/weeks/week44.txt
+      - public/unloading/Wolverine_11.06.26 победные_бои_герои.txt
+      - public/smBattle/best of best.txt
+      - public/unloading/BreezeCenter_15.06 победные_бои_герои.txt
+      - public/smBattle/Renegaci Pl.txt
+      - public/smBattle/Valkyrie Legion.txt
+      - public/smBattle/дружба герои.txt
+      - public/smBattle/Sun.txt
+      - public/smBattle/Ya-Nolja.txt
+      - public/smBattle/leaf2.txt
+      - src/components/Arena/Arena.jsx
+      - public/smBattle/tamago_kake_gohan.txt
+      - public/smBattle/heroes.txt
+      - public/smBattle/Solaris.txt
+      - public/smBattle/Heros герои.txt
+      - src/StrongholdDefense/StrongholdDefense.css
+      - src/Asgard/WeekData/WeekData.css
+      - public/weeks/week47.txt
+      - public/smBattleTitan/best of best titans.txt
+      - public/smBattleTitan/Renegaci titans.txt
+      - public/smBattle/Охотники 21.05.26 победные_бои_герои.txt
+      - public/smBattle/Renegaci 17.05 победные бои герои.txt
+      - public/smBattleTitan/Heros титаны.txt
+      - public/arena/arena.txt
+      - public/smBattleTitan/Ya-Nolja.txt
+      - public/smBattleTitan/Valkyrie Legion titans.txt
+      - public/smBattleTitan/leaf.txt
+      - public/smBattle/Wolverine_11.06.26 победные_бои_герои.txt
+      - copy-all-files.js
+      - public/smBattleTitan/Death Awaits титаны 3 2.txt
+      - processSmFilesHeroes.js
+      - public/smBattleTitan/FRANKO FOLIE_22.06.26 победные_бои_титаны.txt
+      - public/unloading/Wolverine_11.06.26 победные_бои_титаны.txt
+      - public/smBattleTitan/Охотники 21.05.26 победные_бои_титаны.txt
+      - public/smBattleTitan/BreezeCenter_15.06.26 победные_бои_титаны.txt
+      - public/smBattleTitan/fREE-WING_06.06.26 победные_бои_титаны.txt
+      - src/Sm/UnloadingTitans/UnloadingTitans.css
+      - src/components/Monolith/Monolith.css
+      - src/Soveti/Soveti.jsx
+      - processSmFilesTitans.js
+      - src/components/Audio/AudioManager.js
+      - src/components/Monolith/Monolith.js
+      - src/Asgard/Asgard.jsx
+      - src/Sm/Sm.jsx
+      - src/App.js
+      - public/data/ga-manifest.json
+      - src/FileSelector/FileSelector.css
+      - public/unloading/manifest.json
+      - src/components/Modal/Modal.js
+      - src/FileSelector/FileSelector.jsx
+      - src/index.js
+      - src/setupTests.js
+      - src/components/Effects/Particles.css
+
+📦 ЧАСТЬ 3: all-files-part3-1783151125997.txt
+   📄 Файлов: 77
+   📂 Файлы:
+      - public/unloading/Vahalla_18.06.26 все_бои.txt
+      - public/unloading/Renegaci_14.05.26 все_бои.txt
+      - public/unloading/BreezeCenter_15.06.txt
+      - public/unloading/FRANK_FOLIE_22.06 все_бои.txt
+      - public/unloading/ВоиныСвета_25.05 все_бои.txt
+      - src/StrongholdDefense/StrongholdDefense.jsx
+      - public/unloading/Охотники_21.05.26 все_бои.txt
+      - public/weeks/week36.txt
+      - public/weeks/week37.txt
+      - public/weeks/week40.txt
+      - public/weeks/week42.txt
+      - public/weeks/week46.txt
+      - src/War/War.css
+      - public/weeks/week39.txt
+      - public/weeks/week45.txt
+      - src/War/War.jsx
+      - public/weeks/week41.txt
+      - public/unloading/Охотники_21.05.26 победные_бои_герои.txt
+      - public/unloading/FRANK_FOLIE_22.06 победные_бои_герои.txt
+      - public/unloading/Renegaci_17.05 победные бои герои.txt
+      - public/unloading/ВоиныСвета_25.05 победные_бои_герои.txt
+      - public/weeks/week38.txt
+      - public/weeks/week34.txt
+      - public/unloading/fREE-WING_06.06.26 победные_бои_герои.txt
+      - public/smBattle/RISING SUN .txt
+      - public/smBattle/Japan only.txt
+      - public/smBattle/Wind of Change.txt
+      - public/smBattle/Demon Slayer.txt
+      - public/smBattle/Scorching-trinity.txt
+      - public/smBattle/Wings_of_Destiny.txt
+      - src/Asgard/WeekData/WeekData.jsx
+      - public/smBattle/Охотники герои.txt
+      - public/smBattle/Alliance of Might.txt
+      - public/smBattle/KAOS.txt
+      - public/smBattle/fREE-WING_06.06.26 победные_бои_герои.txt
+      - public/smBattle/Vahalla_18.06.26 победные_бои_герои.txt
+      - public/smBattleTitan/Охотники титаны.txt
+      - src/components/Arena/Arena.css
+      - public/smBattleTitan/Scorching-Trinity titans.txt
+      - public/smBattleTitan/Japan only титаны.txt
+      - public/smBattle/wataha.txt
+      - public/smBattleTitan/дружба титаны 3.txt
+      - public/weeks/week43.txt
+      - public/smBattleTitan/Wind of Change титаны.txt
+      - public/smBattleTitan/Sun.txt
+      - public/smBattle/FRANKO FOLIE_22.06.26 победные_бои_герои.txt
+      - public/smBattle/ВоиныСвета 25.05.26 победные_бои_герои.txt
+      - public/smBattle/BreezeCenter герои 2.txt
+      - public/smBattle/БратьяПоРазуму 11.05.26 победные_бои_герои.txt
+      - public/unloading/БратьяПоРаз_11.05 победные_бои_герои.txt
+      - public/smBattleTitan/KAOS titans.txt
+      - public/smBattle/Death Awaits герои 3.txt
+      - src/Sm/UnloadingTitans/UnloadingTitans.jsx
+      - src/Sm/UnloadingWars/UnloadingWars.jsx
+      - public/smBattleTitan/ВоиныСвета 25.05.26 победные_бои_титаны.txt
+      - public/unloading/FRANK_FOLIE_22.06 победные_бои_титаны.txt
+      - public/smBattleTitan/Vahalla_18.06.26 победные_бои_титаны.txt
+      - public/smBattleTitan/heroes.txt
+      - public/unloading/BreezeCenter_15.06 победные_бои_титаны.txt
+      - public/unloading/fREE-WING_06.06.26 победные_бои_титаны.txt
+      - public/smBattleTitan/Demon Slayer титаны.txt
+      - public/unloading/Renegaci_14.05.26 победные_бои_титаны.txt
+      - public/unloading/БратьяПоРаз_11.05 победные_бои_титаны.txt
+      - public/smBattleTitan/RISING SUN  2.txt
+      - src/Unloading/Unloading.css
+      - src/components/Modal/Modal.css
+      - src/Table/table.css
+      - processEditAndDeleteLines.js
+      - src/components/Effects/Particles.js
+      - public/config/playerNames.json
+      - src/components/Audio/AudioPlayer.jsx
+      - generateGAmanifest.js
+      - src/components/Audio/AudioPlayer.css
+      - package.json
+      - src/Activ/activ.module.css
+      - src/setupProxy.js
+      - public/robots.txt
+
+================================================================================
+📁 СОЗДАННЫЕ ФАЙЛЫ:
+   1. all-files-part1-1783151125997.txt (1.7 MB)
+   2. all-files-part2-1783151125997.txt (1.7 MB)
+   3. all-files-part3-1783151125997.txt (1.7 MB)
