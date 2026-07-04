@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Monolith from './components/Monolith/Monolith';
 import Modal from './components/Modal/Modal';
-import AudioManager from './components/Audio/AudioManager';
 import Particles from './components/Effects/Particles';
 import './App.css';
 
@@ -14,8 +13,6 @@ import Soveti from './Soveti/Soveti';
 import Territory from './Territory/Territory';
 import Activ from './Activ/Activ';
 import Nakazanie from './Nakazanie/Nakazanie';
-import AudioPlayer from './components/Audio/AudioPlayer';
-import Arena from './components/Arena/Arena';
 import Unloading from './Unloading/Unloading';
 import Table from './Table/Table';
 
@@ -43,38 +40,14 @@ function App() {
     setModalOpen(true);
   };
 
-  const handleArenaClick = () => {
-    setModalTitle('Арена');
-    setModalContent(<Arena />);
-    setModalOpen(true);
-  };
 
   return (
     <div className="App">
-      <AudioManager />
       <Particles />
       <Monolith sections={sections} onSectionClick={handleSectionClick} />
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
         {modalContent}
       </Modal>
-      <AudioPlayer />
-      {/* Невидимая кнопка арены */}
-      <button
-        onClick={handleArenaClick}
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          width: '50px',
-          height: '50px',
-          opacity: 0,
-          cursor: 'pointer',
-          background: 'transparent',
-          border: 'none',
-          zIndex: 9999,
-        }}
-        aria-label="Скрытая кнопка арены"
-      />
     </div>
   );
 }
