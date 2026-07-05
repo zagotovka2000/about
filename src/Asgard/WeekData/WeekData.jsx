@@ -60,6 +60,7 @@ const WeekData = ({ weekNumber }) => {
   // Загрузка всех файлов недель
   useEffect(() => {
     const weeksConfig = [
+      { number: 48, label: 'Ош 28.06.2026' },
       { number: 47, label: 'Маэстро 21.06.2026' },
       { number: 46, label: 'Ош 14.06.2026' },
       { number: 45, label: 'Маэстро 07.06.2026' },
