@@ -1,5 +1,5 @@
 // App.js
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Monolith from './components/Monolith/Monolith';
 import Modal from './components/Modal/Modal';
 import Particles from './components/Effects/Particles';
@@ -21,6 +21,52 @@ function App() {
   const [modalContent, setModalContent] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
 
+  // Ссылки на аудиоэлементы
+  const openSoundRef = useRef(null);
+  const closeSoundRef = useRef(null);
+
+  // Инициализация аудио при монтировании компонента
+  useEffect(() => {
+    // Создаем аудио объекты
+    openSoundRef.current = new Audio('/sounds/open-modal.mp3'); // Путь к звуку открытия
+    closeSoundRef.current = new Audio('/sounds/close-modal.mp3'); // Путь к звуку закрытия
+    
+    // Настройка громкости (опционально)
+    if (openSoundRef.current) {
+      openSoundRef.current.volume = 0.5;
+    }
+    if (closeSoundRef.current) {
+      closeSoundRef.current.volume = 0.5;
+    }
+
+    // Очистка при размонтировании
+    return () => {
+      if (openSoundRef.current) {
+        openSoundRef.current.pause();
+        openSoundRef.current = null;
+      }
+      if (closeSoundRef.current) {
+        closeSoundRef.current.pause();
+        closeSoundRef.current = null;
+      }
+    };
+  }, []);
+
+  // Функция воспроизведения звука с обработкой ошибок
+  const playSound = (audioRef) => {
+    try {
+      if (audioRef.current) {
+        // Перематываем на начало для возможности быстрого повторного воспроизведения
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(error => {
+          console.warn('Ошибка воспроизведения звука:', error);
+        });
+      }
+    } catch (error) {
+      console.warn('Ошибка воспроизведения звука:', error);
+    }
+  };
+
   // 8 секций – порядок влияет на расположение по кругу (первая сверху)
   const sections = [
     { id: 'territory', title: 'ГЕРОИ', component: <Territory /> },
@@ -38,14 +84,25 @@ function App() {
     setModalTitle(section.title);
     setModalContent(section.component);
     setModalOpen(true);
+    // Воспроизводим звук открытия
+    playSound(openSoundRef);
   };
 
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    // Воспроизводим звук закрытия
+    playSound(closeSoundRef);
+  };
 
   return (
     <div className="App">
       <Particles />
       <Monolith sections={sections} onSectionClick={handleSectionClick} />
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
+      <Modal 
+        isOpen={modalOpen} 
+        onClose={handleCloseModal} 
+        title={modalTitle}
+      >
         {modalContent}
       </Modal>
     </div>
