@@ -15,7 +15,7 @@ import Activ from './Activ/Activ';
 import Nakazanie from './Nakazanie/Nakazanie';
 import Unloading from './Unloading/Unloading';
 import Table from './Table/Table';
-
+import SmPlan from './SmPlan/SmPlan';
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
@@ -75,6 +75,7 @@ function App() {
     { id: 'soveti', title: 'АСГАРД', component: <Asgard /> },
     { id: 'asgard', title: 'СОВЕТЫ ОТ ДИАБЛО', component: <Soveti /> },
     { id: 'activ', title: 'АКТИВНОСТЬ', component: <Activ /> },
+    { id: 'smplan', title: 'ПЛАНИРОВЩИК', component: <SmPlan /> },
     { id: 'nakazanie', title: 'НАКАЗАНИЯ', component: <Nakazanie /> },
     { id: 'tournament', title: 'Выгрузки реплеев', component: <Unloading /> },
     { id: 'table', title: 'АРЕНА', component: <Table /> },

@@ -1,126 +1,124 @@
 [
    {
-     "name": "Оди",
-     "avatarUrl": "/images/analitics/Оди.jpg"
+      "name": "2718",
+      "avatarUrl": "/images/analitics/2718.jpg"
    },
+   {
+     "name": "3.14_ZDETS",
+     "avatarUrl": "/images/analitics/3.14_ZDETS.png"
+   },
+   {
+      "name": "3ve",
+      "avatarUrl": "/images/analitics/3ve.jpg"
+    },
+    {
+      "name": "Виларт",
+      "avatarUrl": "/images/analitics/Виларт.jpg"
+    },
+    {
+      "name": "Винни",
+      "avatarUrl": "/images/analitics/Винни.jpg"
+    },
+    {
+      "name": "ГошаПукаетВкозу",
+      "avatarUrl": "/images/analitics/ГошаПукаетВкозу.png"
+    },
+    {
+      "name": "Dobraia Feя",
+      "avatarUrl": "/images/analitics/Dobraia Feя.jpg"
+    },
+    {
+      "name": "КусьЗаЖопку",
+      "avatarUrl": "/images/analitics/КусьЗаЖопку.jpg"
+    },
+    {
+      "name": "Лапочка",
+      "avatarUrl": "/images/analitics/Лапочка.jpg"
+    },
+    {
+      "name": "Пунь Пунь",
+      "avatarUrl": "/images/analitics/Пунь Пунь.png"
+    },
+    {
+      "name": "Тема",
+      "avatarUrl": "/images/analitics/Тема.jpg"
+    },
+    {
+      "name": "Тихая",
+      "avatarUrl": "/images/analitics/Тихая.jpg"
+    },
+    {
+      "name": "Фартовый",
+      "avatarUrl": "/images/analitics/Фартовый.jpg"
+    },
+    {
+      "name": "B.i.G",
+      "avatarUrl": "/images/analitics/B.i.G.jpg"
+    },
+    {
+      "name": "bLanx",
+      "avatarUrl": "/images/analitics/bLanx.jpg"
+    },
+   {
+       "name": "Diablo",
+       "avatarUrl": "/images/analitics/Diablo.jpg"
+      },
+      {
+        "name": "FEDOR",
+        "avatarUrl": "/images/analitics/FEDOR.jpg"
+      },
+      {
+         "name": "G_G",
+         "avatarUrl": "/images/analitics/G_G.jpg"
+       },
+      {
+         "name": "Joker",
+         "avatarUrl": "/images/analitics/Joker.jpg"
+       },
+       {
+         "name": "Kamul27rus",
+         "avatarUrl": "/images/analitics/Kamul27rus.jpg"
+       },
+       {
+         "name": "MEDVED",
+         "avatarUrl": "/images/analitics/MEDVED.jpg"
+       },
+       {
+         "name": "Nata",
+         "avatarUrl": "/images/analitics/Nata.jpg"
+       },
+       {
+         "name": "Nergal",
+         "avatarUrl": "/images/analitics/Nergal.jpg"
+       }, 
+       {
+         "name": "rednaZ",
+         "avatarUrl": "/images/analitics/rednaZ.jpg"
+       }, 
+       {
+         "name": "SVAROG",
+         "avatarUrl": "/images/analitics/SVAROG.jpg"
+       },
+       {
+         "name": "VICTOR",
+         "avatarUrl": "/images/analitics/VICTOR.jpg"
+       },
+       {
+         "name": "YaElf",
+         "avatarUrl": "/images/analitics/YaElf.jpg"
+       },
    {
      "name": "ZOV",
      "avatarUrl": "/images/analitics/ZOV.png"
    },
-   {
-     "name": "Винни",
-     "avatarUrl": "/images/analitics/Винни.jpg"
-   },
-   {
-     "name": "Тема",
-     "avatarUrl": "/images/analitics/Тема.jpg"
-   },
+ 
+
+
    {
      "name": "Бальдр",
      "avatarUrl": "/images/analitics/Бальдр.jpg"
-   },
-   {
-     "name": "VICTOR",
-     "avatarUrl": "/images/analitics/VICTOR.jpg"
-   },
-   {
-     "name": "ГошаПукаетВкозу",
-     "avatarUrl": "/images/analitics/ГошаПукаетВкозу.png"
-   },
-    {
-     "name": "BIG",
-     "avatarUrl": "/images/analitics/BIG.jpg"
-   },
-   {
-     "name": "Нежданчик",
-     "avatarUrl": "/images/analitics/Нежданчик.png"
-   },
-   {
-     "name": "Rom",
-     "avatarUrl": "/images/analitics/Rom.jpg"
-   },
-   {
-     "name": "3.14_ZDETS",
-     "avatarUrl": "/images/analitics/3.14_ZDETS.jpg"
-   },
-   {
-     "name": "Тихая",
-     "avatarUrl": "/images/analitics/Тихая.jpg"
-   },
-   {
-     "name": "Nergal",
-     "avatarUrl": "/images/analitics/Nergal.jpg"
-   },
-   {
-     "name": "Виларт",
-     "avatarUrl": "/images/analitics/Виларт.jpg"
-   },
-   {
-     "name": "Пух",
-     "avatarUrl": "/images/analitics/Пух.jpg"
-   },
-   {
-     "name": "G_G",
-     "avatarUrl": "/images/analitics/G_G.jpg"
-   },
-   {
-     "name": "Diablo",
-     "avatarUrl": "/images/analitics/Diablo.png"
-   },
-   {
-     "name": "Nata",
-     "avatarUrl": "/images/analitics/Nata.jpg"
-   },
-   {
-     "name": "Орел",
-     "avatarUrl": "/images/analitics/Орел.jpg"
-   },
-   {
-     "name": "Лапочка",
-     "avatarUrl": "/images/analitics/Лапочка.jpg"
-   },
-   {
-     "name": "MEDVED",
-     "avatarUrl": "/images/analitics/MEDVED.jpg"
-   },
-   {
-     "name": "Kamul27rus",
-     "avatarUrl": "/images/analitics/Kamul27rus.jpg"
-   },
-   {
-     "name": "Фартовый",
-     "avatarUrl": "/images/analitics/Фартовый.jpg"
-   },
-   {
-     "name": "SVAROG",
-     "avatarUrl": "/images/analitics/SVAROG.jpg"
-   },
-   {
-     "name": "Wren",
-     "avatarUrl": "/images/analitics/Wren.jpg"
-   },
-   {
-     "name": "victori",
-     "avatarUrl": "/images/analitics/victori.jpg"
-   },
-   {
-     "name": "FEDOR",
-     "avatarUrl": "/images/analitics/FEDOR.jpg"
-   },
-   {
-     "name": "Пунь Пунь",
-     "avatarUrl": "/images/analitics/Пунь Пунь.jpg"
-   },
-   {
-     "name": "bLanx",
-     "avatarUrl": "/images/analitics/bLanx.jpg"
-   },
-   {
-     "name": "3ve",
-     "avatarUrl": "/images/analitics/3ve.jpg"
-   },
-   {
-     "name": "Эльф",
-     "avatarUrl": "/images/analitics/Эльф.jpg"
    }
+
+
+
  ]
