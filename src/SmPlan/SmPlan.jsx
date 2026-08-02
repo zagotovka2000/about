@@ -84,10 +84,15 @@ const SmPlan = () => {
   const [showModal, setShowModal] = useState(false);
   const [entryToDelete, setEntryToDelete] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
+  
+  // Модальные окна для ошибок валидации
+  const [showValidationModal, setShowValidationModal] = useState(false);
+  const [validationMessage, setValidationMessage] = useState('');
 
   const [enemyGuild, setEnemyGuild] = useState('');
   const [myScore, setMyScore] = useState('');
   const [enemyScore, setEnemyScore] = useState('');
+  const [rankPosition, setRankPosition] = useState('');
 
   const pointsNeeded = targetPoints - currentPoints;
 
@@ -254,24 +259,48 @@ const SmPlan = () => {
     setEntryToDelete(null);
   };
 
+  // Функция для показа валидационной ошибки
+  const showValidationError = (message) => {
+    setValidationMessage(message);
+    setShowValidationModal(true);
+  };
+
   const handleAddMatch = () => {
+    // Проверка названия гильдии
     if (!enemyGuild.trim()) {
-      alert('Пожалуйста, введите название гильдии уёбков');
+      showValidationError('Пожалуйста, введите название гильдии уёбков');
       return;
     }
+    
     const myScoreNum = parseInt(myScore);
     const enemyScoreNum = parseInt(enemyScore);
-    if (isNaN(myScoreNum) || isNaN(enemyScoreNum)) {
-      alert('Пожалуйста, введите корректные значения счета');
+    
+    // Проверка очков своей гильдии
+    if (isNaN(myScoreNum)) {
+      showValidationError('Пожалуйста, введите корректное количество очков для вашей гильдии');
       return;
     }
+    
+    // Проверка очков гильдии уёбков
+    if (isNaN(enemyScoreNum)) {
+      showValidationError('Пожалуйста, введите корректное количество очков для гильдии уёбков');
+      return;
+    }
+    
     if (myScoreNum < 0 || enemyScoreNum < 0) {
-      alert('Счет не может быть отрицательным');
+      showValidationError('Счет не может быть отрицательным');
+      return;
+    }
+
+    // Проверка места в рейтинге
+    const rankNum = parseInt(rankPosition);
+    if (isNaN(rankNum) || rankNum <= 0) {
+      showValidationError('Пожалуйста, введите корректное место в рейтинге (число больше 0)');
       return;
     }
 
     if (gamesLeft <= 0) {
-      alert('Все игры уже сыграны!');
+      showValidationError('Все игры уже сыграны!');
       return;
     }
 
@@ -288,7 +317,8 @@ const SmPlan = () => {
       scoreDisplay: `${myScoreNum}-${enemyScoreNum}`,
       timestamp: new Date().toLocaleString(),
       type: 'match',
-      matchResult: result
+      matchResult: result,
+      rankPosition: rankNum
     }];
 
     setHistory(newHistory);
@@ -299,6 +329,7 @@ const SmPlan = () => {
     setEnemyGuild('');
     setMyScore('');
     setEnemyScore('');
+    setRankPosition('');
   };
 
   const handleManualSave = async () => {
@@ -396,6 +427,16 @@ const SmPlan = () => {
               className="match-input"
             />
           </div>
+          <div className="match-input-group rank-input-group">
+            <input
+              type="number"
+              value={rankPosition}
+              onChange={(e) => setRankPosition(e.target.value)}
+              placeholder="Место в рейтинге"
+              className="match-input rank-input"
+              min="1"
+            />
+          </div>
           <button onClick={handleAddMatch} className="btn-add-match">
             ⚔️ Добавить
           </button>
@@ -429,6 +470,10 @@ const SmPlan = () => {
                         {item.matchResult?.type === 'draw' && '🤝 Ничья'}
                         {item.matchResult?.type === 'loss' && '💔 Поражение'}
                       </span>
+                    </div>
+                    <div className="rank-position">
+                      <span className="rank-label">📍 Место:</span>
+                      <span className="rank-value">#{item.rankPosition || '—'}</span>
                     </div>
                   </>
                 )}
@@ -482,6 +527,10 @@ const SmPlan = () => {
                     {entryToDelete.matchResult?.type === 'loss' && '💔 Поражение'}
                   </span>
                 </div>
+                <div className="preview-item">
+                  <span className="preview-label">Место в рейтинге:</span>
+                  <span className="preview-value">#{entryToDelete?.rankPosition || '—'}</span>
+                </div>
               </>
             )}
             <div className="preview-item">
@@ -526,6 +575,27 @@ const SmPlan = () => {
             </button>
             <button className="modal-btn-confirm" onClick={handleResetSeason} disabled={saving}>
               {saving ? 'Сброс...' : '✅ Сбросить сезон'}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Модальное окно для валидационных ошибок */}
+      <Modal 
+        isOpen={showValidationModal} 
+        onClose={() => setShowValidationModal(false)}
+        title="⚠️ Ошибка валидации"
+      >
+        <div className="modal-validation-content">
+          <div className="validation-icon">❌</div>
+          <p className="validation-message">{validationMessage}</p>
+          <div className="modal-delete-actions" style={{ justifyContent: 'center' }}>
+            <button 
+              className="modal-btn-confirm" 
+              onClick={() => setShowValidationModal(false)}
+              style={{ background: 'linear-gradient(135deg, #4ECDC4, #44a8a0)' }}
+            >
+              Понятно
             </button>
           </div>
         </div>
