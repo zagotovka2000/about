@@ -6,7 +6,7 @@ const getWeekType = (weekNumber) => (weekNumber % 2 === 0 ? 'osh' : 'maestro');
 // Конфигурация недель
 const weeksConfig = [ 
    { number: 48, label: 'Ош 26.07.2026' },
-   { number: 47, label: 'на удаление' },
+   { number: 49, label: 'Маэстро 01.08.2026' },
 ];
 
 const Asgard = () => {
